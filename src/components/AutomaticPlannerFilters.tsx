@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -41,6 +41,12 @@ const AutomaticPlannerFilters: React.FC<AutomaticPlannerFiltersProps> = ({
   setSelectedSkillFilter,
   onSimulate,
 }) => {
+  const [currentTechnicianSelection, setCurrentTechnicianSelection] = useState<string>(""); // Novo estado para o valor do Select de técnicos
+
+  const handleSkillFilterChange = (value: string) => {
+    setSelectedSkillFilter(value === "all" ? null : value);
+  };
+
   return (
     <Card className="lg:col-span-1 xl:col-span-1">
       <CardHeader>
@@ -54,12 +60,13 @@ const AutomaticPlannerFilters: React.FC<AutomaticPlannerFiltersProps> = ({
             Técnicos
           </label>
           <Select
+            value={currentTechnicianSelection} // Controlado pelo novo estado
             onValueChange={(value) => {
-              if (!selectedTechnicianIds.includes(value)) {
+              if (value && !selectedTechnicianIds.includes(value)) { // Garante que o valor não é vazio e não está duplicado
                 setSelectedTechnicianIds((prev) => [...prev, value]);
               }
+              setCurrentTechnicianSelection(""); // Reseta o select para mostrar o placeholder
             }}
-            value={selectedTechnicianIds.length > 0 ? "" : "placeholder"} // Reset select value after selection
           >
             <SelectTrigger id="technicians">
               <SelectValue placeholder="Selecione técnicos" />
@@ -97,12 +104,15 @@ const AutomaticPlannerFilters: React.FC<AutomaticPlannerFiltersProps> = ({
           <label htmlFor="skillFilter" className="block text-sm font-medium text-foreground mb-1">
             Filtrar por Habilidade
           </label>
-          <Select onValueChange={setSelectedSkillFilter} value={selectedSkillFilter || ""}>
+          <Select
+            onValueChange={handleSkillFilterChange}
+            value={selectedSkillFilter || "all"} // Se null, exibe "all"
+          >
             <SelectTrigger id="skillFilter">
               <SelectValue placeholder="Todas as habilidades" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as habilidades</SelectItem>
+              <SelectItem value="all">Todas as habilidades</SelectItem> {/* Valor alterado para "all" */}
               {availableSkills.map((skill) => (
                 <SelectItem key={skill} value={skill}>
                   {skill.charAt(0).toUpperCase() + skill.slice(1)}
