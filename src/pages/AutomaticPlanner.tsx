@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/table";
 import { GoogleMap, useLoadScript, MarkerF, DirectionsRenderer } from "@react-google-maps/api";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge"; // Importar Badge
+import { X } from "lucide-react"; // Importar X para o botão de remover
 
 // Mock Data
 interface Technician {
@@ -440,7 +442,7 @@ const AutomaticPlanner = () => {
                         title={`${order.type} (${order.client})`}
                       />
                     ))}
-                  {selectedTechniciansIds.map(techId => {
+                  {selectedTechnicianIds.map(techId => { {/* Corrigido aqui */}
                     const tech = mockTechnicians.find(t => t.id === techId);
                     if (tech && assignedRoutes[techId]) {
                       return (
@@ -476,7 +478,7 @@ const AutomaticPlanner = () => {
 
           {selectedTechnicianIds.length > 0 && (
             <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-              {selectedTechnicianIds.map(techId => {
+              {selectedTechnicianIds.map(techId => { {/* Corrigido aqui */}
                 const tech = mockTechnicians.find(t => t.id === techId);
                 const summary = technicianTravelSummaries[techId];
                 const orders = assignedWorkOrders[techId];
