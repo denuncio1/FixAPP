@@ -18,7 +18,8 @@ import { MapPin, QrCode, Factory, Building, Mountain, Globe, ArrowLeft, Image as
 import { toast } from "sonner";
 import { Location } from "@/types/location";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
-import { QRCode } from "qrcode.react"; // CORREÇÃO AQUI: importação como named export
+import QRCode from "qrcode.react"; // CORREÇÃO AQUI: Revertido para default import
+import { Textarea } from "@/components/ui/textarea"; // CORREÇÃO AQUI: Importando Textarea
 
 const containerStyle = {
   width: "100%",
@@ -57,11 +58,11 @@ const LocationRegistration = () => {
     mapRef.current = map;
   }, []);
 
-  const onMarkerDragEnd = useCallback((marker: google.maps.Marker) => {
-    const newLat = marker.getPosition()?.lat() || defaultCenter.lat;
-    const newLng = marker.getPosition()?.lng() || defaultCenter.lng;
-    setLat(newLat);
-    setLng(newLng);
+  const onMarkerDragEnd = useCallback((event: google.maps.MapMouseEvent) => {
+    if (event.latLng) {
+      setLat(event.latLng.lat());
+      setLng(event.latLng.lng());
+    }
   }, []);
 
   const onMapClick = useCallback((event: google.maps.MapMouseEvent) => {
