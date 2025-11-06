@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Menu, Search, Filter, Plus } from "lucide-react";
+import { Menu, Search, Plus } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
-import WorkOrderCard from "@/components/WorkOrderCard"; // Importar o novo componente
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"; // Importar Card para as colunas Kanban
+import WorkOrderCard from "@/components/WorkOrderCard";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import NewWorkOrderDialog from "@/components/NewWorkOrderDialog"; // Importar o novo componente de diálogo
 
 interface WorkOrder {
   id: string;
@@ -21,7 +21,7 @@ interface WorkOrder {
   daysAgo: number;
 }
 
-const mockWorkOrders: WorkOrder[] = [
+const initialMockWorkOrders: WorkOrder[] = [
   {
     id: "#OS1017",
     status: "Pendente",
@@ -104,12 +104,19 @@ const mockWorkOrders: WorkOrder[] = [
 const WorkOrders = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isNewOrderDialogOpen, setIsNewOrderDialogOpen] = useState(false);
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>(initialMockWorkOrders);
+
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  const filteredWorkOrders = mockWorkOrders.filter((order) => {
+  const handleSaveNewOrder = (newOrder: WorkOrder) => {
+    setWorkOrders((prevOrders) => [...prevOrders, newOrder]);
+  };
+
+  const filteredWorkOrders = workOrders.filter((order) => {
     const matchesSearch =
       order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -162,7 +169,7 @@ const WorkOrders = () => {
               />
             </div>
 
-            <Button className="flex items-center gap-2 w-full md:w-auto">
+            <Button className="flex items-center gap-2 w-full md:w-auto" onClick={() => setIsNewOrderDialogOpen(true)}>
               <Plus className="h-4 w-4" />
               Nova OS
             </Button>
@@ -190,6 +197,11 @@ const WorkOrders = () => {
           </div>
         </main>
       </div>
+      <NewWorkOrderDialog
+        isOpen={isNewOrderDialogOpen}
+        onClose={() => setIsNewOrderDialogOpen(false)}
+        onSave={handleSaveNewOrder}
+      />
     </div>
   );
 };
