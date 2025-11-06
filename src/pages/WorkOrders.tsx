@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Menu, Search, Filter, Plus } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import WorkOrderCard from "@/components/WorkOrderCard"; // Importar o novo componente
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"; // Importar Card para as colunas Kanban
 
 interface WorkOrder {
   id: string;
@@ -76,12 +77,33 @@ const mockWorkOrders: WorkOrder[] = [
     priority: "Baixa",
     daysAgo: 8,
   },
+  {
+    id: "#OS1027",
+    status: "Crítica",
+    client: "Prefeitura Municipal",
+    title: "Reparo emergencial em semáforo",
+    description: "Semáforo da Av. Principal com defeito, causando congestionamento.",
+    technician: "Equipe de Emergência",
+    date: "29/10/2024",
+    priority: "Crítica",
+    daysAgo: 1,
+  },
+  {
+    id: "#OS1028",
+    status: "Pendente",
+    client: "Escola Primária",
+    title: "Manutenção de bebedouros",
+    description: "Bebedouros com vazamento e filtro entupido.",
+    technician: "N/A",
+    date: "05/11/2024",
+    priority: "Baixa",
+    daysAgo: 0,
+  },
 ];
 
 const WorkOrders = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("Todos Status");
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -93,12 +115,18 @@ const WorkOrders = () => {
       order.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.description.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesStatus =
-      filterStatus === "Todos Status" || order.status === filterStatus;
-
-    return matchesSearch && matchesStatus;
+    return matchesSearch;
   });
+
+  const groupedWorkOrders = filteredWorkOrders.reduce((acc, order) => {
+    if (!acc[order.status]) {
+      acc[order.status] = [];
+    }
+    acc[order.status].push(order);
+    return acc;
+  }, {} as Record<WorkOrder['status'], WorkOrder[]>);
+
+  const statusOrder: WorkOrder['status'][] = ["Pendente", "Crítica", "Concluída"];
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -134,47 +162,31 @@ const WorkOrders = () => {
               />
             </div>
 
-            <div className="flex items-center gap-4 w-full md:w-auto">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2 w-full md:w-auto">
-                    <Filter className="h-4 w-4" />
-                    {filterStatus}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setFilterStatus("Todos Status")}>
-                    Todos Status
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilterStatus("Pendente")}>
-                    Pendente
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilterStatus("Concluída")}>
-                    Concluída
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilterStatus("Crítica")}>
-                    Crítica
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Button className="flex items-center gap-2 w-full md:w-auto">
-                <Plus className="h-4 w-4" />
-                Nova OS
-              </Button>
-            </div>
+            <Button className="flex items-center gap-2 w-full md:w-auto">
+              <Plus className="h-4 w-4" />
+              Nova OS
+            </Button>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredWorkOrders.length > 0 ? (
-              filteredWorkOrders.map((order) => (
-                <WorkOrderCard key={order.id} {...order} />
-              ))
-            ) : (
-              <p className="text-muted-foreground col-span-full text-center">
-                Nenhuma ordem de serviço encontrada com os critérios atuais.
-              </p>
-            )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {statusOrder.map((status) => (
+              <Card key={status} className="flex flex-col h-full bg-muted/40">
+                <CardHeader className="border-b pb-3">
+                  <CardTitle className="text-lg font-semibold">{status} ({groupedWorkOrders[status]?.length || 0})</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 p-4 space-y-4 overflow-y-auto">
+                  {groupedWorkOrders[status] && groupedWorkOrders[status].length > 0 ? (
+                    groupedWorkOrders[status].map((order) => (
+                      <WorkOrderCard key={order.id} {...order} />
+                    ))
+                  ) : (
+                    <p className="text-muted-foreground text-center py-4">
+                      Nenhuma ordem de serviço {status.toLowerCase()} encontrada.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </main>
       </div>
