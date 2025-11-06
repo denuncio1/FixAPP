@@ -21,11 +21,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { WorkOrder } from "@/types/work-order"; // Importação corrigida
 
 interface NewWorkOrderDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (newOrder: any) => void; // Em um cenário real, 'any' seria um tipo WorkOrder
+  onSave: (newOrder: WorkOrder) => void;
 }
 
 const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
@@ -40,6 +41,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
   const [priority, setPriority] = useState<"Baixa" | "Média" | "Crítica">(
     "Média",
   );
+  const [tagsInput, setTagsInput] = useState(""); // Novo estado para input de tags
 
   const handleSubmit = () => {
     if (!client || !title || !description) {
@@ -47,7 +49,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
       return;
     }
 
-    const newOrder = {
+    const newOrder: WorkOrder = {
       id: `#OS${Math.floor(Math.random() * 10000)}`, // ID temporário
       status: "Pendente",
       client,
@@ -57,6 +59,12 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
       date: new Date().toLocaleDateString("pt-BR"),
       priority,
       daysAgo: 0,
+      tags: tagsInput.split(",").map(tag => tag.trim()).filter(tag => tag !== ""), // Processar tags
+      activityHistory: [{
+        timestamp: new Date().toISOString(),
+        action: "OS Criada",
+        details: `Ordem de serviço criada por ${client}`,
+      }],
     };
     onSave(newOrder);
     onClose();
@@ -66,6 +74,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
     setDescription("");
     setTechnician("");
     setPriority("Média");
+    setTagsInput("");
     toast.success("Nova Ordem de Serviço criada com sucesso!");
   };
 
@@ -145,6 +154,18 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
                 <SelectItem value="Crítica">Crítica</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="tags" className="text-right">
+              Tags
+            </Label>
+            <Input
+              id="tags"
+              value={tagsInput}
+              onChange={(e) => setTagsInput(e.target.value)}
+              className="col-span-3"
+              placeholder="Ex: elétrica, hidráulica, urgente"
+            />
           </div>
         </div>
         <DialogFooter>

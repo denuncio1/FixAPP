@@ -11,17 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Wrench } from "lucide-react";
-
-interface WorkOrder {
-  id: string;
-  client: string;
-  address: string;
-  type: string;
-  scheduledTime: string;
-  lat: number;
-  lng: number;
-  requiredSkill: string;
-}
+import { WorkOrder } from "@/types/work-order"; // Importação corrigida
 
 interface WorkOrdersTableDisplayProps {
   mockWorkOrders: WorkOrder[];

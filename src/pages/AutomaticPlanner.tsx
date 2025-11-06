@@ -10,6 +10,7 @@ import AutomaticPlannerFilters from "@/components/AutomaticPlannerFilters";
 import WorkOrdersTableDisplay from "@/components/WorkOrdersTableDisplay";
 import OptimizedRoutesMap from "@/components/OptimizedRoutesMap";
 import TechnicianRouteSummary from "@/components/TechnicianRouteSummary";
+import { WorkOrder } from "@/types/work-order"; // Importação corrigida
 
 // Mock Data - Definido aqui e passado para os componentes
 interface Technician {
@@ -21,21 +22,10 @@ interface Technician {
   startLng: number;
 }
 
-interface WorkOrder {
-  id: string;
-  client: string;
-  address: string;
-  type: string;
-  scheduledTime: string;
-  lat: number;
-  lng: number;
-  requiredSkill: string;
-}
-
 const mockTechnicians: Technician[] = [
   { id: "tech1", name: "Ana Santos", color: "#FF0000", skills: ["elétrica", "hidráulica"], startLat: -23.55052, startLng: -46.633307 }, // São Paulo
   { id: "tech2", name: "João Silva", color: "#0000FF", skills: ["refrigeração", "elétrica"], startLat: -23.56052, startLng: -46.643307 }, // São Paulo
-  { id: "tech3", name: "Maria Souza", color: "#00FF00", skills: ["hidráulica"], startLat: -23.54052, startLng: -46.623307 }, // São Paulo
+  { id: "tech3", name: "Maria Souza", color: "#00FF00", skills: ["hidráulica"], startLat: -23.54052, lng: -46.623307 }, // São Paulo
 ];
 
 const mockWorkOrders: WorkOrder[] = [
@@ -48,6 +38,15 @@ const mockWorkOrders: WorkOrder[] = [
     lat: -23.561355,
     lng: -46.656003,
     requiredSkill: "elétrica",
+    status: "Pendente", // Adicionado para WorkOrder interface
+    title: "Instalação de Wi-Fi", // Adicionado para WorkOrder interface
+    description: "Instalação de roteador e configuração de rede.", // Adicionado para WorkOrder interface
+    technician: "N/A", // Adicionado para WorkOrder interface
+    date: "2024-11-01", // Adicionado para WorkOrder interface
+    priority: "Média", // Adicionado para WorkOrder interface
+    daysAgo: 0, // Adicionado para WorkOrder interface
+    tags: ["instalação", "rede"], // Adicionado para WorkOrder interface
+    activityHistory: [], // Adicionado para WorkOrder interface
   },
   {
     id: "1024",
@@ -58,6 +57,15 @@ const mockWorkOrders: WorkOrder[] = [
     lat: -23.561355,
     lng: -46.656003,
     requiredSkill: "elétrica",
+    status: "Pendente",
+    title: "Manutenção elétrica",
+    description: "Verificação e reparo de fiação.",
+    technician: "N/A",
+    date: "2024-11-01",
+    priority: "Média",
+    daysAgo: 0,
+    tags: ["elétrica", "reparo"],
+    activityHistory: [],
   },
   {
     id: "1025",
@@ -67,7 +75,16 @@ const mockWorkOrders: WorkOrder[] = [
     scheduledTime: "14:00",
     lat: -23.561355,
     lng: -46.656003,
-    requiredSkill: "hidráulica",
+    requiredSkill: "hidráulica", // Mantido como hidráulica para teste de filtro
+    status: "Pendente",
+    title: "Troca de fechadura",
+    description: "Substituição de fechadura danificada.",
+    technician: "N/A",
+    date: "2024-11-01",
+    priority: "Baixa",
+    daysAgo: 0,
+    tags: ["segurança", "reparo"],
+    activityHistory: [],
   },
   {
     id: "1026",
@@ -78,6 +95,15 @@ const mockWorkOrders: WorkOrder[] = [
     lat: -23.561355,
     lng: -46.656003,
     requiredSkill: "elétrica",
+    status: "Pendente",
+    title: "Reparo de rede",
+    description: "Diagnóstico e correção de problemas de rede.",
+    technician: "N/A",
+    date: "2024-11-01",
+    priority: "Média",
+    daysAgo: 0,
+    tags: ["rede", "manutenção"],
+    activityHistory: [],
   },
   {
     id: "1027",
@@ -88,6 +114,15 @@ const mockWorkOrders: WorkOrder[] = [
     lat: -23.561355,
     lng: -46.656003,
     requiredSkill: "refrigeração",
+    status: "Pendente",
+    title: "Manutenção de ar condicionado",
+    description: "Limpeza e verificação de sistema de AC.",
+    technician: "N/A",
+    date: "2024-11-01",
+    priority: "Alta",
+    daysAgo: 0,
+    tags: ["climatização", "preventiva"],
+    activityHistory: [],
   },
 ];
 
@@ -176,7 +211,7 @@ const AutomaticPlanner = () => {
           />
 
           {selectedTechnicianIds.length > 0 && (
-            <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-6 lg:grid-cols-2 xl:col-span-3">
               {selectedTechnicianIds.map((techId) => {
                 const tech = mockTechnicians.find((t) => t.id === techId);
                 const summary = technicianTravelSummaries[techId];

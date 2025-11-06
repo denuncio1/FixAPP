@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map } from "lucide-react"; // Adicionado Map para o novo item
+import { Home, Wrench, Package, Users, Settings, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -34,9 +34,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       path: "/technicians",
     },
     {
-      name: "Planejador Automático", // Novo item
-      icon: Map, // Ícone para o planejador
-      path: "/automatic-planner", // Caminho para a nova página
+      name: "Planejador Automático",
+      icon: Map,
+      path: "/automatic-planner",
     },
     {
       name: "Configurações",
@@ -53,21 +53,14 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       )}
     >
       <div className="flex h-16 items-center justify-center p-4">
-        <h1
-          className={cn(
-            "text-xl font-bold text-sidebar-primary-foreground transition-opacity duration-300",
-            isCollapsed ? "opacity-0" : "opacity-100",
-          )}
-        >
-          Manutenção
-        </h1>
-        <Home
-          className={cn(
-            "text-sidebar-primary-foreground transition-opacity duration-300",
-            isCollapsed ? "opacity-100" : "opacity-0",
-          )}
-          size={24}
-        />
+        {!isCollapsed ? (
+          <img src="/logo.png" alt="FixApp Logo" className="h-10 w-auto" />
+        ) : (
+          <Wrench
+            className="text-sidebar-primary-foreground transition-opacity duration-300"
+            size={24}
+          />
+        )}
       </div>
       <Separator className="bg-sidebar-border" />
       <nav className="flex-1 p-2">

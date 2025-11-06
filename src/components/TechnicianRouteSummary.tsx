@@ -3,6 +3,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Car } from "lucide-react";
+import { WorkOrder } from "@/types/work-order"; // Importação corrigida
 
 interface Technician {
   id: string;
@@ -11,17 +12,6 @@ interface Technician {
   skills: string[];
   startLat: number;
   startLng: number;
-}
-
-interface WorkOrder {
-  id: string;
-  client: string;
-  address: string;
-  type: string;
-  scheduledTime: string;
-  lat: number;
-  lng: number;
-  requiredSkill: string;
 }
 
 interface TechnicianRouteSummaryProps {
