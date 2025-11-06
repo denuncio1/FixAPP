@@ -34,7 +34,7 @@ interface WorkOrder {
   id: string;
   client: string;
   address: string;
-  type: string;
+  type: string; // Usado como título para o marcador
   scheduledTime: string;
   lat: number;
   lng: number;
@@ -284,7 +284,7 @@ const AutomaticPlanner = () => {
                     <MarkerF
                       key={order.id}
                       position={{ lat: order.lat, lng: order.lng }}
-                      title={order.title}
+                      title={order.type} // Corrigido para usar 'order.type'
                       // Você pode personalizar o ícone aqui com base no tipo de serviço ou técnico
                     />
                   ))}
