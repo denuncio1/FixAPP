@@ -66,6 +66,9 @@ const TechnicianRegistration = () => {
       address,
       skills: selectedSkills,
       avatar: avatarUrl,
+      color: "#6B7280", // Cor padrão para o técnico
+      startLat: -23.55052, // Latitude padrão (ex: centro de São Paulo)
+      startLng: -46.633307, // Longitude padrão (ex: centro de São Paulo)
     };
 
     console.log("Novo Técnico Cadastrado:", newTechnician);
