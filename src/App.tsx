@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MaintenanceDashboard from "./pages/MaintenanceDashboard";
-import WorkOrders from "./pages/WorkOrders"; // Importar a nova página
+import WorkOrders from "./pages/WorkOrders";
+import AutomaticPlanner from "./pages/AutomaticPlanner"; // Importar a nova página
 
 const queryClient = new QueryClient();
 
@@ -19,7 +20,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<MaintenanceDashboard />} />
-          <Route path="/work-orders" element={<WorkOrders />} /> {/* Nova rota para Ordens de Serviço */}
+          <Route path="/work-orders" element={<WorkOrders />} />
+          <Route path="/automatic-planner" element={<AutomaticPlanner />} /> {/* Nova rota */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings } from "lucide-react";
+import { Home, Wrench, Package, Users, Settings, Map } from "lucide-react"; // Adicionado Map para o novo item
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -32,6 +32,11 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       name: "Técnicos",
       icon: Users,
       path: "/technicians",
+    },
+    {
+      name: "Planejador Automático", // Novo item
+      icon: Map, // Ícone para o planejador
+      path: "/automatic-planner", // Caminho para a nova página
     },
     {
       name: "Configurações",
