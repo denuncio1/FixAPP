@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, Wrench, Package, Users, Home } from "lucide-react"; // Adicionado Wrench, Package, Users, Home
 import Sidebar from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
 
