@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -19,7 +18,7 @@ import { MapPin, QrCode, Factory, Building, Mountain, Globe, ArrowLeft, Image as
 import { toast } from "sonner";
 import { Location } from "@/types/location";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
-import QRCode from "qrcode.react";
+import { QRCode } from "qrcode.react"; // CORREÇÃO AQUI: importação como named export
 
 const containerStyle = {
   width: "100%",
