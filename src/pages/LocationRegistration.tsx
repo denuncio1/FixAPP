@@ -19,7 +19,7 @@ import { MapPin, QrCode, Factory, Building, Mountain, Globe, ArrowLeft, Image as
 import { toast } from "sonner";
 import { Location } from "@/types/location";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
-import QRCode from "qrcode.react"; // CORREÇÃO AQUI: Importação como default export
+import { QRCode } from "qrcode.react"; // CORREÇÃO AQUI: Importação como named export
 
 const containerStyle = {
   width: "100%",
