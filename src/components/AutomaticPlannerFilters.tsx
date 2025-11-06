@@ -12,15 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Users, Sparkles, X } from "lucide-react";
-
-interface Technician {
-  id: string;
-  name: string;
-  color: string;
-  skills: string[];
-  startLat: number;
-  startLng: number;
-}
+import { Technician } from "@/types/technician"; // Importar a interface Technician global
 
 interface AutomaticPlannerFiltersProps {
   mockTechnicians: Technician[];

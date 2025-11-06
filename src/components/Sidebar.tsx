@@ -29,9 +29,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       path: "/assets",
     },
     {
-      name: "Técnicos",
+      name: "Cadastrar Técnico", // Nome atualizado para refletir a página
       icon: Users,
-      path: "/technicians",
+      path: "/technicians/new", // Caminho atualizado para a nova página de cadastro
     },
     {
       name: "Planejador Automático",

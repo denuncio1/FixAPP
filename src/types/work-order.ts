@@ -14,13 +14,13 @@ export interface ActivityLogEntry {
 
 export interface WorkOrder {
   id: string;
-  status: "Pendente" | "Concluída" | "Crítica" | "Em Andamento"; // Adicionado "Em Andamento"
+  status: "Pendente" | "Concluída" | "Crítica" | "Em Andamento";
   client: string;
   title: string;
   description: string;
   technician: string;
   date: string; // Data de criação ou agendamento
-  priority: "Baixa" | "Média" | "Crítica";
+  priority: "Baixa" | "Média" | "Crítica" | "Alta"; // Adicionado "Alta"
   daysAgo: number; // Dias desde a criação
   tags: string[]; // Nova propriedade para etiquetas
   startTime?: string; // Horário de início do serviço
@@ -28,4 +28,10 @@ export interface WorkOrder {
   startLocation?: LocationData; // Localização de início do serviço
   endLocation?: LocationData; // Localização de conclusão do serviço
   activityHistory: ActivityLogEntry[]; // Histórico de atividades
+  address?: string; // Adicionado para o planejador
+  type?: string; // Adicionado para o planejador
+  scheduledTime?: string; // Adicionado para o planejador
+  lat?: number; // Adicionado para o planejador
+  lng?: number; // Adicionado para o planejador
+  requiredSkill?: string; // Adicionado para o planejador
 }

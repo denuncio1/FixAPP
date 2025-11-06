@@ -10,22 +10,14 @@ import AutomaticPlannerFilters from "@/components/AutomaticPlannerFilters";
 import WorkOrdersTableDisplay from "@/components/WorkOrdersTableDisplay";
 import OptimizedRoutesMap from "@/components/OptimizedRoutesMap";
 import TechnicianRouteSummary from "@/components/TechnicianRouteSummary";
-import { WorkOrder } from "@/types/work-order"; // Importação corrigida
+import { WorkOrder } from "@/types/work-order";
+import { Technician } from "@/types/technician"; // Importar a interface Technician
 
 // Mock Data - Definido aqui e passado para os componentes
-interface Technician {
-  id: string;
-  name: string;
-  color: string;
-  skills: string[];
-  startLat: number;
-  startLng: number;
-}
-
 const mockTechnicians: Technician[] = [
-  { id: "tech1", name: "Ana Santos", color: "#FF0000", skills: ["elétrica", "hidráulica"], startLat: -23.55052, startLng: -46.633307 }, // São Paulo
-  { id: "tech2", name: "João Silva", color: "#0000FF", skills: ["refrigeração", "elétrica"], startLat: -23.56052, startLng: -46.643307 }, // São Paulo
-  { id: "tech3", name: "Maria Souza", color: "#00FF00", skills: ["hidráulica"], startLat: -23.54052, lng: -46.623307 }, // São Paulo
+  { id: "tech1", name: "Ana Santos", email: "ana@example.com", phone: "11987654321", address: "Rua A, 123", skills: ["elétrica", "hidráulica"], color: "#FF0000", startLat: -23.55052, startLng: -46.633307 }, // São Paulo
+  { id: "tech2", name: "João Silva", email: "joao@example.com", phone: "11987654322", address: "Rua B, 456", skills: ["refrigeração", "elétrica"], color: "#0000FF", startLat: -23.56052, startLng: -46.643307 }, // São Paulo
+  { id: "tech3", name: "Maria Souza", email: "maria@example.com", phone: "11987654323", address: "Rua C, 789", skills: ["hidráulica"], color: "#00FF00", startLat: -23.54052, startLng: -46.623307 }, // São Paulo
 ];
 
 const mockWorkOrders: WorkOrder[] = [
@@ -38,15 +30,15 @@ const mockWorkOrders: WorkOrder[] = [
     lat: -23.561355,
     lng: -46.656003,
     requiredSkill: "elétrica",
-    status: "Pendente", // Adicionado para WorkOrder interface
-    title: "Instalação de Wi-Fi", // Adicionado para WorkOrder interface
-    description: "Instalação de roteador e configuração de rede.", // Adicionado para WorkOrder interface
-    technician: "N/A", // Adicionado para WorkOrder interface
-    date: "2024-11-01", // Adicionado para WorkOrder interface
-    priority: "Média", // Adicionado para WorkOrder interface
-    daysAgo: 0, // Adicionado para WorkOrder interface
-    tags: ["instalação", "rede"], // Adicionado para WorkOrder interface
-    activityHistory: [], // Adicionado para WorkOrder interface
+    status: "Pendente",
+    title: "Instalação de Wi-Fi",
+    description: "Instalação de roteador e configuração de rede.",
+    technician: "N/A",
+    date: "2024-11-01",
+    priority: "Média",
+    tags: ["instalação", "rede"],
+    daysAgo: 0,
+    activityHistory: [],
   },
   {
     id: "1024",
@@ -63,8 +55,8 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
-    daysAgo: 0,
     tags: ["elétrica", "reparo"],
+    daysAgo: 0,
     activityHistory: [],
   },
   {
@@ -75,15 +67,15 @@ const mockWorkOrders: WorkOrder[] = [
     scheduledTime: "14:00",
     lat: -23.561355,
     lng: -46.656003,
-    requiredSkill: "hidráulica", // Mantido como hidráulica para teste de filtro
+    requiredSkill: "hidráulica",
     status: "Pendente",
     title: "Troca de fechadura",
     description: "Substituição de fechadura danificada.",
     technician: "N/A",
     date: "2024-11-01",
     priority: "Baixa",
-    daysAgo: 0,
     tags: ["segurança", "reparo"],
+    daysAgo: 0,
     activityHistory: [],
   },
   {
@@ -145,7 +137,7 @@ const AutomaticPlanner = () => {
   const availableSkills = useMemo(() => {
     const skills = new Set<string>();
     mockTechnicians.forEach(tech => tech.skills.forEach(skill => skills.add(skill)));
-    mockWorkOrders.forEach(order => skills.add(order.requiredSkill));
+    mockWorkOrders.forEach(order => order.requiredSkill && skills.add(order.requiredSkill));
     return Array.from(skills);
   }, []);
 
@@ -211,7 +203,7 @@ const AutomaticPlanner = () => {
           />
 
           {selectedTechnicianIds.length > 0 && (
-            <div className="grid gap-6 lg:grid-cols-2 xl:col-span-3">
+            <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
               {selectedTechnicianIds.map((techId) => {
                 const tech = mockTechnicians.find((t) => t.id === techId);
                 const summary = technicianTravelSummaries[techId];

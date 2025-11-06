@@ -4,15 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Car } from "lucide-react";
 import { WorkOrder } from "@/types/work-order"; // Importação corrigida
-
-interface Technician {
-  id: string;
-  name: string;
-  color: string;
-  skills: string[];
-  startLat: number;
-  startLng: number;
-}
+import { Technician } from "@/types/technician"; // Importar a interface Technician global
 
 interface TechnicianRouteSummaryProps {
   technician: Technician;

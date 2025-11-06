@@ -7,7 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MaintenanceDashboard from "./pages/MaintenanceDashboard";
 import WorkOrders from "./pages/WorkOrders";
-import AutomaticPlanner from "./pages/AutomaticPlanner"; // Importar a nova página
+import AutomaticPlanner from "./pages/AutomaticPlanner";
+import TechnicianRegistration from "./pages/TechnicianRegistration"; // Importar a nova página
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<MaintenanceDashboard />} />
           <Route path="/work-orders" element={<WorkOrders />} />
-          <Route path="/automatic-planner" element={<AutomaticPlanner />} /> {/* Nova rota */}
+          <Route path="/automatic-planner" element={<AutomaticPlanner />} />
+          <Route path="/technicians/new" element={<TechnicianRegistration />} /> {/* Nova rota */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

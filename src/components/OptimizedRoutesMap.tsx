@@ -5,15 +5,7 @@ import { GoogleMap, MarkerF, DirectionsRenderer } from "@react-google-maps/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 import { WorkOrder } from "@/types/work-order"; // Importação corrigida
-
-interface Technician {
-  id: string;
-  name: string;
-  color: string;
-  skills: string[];
-  startLat: number;
-  startLng: number;
-}
+import { Technician } from "@/types/technician"; // Importar a interface Technician global
 
 interface OptimizedRoutesMapProps {
   center: { lat: number; lng: number };
@@ -57,7 +49,7 @@ const OptimizedRoutesMap: React.FC<OptimizedRoutesMapProps> = ({
             {filteredWorkOrders.map((order) => (
               <MarkerF
                 key={order.id}
-                position={{ lat: order.lat, lng: order.lng }}
+                position={{ lat: order.lat!, lng: order.lng! }} // Usar ! para afirmar que não são nulos aqui
                 title={`${order.type} (${order.client})`}
               />
             ))}

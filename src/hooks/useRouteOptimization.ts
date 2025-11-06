@@ -2,27 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
-
-// Interfaces (repetidas aqui para clareza, em um projeto maior poderiam vir de um arquivo de tipos centralizado)
-interface Technician {
-  id: string;
-  name: string;
-  color: string;
-  skills: string[];
-  startLat: number;
-  startLng: number;
-}
-
-interface WorkOrder {
-  id: string;
-  client: string;
-  address: string;
-  type: string;
-  scheduledTime: string;
-  lat: number;
-  lng: number;
-  requiredSkill: string;
-}
+import { Technician } from "@/types/technician"; // Importar a interface Technician global
+import { WorkOrder } from "@/types/work-order"; // Importar a interface WorkOrder global
 
 interface RouteOptimizationResult {
   assignedRoutes: Record<string, google.maps.DirectionsResult | null>;
@@ -68,7 +49,7 @@ export const useRouteOptimization = (
     }
 
     const origins = selectedTechnicians.map(tech => ({ lat: tech.startLat, lng: tech.startLng }));
-    const destinations = filteredOrders.map(order => ({ lat: order.lat, lng: order.lng }));
+    const destinations = filteredOrders.map(order => ({ lat: order.lat!, lng: order.lng! })); // Usar ! para afirmar que não são nulos aqui
 
     const distanceMatrixService = new google.maps.DistanceMatrixService();
 
@@ -91,7 +72,7 @@ export const useRouteOptimization = (
 
         for (const order of unassignedOrders) {
           for (const tech of selectedTechnicians) {
-            if (tech.skills.includes(order.requiredSkill)) {
+            if (tech.skills.includes(order.requiredSkill!)) { // Usar ! para afirmar que não é nulo
               const techIndex = selectedTechnicians.findIndex(t => t.id === tech.id);
               const orderIndex = filteredOrders.findIndex(o => o.id === order.id);
 
@@ -128,9 +109,9 @@ export const useRouteOptimization = (
         if (techOrders.length > 0) {
           const directionsService = new google.maps.DirectionsService();
           const origin = { lat: tech.startLat, lng: tech.startLng };
-          const destination = { lat: techOrders[techOrders.length - 1].lat, lng: techOrders[techOrders.length - 1].lng };
+          const destination = { lat: techOrders[techOrders.length - 1].lat!, lng: techOrders[techOrders.length - 1].lng! }; // Usar !
           const waypoints = techOrders.slice(0, techOrders.length - 1).map(order => ({
-            location: { lat: order.lat, lng: order.lng },
+            location: { lat: order.lat!, lng: order.lng! }, // Usar !
             stopover: true,
           }));
 
