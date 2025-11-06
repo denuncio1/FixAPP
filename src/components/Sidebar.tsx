@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map } from "lucide-react";
+import { Home, Wrench, Package, Users, Settings, Map, Building2 } from "lucide-react"; // Adicionado Building2 para localização
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -29,9 +29,14 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       path: "/assets",
     },
     {
-      name: "Cadastrar Técnico", // Nome atualizado para refletir a página
+      name: "Cadastrar Técnico",
       icon: Users,
-      path: "/technicians/new", // Caminho atualizado para a nova página de cadastro
+      path: "/technicians/new",
+    },
+    {
+      name: "Cadastrar Localização", // Novo item de navegação
+      icon: Building2, // Ícone para localização
+      path: "/locations/new", // Caminho para a nova página
     },
     {
       name: "Planejador Automático",
