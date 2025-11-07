@@ -9,8 +9,9 @@ import MaintenanceDashboard from "./pages/MaintenanceDashboard";
 import WorkOrders from "./pages/WorkOrders";
 import AutomaticPlanner from "./pages/AutomaticPlanner";
 import TechnicianRegistration from "./pages/TechnicianRegistration";
-import Technicians from "./pages/Technicians"; // Importar a nova página de listagem
+import Technicians from "./pages/Technicians";
 import LocationRegistration from "./pages/LocationRegistration";
+import Locations from "./pages/Locations"; // Importar a nova página de listagem
 import ViewClient from "./pages/ViewClient";
 import SupplierRegistration from "./pages/SupplierRegistration";
 import ManagerRegistration from "./pages/ManagerRegistration";
@@ -29,8 +30,9 @@ const App = () => (
           <Route path="/dashboard" element={<MaintenanceDashboard />} />
           <Route path="/work-orders" element={<WorkOrders />} />
           <Route path="/automatic-planner" element={<AutomaticPlanner />} />
-          <Route path="/technicians" element={<Technicians />} /> {/* Nova rota de listagem */}
+          <Route path="/technicians" element={<Technicians />} />
           <Route path="/technicians/new" element={<TechnicianRegistration />} />
+          <Route path="/locations" element={<Locations />} /> {/* Nova rota de listagem */}
           <Route path="/locations/new" element={<LocationRegistration />} />
           <Route path="/clients/new" element={<ViewClient />} />
           <Route path="/suppliers/new" element={<SupplierRegistration />} />
