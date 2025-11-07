@@ -16,7 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { WorkOrder, LocationData, ActivityLogEntry, WorkOrderChecklist } from "@/types/work-order";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature } from "lucide-react"; // 'Ban' adicionado para cancelar
+import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle } from "lucide-react"; // 'Ban' adicionado para cancelar, CheckCircle e AlertTriangle para status
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog"; // Importar o novo componente
@@ -189,6 +189,23 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     toast.success("Checklist salvo na Ordem de Serviço.");
   };
 
+  const getStatusIcon = (status: WorkOrder['status']) => {
+    switch (status) {
+      case "Pendente":
+        return <Clock className="h-4 w-4 mr-1" />;
+      case "Em Andamento":
+        return <Play className="h-4 w-4 mr-1" />;
+      case "Concluída":
+        return <CheckCircle className="h-4 w-4 mr-1" />;
+      case "Crítica":
+        return <AlertTriangle className="h-4 w-4 mr-1" />;
+      case "Cancelada":
+        return <Ban className="h-4 w-4 mr-1" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
@@ -203,11 +220,11 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
 
         <ScrollArea className="flex-1 p-4 -mx-4">
           <div className="grid gap-4 py-4 px-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <h3 className="text-lg font-semibold">{currentOrder.title}</h3>
               <Badge
                 className={cn(
-                  "px-2 py-1 text-sm font-medium",
+                  "px-2 py-1 text-sm font-medium flex items-center",
                   currentOrder.status === "Pendente" && "bg-yellow-100 text-yellow-800",
                   currentOrder.status === "Em Andamento" && "bg-blue-100 text-blue-800",
                   currentOrder.status === "Concluída" && "bg-green-100 text-green-800",
@@ -215,14 +232,14 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                   currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800",
                 )}
               >
-                {currentOrder.status}
+                {getStatusIcon(currentOrder.status)} {currentOrder.status}
               </Badge>
             </div>
             <p className="text-muted-foreground">{currentOrder.description}</p>
 
             <Separator />
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <p><span className="font-medium">Cliente:</span> {currentOrder.client}</p>
                 <p><span className="font-medium">Técnico:</span> {currentOrder.technician || "N/A"}</p>
