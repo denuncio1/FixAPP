@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera } from "lucide-react"; // Adicionado Camera para Reconhecimento de Imagem
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot } from "lucide-react"; // Adicionado Bot para Assistente Virtual
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -49,9 +49,15 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Reconhecimento de Imagem", // Novo link
+          name: "Reconhecimento de Imagem",
           icon: Camera,
           path: "/maintenance/image-recognition",
+          type: "link",
+        },
+        {
+          name: "Assistente Virtual", // Novo link
+          icon: Bot,
+          path: "/maintenance/virtual-assistant",
           type: "link",
         },
       ],
