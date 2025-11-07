@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot } from "lucide-react";
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import AppLogo from "./AppLogo";
@@ -59,6 +59,12 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           name: "Assistente Virtual",
           icon: Bot,
           path: "/maintenance/virtual-assistant",
+          type: "link",
+        },
+        {
+          name: "Medidores Digitais", // Novo item
+          icon: Gauge, // Ícone para medidores
+          path: "/maintenance/digital-meters", // Nova rota
           type: "link",
         },
       ],

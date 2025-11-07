@@ -33,7 +33,8 @@ import SupportRequest from "./pages/SupportRequest";
 import EnergyConsumption from "./pages/EnergyConsumption";
 import WasteDisposal from "./pages/WasteDisposal";
 import ImageRecognition from "./pages/ImageRecognition";
-import VirtualAssistant from "./pages/VirtualAssistant"; // Importar nova página
+import VirtualAssistant from "./pages/VirtualAssistant";
+import DigitalMeters from "./pages/DigitalMeters"; // Importar nova página
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
@@ -86,7 +87,8 @@ const App = () => (
             <Route path="/maintenance/alerts" element={<ProtectedRoute><SmartAlerts /></ProtectedRoute>} />
             <Route path="/maintenance/history" element={<ProtectedRoute><MaintenanceHistory /></ProtectedRoute>} />
             <Route path="/maintenance/image-recognition" element={<ProtectedRoute><ImageRecognition /></ProtectedRoute>} />
-            <Route path="/maintenance/virtual-assistant" element={<ProtectedRoute><VirtualAssistant /></ProtectedRoute>} /> {/* Nova rota */}
+            <Route path="/maintenance/virtual-assistant" element={<ProtectedRoute><VirtualAssistant /></ProtectedRoute>} />
+            <Route path="/maintenance/digital-meters" element={<ProtectedRoute><DigitalMeters /></ProtectedRoute>} /> {/* Nova rota */}
             <Route path="/stock/control" element={<ProtectedRoute><StockControl /></ProtectedRoute>} />
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
