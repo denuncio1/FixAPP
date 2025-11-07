@@ -10,9 +10,9 @@ interface AppLogoProps {
 const AppLogo: React.FC<AppLogoProps> = ({ className }) => {
   return (
     <img 
-      src="/logo.png" 
+      src="/imagem 1.png" 
       alt="FixApp Logo" 
-      className={cn("h-24 w-auto", className)} // Tamanho dobrado para h-24
+      className={cn("h-24 w-auto", className)} // Mantendo o tamanho h-24 e largura automática
     />
   );
 };
