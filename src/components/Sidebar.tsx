@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck } from "lucide-react"; // Adicionado Truck
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -49,13 +49,13 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Clientes", // Novo item
+          name: "Clientes", // Link para a nova página ViewClient
           icon: Users,
           path: "/clients/new",
           type: "link",
         },
         {
-          name: "Fornecedores", // Novo item
+          name: "Fornecedores",
           icon: Truck,
           path: "/suppliers/new",
           type: "link",
