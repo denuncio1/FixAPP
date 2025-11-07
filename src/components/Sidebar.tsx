@@ -3,10 +3,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot } from "lucide-react"; // Adicionado Bot para Assistente Virtual
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import AppLogo from "./AppLogo"; // Importar o novo componente AppLogo
+import AppLogo from "./AppLogo";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -56,7 +56,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Assistente Virtual", // Novo link
+          name: "Assistente Virtual",
           icon: Bot,
           path: "/maintenance/virtual-assistant",
           type: "link",
@@ -203,14 +203,11 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
 
   return (
     <div
-      className={cn(
-        "flex h-full flex-col overflow-hidden border-r bg-sidebar transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64",
-      )}
+      className={`flex h-full flex-col overflow-hidden border-r bg-sidebar transition-all duration-300 ${isCollapsed ? "w-16" : "w-64"}`}
     >
       <div className="flex h-16 items-center justify-center p-4">
         {!isCollapsed ? (
-          <AppLogo className="h-10 w-auto" /> {/* Usando AppLogo aqui */}
+          <AppLogo className="h-10 w-auto" />
         ) : (
           <Wrench
             className="text-sidebar-primary-foreground transition-opacity duration-300"
@@ -263,7 +260,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
                         key={child.name}
                         asChild
                         variant="ghost"
-                        className="mb-1 flex w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground px-4"
+                        className={cn(
+                          "mb-1 flex w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground px-4"
+                        )}
                       >
                         <Link to={child.path}>
                           <child.icon className="h-5 w-5" />
