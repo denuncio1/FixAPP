@@ -9,6 +9,7 @@ import Sidebar from "@/components/Sidebar";
 import KpiCards from "@/components/KpiCards"; // Nova importação
 import MaintenanceCharts from "@/components/MaintenanceCharts"; // Nova importação
 import { toast } from "sonner"; // Importar toast para notificações
+import AppLogo from "@/components/AppLogo"; // Importar AppLogo
 
 const MaintenanceDashboard = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -38,12 +39,16 @@ const MaintenanceDashboard = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="mr-4"
+            className="mr-2"
             onClick={toggleSidebar}
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Painel de Manutenção e Relatórios</h1>
+          <AppLogo className="h-12 w-auto mr-4" /> {/* Logo à esquerda, mais proeminente */}
+          <h1 className="text-xl font-semibold flex items-center gap-2 flex-1 justify-between">
+            <span>Painel de Manutenção e Relatórios</span>
+            <AppLogo className="h-8 w-auto ml-2" /> {/* Logo à direita do título */}
+          </h1>
         </header>
         <main className="flex-1 p-6">
           <div className="mb-6">
