@@ -60,4 +60,7 @@ export interface WorkOrder {
   lng?: number;
   requiredSkill?: string;
   checklist?: WorkOrderChecklist; // NOVO CAMPO: Checklist de execução
+  assetId?: string; // NOVO CAMPO: ID do ativo relacionado
+  assetName?: string; // NOVO CAMPO: Nome do ativo relacionado
+  estimatedDuration?: string; // NOVO CAMPO: Duração estimada do serviço
 }

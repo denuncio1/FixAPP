@@ -16,7 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { WorkOrder, LocationData, ActivityLogEntry, WorkOrderChecklist } from "@/types/work-order";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle, SearchCheck } from "lucide-react"; // 'SearchCheck' adicionado para 'Em Verificação'
+import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle, SearchCheck, Package } from "lucide-react"; // 'Package' adicionado para ativo
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog"; // Importar o novo componente
@@ -283,6 +283,21 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                 <p><span className="font-medium">Criada há:</span> {currentOrder.daysAgo} dias</p>
               </div>
             </div>
+
+            {currentOrder.assetName && (
+              <>
+                <Separator />
+                <p className="text-sm flex items-center gap-1">
+                  <Package className="h-4 w-4" /> <span className="font-medium">Ativo Relacionado:</span> {currentOrder.assetName}
+                </p>
+              </>
+            )}
+
+            {currentOrder.estimatedDuration && (
+              <p className="text-sm flex items-center gap-1">
+                <Clock className="h-4 w-4" /> <span className="font-medium">Duração Estimada:</span> {currentOrder.estimatedDuration}
+              </p>
+            )}
 
             {currentOrder.tags && currentOrder.tags.length > 0 && (
               <>

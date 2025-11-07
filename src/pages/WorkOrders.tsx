@@ -36,6 +36,9 @@ const initialMockWorkOrders: WorkOrder[] = [
     activityHistory: [
       { timestamp: "2025-10-08T10:00:00Z", action: "OS Criada" },
     ],
+    assetId: "asset_mesa_001", // Exemplo de ativo
+    assetName: "Mesa de Escritório", // Exemplo de nome de ativo
+    estimatedDuration: "1h 30min", // Exemplo de duração
   },
   {
     id: "#OS1020",
@@ -74,7 +77,10 @@ const initialMockWorkOrders: WorkOrder[] = [
       signatureDate: "2025-10-07T11:35:00Z",
       completedByTechnicianId: "tech2",
       completedByTechnicianName: "Nilson Denuncio",
-    }
+    },
+    assetId: "asset_gerador_001",
+    assetName: "Gerador Principal",
+    estimatedDuration: "2h 00min",
   },
   {
     id: "#OS1024",
@@ -92,6 +98,9 @@ const initialMockWorkOrders: WorkOrder[] = [
     activityHistory: [
       { timestamp: "2024-12-01T14:00:00Z", action: "OS Criada" },
     ],
+    assetId: "asset_gerador_002",
+    assetName: "Grupo Gerador Auxiliar",
+    estimatedDuration: "4h 00min",
   },
   {
     id: "#OS1025",
@@ -109,6 +118,9 @@ const initialMockWorkOrders: WorkOrder[] = [
     activityHistory: [
       { timestamp: "2024-10-27T09:00:00Z", action: "OS Criada" },
     ],
+    assetId: "asset_esteira_001",
+    assetName: "Esteira Transportadora 01",
+    estimatedDuration: "3h 00min",
   },
   {
     id: "#OS1026",
@@ -126,6 +138,9 @@ const initialMockWorkOrders: WorkOrder[] = [
     activityHistory: [
       { timestamp: "2024-10-20T10:00:00Z", action: "OS Criada" },
     ],
+    assetId: "asset_ac_001",
+    assetName: "Ar Condicionado Sala A",
+    estimatedDuration: "1h 00min",
   },
   {
     id: "#OS1027",
@@ -143,6 +158,9 @@ const initialMockWorkOrders: WorkOrder[] = [
     activityHistory: [
       { timestamp: "2024-10-28T16:00:00Z", action: "OS Criada" },
     ],
+    assetId: "asset_semaforo_001",
+    assetName: "Semáforo Av. Principal",
+    estimatedDuration: "0h 45min",
   },
   {
     id: "#OS1028",
@@ -160,6 +178,9 @@ const initialMockWorkOrders: WorkOrder[] = [
     activityHistory: [
       { timestamp: "2024-11-05T08:00:00Z", action: "OS Criada" },
     ],
+    assetId: "asset_bebedouro_001",
+    assetName: "Bebedouro Bloco A",
+    estimatedDuration: "1h 00min",
   },
   {
     id: "#OS1029",
@@ -178,6 +199,9 @@ const initialMockWorkOrders: WorkOrder[] = [
       { timestamp: "2024-10-22T10:00:00Z", action: "OS Criada" },
       { timestamp: "2024-11-01T14:00:00Z", action: "Serviço Cancelado", details: "Cliente solicitou o cancelamento." },
     ],
+    assetId: "asset_veiculo_001",
+    assetName: "Veículo Frota B",
+    estimatedDuration: "2h 00min",
   },
   {
     id: "#OS1030",
@@ -212,7 +236,10 @@ const initialMockWorkOrders: WorkOrder[] = [
       signatureDate: "2024-11-04T16:05:00Z",
       completedByTechnicianId: "tech1",
       completedByTechnicianName: "Ana Santos",
-    }
+    },
+    assetId: "asset_servidor_001",
+    assetName: "Servidor Principal",
+    estimatedDuration: "3h 30min",
   },
 ];
 
@@ -258,7 +285,8 @@ const WorkOrders = () => {
       order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.description.toLowerCase().includes(searchTerm.toLowerCase());
+      order.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.assetName?.toLowerCase().includes(searchTerm.toLowerCase()); // Incluir busca por nome do ativo
 
     const matchesTags =
       selectedTagsFilter.length === 0 ||
@@ -306,7 +334,7 @@ const WorkOrders = () => {
             <div className="relative flex-1 w-full md:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Buscar por número, cliente ou título..."
+                placeholder="Buscar por número, cliente, título ou ativo..."
                 className="pl-9 w-full"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

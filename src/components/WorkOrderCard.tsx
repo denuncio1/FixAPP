@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { WorkOrder } from "@/types/work-order";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Package, Clock } from "lucide-react"; // Importar ícones
 
 interface WorkOrderCardProps extends WorkOrder {
   onClick: () => void;
@@ -24,7 +25,9 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
   classification,
   daysAgo,
   tags,
-  deadlineDate, // Adicionado deadlineDate
+  deadlineDate,
+  assetName, // Novo campo
+  estimatedDuration, // Novo campo
   onClick,
 }) => {
   const formattedDeadline = deadlineDate
@@ -75,6 +78,11 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
       <CardContent className="flex-1 flex flex-col justify-between">
         <div>
           <h3 className="text-md font-medium mb-1">{title}</h3>
+          {assetName && (
+            <p className="text-sm text-muted-foreground flex items-center gap-1 mb-1">
+              <Package className="h-3 w-3" /> <span className="font-medium">Ativo:</span> {assetName}
+            </p>
+          )}
           <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
             {description}
           </p>
@@ -92,6 +100,11 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
             <p>
               <span className="font-medium">Prazo:</span> {formattedDeadline}
             </p>
+            {estimatedDuration && (
+              <p className="flex items-center gap-1">
+                <Clock className="h-3 w-3" /> <span className="font-medium">Estimativa:</span> {estimatedDuration}
+              </p>
+            )}
           </div>
         </div>
         <div className="mt-4">
