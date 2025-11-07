@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle } from "lucide-react"; // Adicionado PlusCircle
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -26,13 +26,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       type: "link",
     },
     {
-      name: "Ativos",
-      icon: Package,
-      path: "/assets",
-      type: "link",
-    },
-    {
-      name: "Cadastro", // Nova categoria
+      name: "Cadastro", // Categoria
       icon: PlusCircle,
       type: "category",
       children: [
@@ -46,6 +40,12 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           name: "Localização",
           icon: Building2,
           path: "/locations/new",
+          type: "link",
+        },
+        {
+          name: "Ativos", // Ativos movido para dentro de Cadastro
+          icon: Package,
+          path: "/assets",
           type: "link",
         },
       ],
