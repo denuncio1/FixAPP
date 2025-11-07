@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy } from "lucide-react"; // Adicionado Trophy para Gamificação
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset } from "lucide-react"; // Novos ícones para Comunicação e Suporte
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -131,10 +131,35 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       type: "link",
     },
     {
-      name: "Gamificação", // Nova entrada para Gamificação
+      name: "Gamificação",
       icon: Trophy,
       path: "/gamification",
       type: "link",
+    },
+    {
+      name: "Comunicação e Suporte", // Nova Categoria
+      icon: LifeBuoy, // Ícone para a categoria Comunicação e Suporte
+      type: "category",
+      children: [
+        {
+          name: "Chat Interno",
+          icon: MessageSquare,
+          path: "/communication/chat",
+          type: "link",
+        },
+        {
+          name: "Central de Ajuda",
+          icon: LifeBuoy,
+          path: "/communication/help-center",
+          type: "link",
+        },
+        {
+          name: "Solicitar Suporte",
+          icon: Headset,
+          path: "/communication/support-request",
+          type: "link",
+        },
+      ],
     },
     {
       name: "Configurações",

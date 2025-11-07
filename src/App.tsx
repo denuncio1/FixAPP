@@ -26,7 +26,10 @@ import LowStockAlerts from "./pages/LowStockAlerts";
 import SupplierIntegration from "./pages/SupplierIntegration";
 import Login from "./pages/Login";
 import Settings from "./pages/Settings";
-import Gamification from "./pages/Gamification"; // Importar a nova página de Gamification
+import Gamification from "./pages/Gamification";
+import InternalChat from "./pages/InternalChat"; // Importar nova página
+import HelpCenter from "./pages/HelpCenter"; // Importar nova página
+import SupportRequest from "./pages/SupportRequest"; // Importar nova página
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
@@ -83,7 +86,10 @@ const App = () => (
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
             <Route path="/stock/supplier-integration" element={<ProtectedRoute><SupplierIntegration /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-            <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} /> {/* Nova rota de Gamificação */}
+            <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} />
+            <Route path="/communication/chat" element={<ProtectedRoute><InternalChat /></ProtectedRoute>} /> {/* Nova rota */}
+            <Route path="/communication/help-center" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} /> {/* Nova rota */}
+            <Route path="/communication/support-request" element={<ProtectedRoute><SupportRequest /></ProtectedRoute>} /> {/* Nova rota */}
             
             <Route path="*" element={<NotFound />} />
           </Routes>
