@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot, Gauge } from "lucide-react";
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot, Gauge, FileText } from "lucide-react"; // Adicionado FileText para WorkRequests
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import AppLogo from "./AppLogo";
@@ -24,6 +24,12 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       name: "Ordens de Serviço",
       icon: Wrench,
       path: "/work-orders",
+      type: "link",
+    },
+    {
+      name: "Solicitações de Trabalho", // Novo item
+      icon: FileText, // Ícone para solicitações de trabalho
+      path: "/work-requests", // Nova rota
       type: "link",
     },
     {
@@ -62,9 +68,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Medidores Digitais", // Novo item
-          icon: Gauge, // Ícone para medidores
-          path: "/maintenance/digital-meters", // Nova rota
+          name: "Medidores Digitais",
+          icon: Gauge,
+          path: "/maintenance/digital-meters",
           type: "link",
         },
       ],

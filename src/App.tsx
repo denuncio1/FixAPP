@@ -34,7 +34,8 @@ import EnergyConsumption from "./pages/EnergyConsumption";
 import WasteDisposal from "./pages/WasteDisposal";
 import ImageRecognition from "./pages/ImageRecognition";
 import VirtualAssistant from "./pages/VirtualAssistant";
-import DigitalMeters from "./pages/DigitalMeters"; // Importar nova página
+import DigitalMeters from "./pages/DigitalMeters";
+import WorkRequests from "./pages/WorkRequests"; // Importar nova página
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,7 @@ const App = () => (
             
             <Route path="/dashboard" element={<ProtectedRoute><MaintenanceDashboard /></ProtectedRoute>} />
             <Route path="/work-orders" element={<ProtectedRoute><WorkOrders /></ProtectedRoute>} />
+            <Route path="/work-requests" element={<ProtectedRoute><WorkRequests /></ProtectedRoute>} /> {/* Nova rota */}
             <Route path="/automatic-planner" element={<ProtectedRoute><AutomaticPlanner /></ProtectedRoute>} />
             <Route path="/technicians" element={<ProtectedRoute><Technicians /></ProtectedRoute>} />
             <Route path="/technicians/new" element={<ProtectedRoute><TechnicianRegistration /></ProtectedRoute>} />
@@ -88,7 +90,7 @@ const App = () => (
             <Route path="/maintenance/history" element={<ProtectedRoute><MaintenanceHistory /></ProtectedRoute>} />
             <Route path="/maintenance/image-recognition" element={<ProtectedRoute><ImageRecognition /></ProtectedRoute>} />
             <Route path="/maintenance/virtual-assistant" element={<ProtectedRoute><VirtualAssistant /></ProtectedRoute>} />
-            <Route path="/maintenance/digital-meters" element={<ProtectedRoute><DigitalMeters /></ProtectedRoute>} /> {/* Nova rota */}
+            <Route path="/maintenance/digital-meters" element={<ProtectedRoute><DigitalMeters /></ProtectedRoute>} />
             <Route path="/stock/control" element={<ProtectedRoute><StockControl /></ProtectedRoute>} />
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />

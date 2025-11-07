@@ -64,3 +64,16 @@ export interface WorkOrder {
   assetName?: string; // NOVO CAMPO: Nome do ativo relacionado
   estimatedDuration?: string; // NOVO CAMPO: Duração estimada do serviço
 }
+
+export interface WorkRequest {
+  id: string;
+  status: "Aberto" | "Em Análise" | "OS Gerada" | "Rejeitada";
+  createdBy: string;
+  createdAt: string; // ISO string
+  description: string;
+  assetId?: string;
+  assetName?: string;
+  attachments?: ChecklistMedia[]; // Reutilizando o tipo para fotos/vídeos
+  activityLog: ActivityLogEntry[]; // Reutilizando o tipo para histórico
+  generatedWorkOrderId?: string; // ID da OS gerada a partir desta solicitação
+}
