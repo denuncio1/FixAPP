@@ -4,15 +4,30 @@ import React from "react";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Menu, Wrench, Package, Users, Home } from "lucide-react"; // Adicionado Wrench, Package, Users, Home
+import { Menu, Wrench, Package, Users, Home, FileText, Download } from "lucide-react"; // Adicionado FileText, Download
 import Sidebar from "@/components/Sidebar";
-import { cn } from "@/lib/utils";
+import KpiCards from "@/components/KpiCards"; // Nova importação
+import MaintenanceCharts from "@/components/MaintenanceCharts"; // Nova importação
+import { toast } from "sonner"; // Importar toast para notificações
 
 const MaintenanceDashboard = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  // Mock Data para KPIs
+  const mockKpis = {
+    avgResponseTime: "3.5 horas",
+    costPerWorkOrder: "R$ 150,00",
+    assetAvailability: "98.5%",
+  };
+
+  const handleExportReport = (format: string) => {
+    toast.info(`Funcionalidade de exportação para ${format} em desenvolvimento.`);
+    console.log(`Exportar relatório em formato: ${format}`);
+    // Aqui seria a lógica para chamar um serviço de exportação (backend ou biblioteca cliente)
   };
 
   return (
@@ -28,68 +43,56 @@ const MaintenanceDashboard = () => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Painel de Manutenção</h1>
+          <h1 className="text-xl font-semibold">Painel de Manutenção e Relatórios</h1>
         </header>
         <main className="flex-1 p-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold mb-2">Visão Geral e Relatórios</h2>
+            <p className="text-muted-foreground">
+              Acompanhe os principais indicadores e visualize o desempenho da manutenção.
+            </p>
+          </div>
+
+          {/* Seção de KPIs */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+              <FileText className="h-6 w-6" /> Indicadores Chave de Desempenho (KPIs)
+            </h3>
+            <KpiCards kpis={mockKpis} />
+          </div>
+
+          {/* Seção de Gráficos Interativos */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+              <Wrench className="h-6 w-6" /> Análise de Manutenção
+            </h3>
+            <MaintenanceCharts />
+          </div>
+
+          {/* Seção de Exportação de Relatórios */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+              <Download className="h-6 w-6" /> Exportar Relatórios
+            </h3>
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Ordens de Serviço Pendentes
-                </CardTitle>
-                <Wrench className="h-4 w-4 text-muted-foreground" />
+              <CardHeader>
+                <CardTitle>Opções de Exportação</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">15</div>
-                <p className="text-xs text-muted-foreground">
-                  +3 desde a semana passada
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Ativos Registrados
-                </CardTitle>
-                <Package className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">245</div>
-                <p className="text-xs text-muted-foreground">
-                  +10 novos ativos este mês
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Técnicos Ativos
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">8</div>
-                <p className="text-xs text-muted-foreground">
-                  Todos disponíveis
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Manutenções Concluídas (Mês)
-                </CardTitle>
-                <Home className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">62</div>
-                <p className="text-xs text-muted-foreground">
-                  +12% em relação ao mês passado
-                </p>
+              <CardContent className="flex flex-wrap gap-4">
+                <Button onClick={() => handleExportReport("PDF")}>
+                  Exportar para PDF
+                </Button>
+                <Button onClick={() => handleExportReport("Excel")}>
+                  Exportar para Excel
+                </Button>
+                <Button variant="outline" onClick={() => handleExportReport("BI")}>
+                  Integrar com BI (API)
+                </Button>
               </CardContent>
             </Card>
           </div>
 
+          {/* Manter as atividades recentes e próximas manutenções, se desejar */}
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <Card>
               <CardHeader>
