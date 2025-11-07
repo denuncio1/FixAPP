@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase } from "lucide-react"; // Adicionado Briefcase
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -37,7 +37,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Gestor", // Novo link
+          name: "Gestor",
           icon: Briefcase,
           path: "/managers/new",
           type: "link",
@@ -49,9 +49,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Ativos",
+          name: "Ativos", // Link atualizado
           icon: Package,
-          path: "/assets",
+          path: "/assets/new",
           type: "link",
         },
         {

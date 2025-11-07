@@ -12,7 +12,8 @@ import TechnicianRegistration from "./pages/TechnicianRegistration";
 import LocationRegistration from "./pages/LocationRegistration";
 import ViewClient from "./pages/ViewClient";
 import SupplierRegistration from "./pages/SupplierRegistration";
-import ManagerRegistration from "./pages/ManagerRegistration"; // Importar a nova página
+import ManagerRegistration from "./pages/ManagerRegistration";
+import AssetRegistration from "./pages/AssetRegistration"; // Importar a nova página
 
 const queryClient = new QueryClient();
 
@@ -31,7 +32,8 @@ const App = () => (
           <Route path="/locations/new" element={<LocationRegistration />} />
           <Route path="/clients/new" element={<ViewClient />} />
           <Route path="/suppliers/new" element={<SupplierRegistration />} />
-          <Route path="/managers/new" element={<ManagerRegistration />} /> {/* Nova rota */}
+          <Route path="/managers/new" element={<ManagerRegistration />} />
+          <Route path="/assets/new" element={<AssetRegistration />} /> {/* Nova rota */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
