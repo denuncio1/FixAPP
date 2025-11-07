@@ -132,9 +132,9 @@ export const mockWorkOrders: WorkOrder[] = [
 
 // Mock Data para Anexos
 export const mockAttachments = [
-  { id: "doc1", name: "Manual do Operador MPX-001.pdf", type: "document", url: "/placeholder.svg" },
-  { id: "img1", name: "Foto_Instalacao_MPX.jpg", type: "image", url: "/placeholder.svg" },
-  { id: "vid1", name: "Video_Calibracao_MPX.mp4", type: "video", url: "/placeholder.svg" },
+  { id: "doc1", name: "Manual do Operador MPX-001.pdf", type: "document" as const, url: "/placeholder.svg" },
+  { id: "img1", name: "Foto_Instalacao_MPX.jpg", type: "image" as const, url: "/placeholder.svg" },
+  { id: "vid1", name: "Video_Calibracao_MPX.mp4", type: "video" as const, url: "/placeholder.svg" },
 ];
 
 // Mock Data para Leituras de Sensores
