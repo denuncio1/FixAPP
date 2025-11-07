@@ -12,9 +12,32 @@ export interface ActivityLogEntry {
   details?: string;
 }
 
+export interface ChecklistItem {
+  id: string;
+  description: string;
+  completed: boolean;
+  notes?: string;
+}
+
+export interface ChecklistMedia {
+  type: 'image' | 'video';
+  url: string; // URL.createObjectURL for client-side, or actual URL from storage
+  filename: string;
+}
+
+export interface WorkOrderChecklist {
+  items: ChecklistItem[];
+  photos?: ChecklistMedia[];
+  videos?: ChecklistMedia[];
+  signatureName?: string; // Para uma assinatura digitada simples
+  signatureDate?: string; // ISO string
+  completedByTechnicianId?: string;
+  completedByTechnicianName?: string;
+}
+
 export interface WorkOrder {
   id: string;
-  status: "Pendente" | "Concluída" | "Crítica" | "Em Andamento" | "Cancelada"; // 'Cancelada' adicionado
+  status: "Pendente" | "Concluída" | "Crítica" | "Em Andamento" | "Cancelada";
   client: string;
   title: string;
   description: string;
@@ -26,7 +49,7 @@ export interface WorkOrder {
   tags: string[];
   startTime?: string; // Horário de início do serviço
   endTime?: string; // Horário de conclusão do serviço
-  deadlineDate?: string; // NOVO CAMPO: Prazo para conclusão
+  deadlineDate?: string; // Prazo para conclusão
   startLocation?: LocationData;
   endLocation?: LocationData;
   activityHistory: ActivityLogEntry[];
@@ -36,4 +59,5 @@ export interface WorkOrder {
   lat?: number;
   lng?: number;
   requiredSkill?: string;
+  checklist?: WorkOrderChecklist; // NOVO CAMPO: Checklist de execução
 }

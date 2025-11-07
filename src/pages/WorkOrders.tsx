@@ -32,7 +32,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     classification: "Corretiva",
     daysAgo: 14,
     tags: ["mobiliário", "urgente"],
-    deadlineDate: "2025-11-05T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2025-11-05T23:59:59Z",
     activityHistory: [
       { timestamp: "2025-10-08T10:00:00Z", action: "OS Criada" },
     ],
@@ -51,7 +51,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     tags: ["elétrica", "preventiva"],
     startTime: "2025-10-07T09:00:00Z",
     endTime: "2025-10-07T11:30:00Z",
-    deadlineDate: "2025-10-25T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2025-10-25T23:59:59Z",
     startLocation: { lat: -23.561355, lng: -46.656003, timestamp: "2025-10-07T09:00:00Z" },
     endLocation: { lat: -23.561355, lng: -46.656003, timestamp: "2025-10-07T11:30:00Z" },
     activityHistory: [
@@ -59,6 +59,22 @@ const initialMockWorkOrders: WorkOrder[] = [
       { timestamp: "2025-10-07T09:00:00Z", action: "Serviço Iniciado", location: { lat: -23.561355, lng: -46.656003, timestamp: "2025-10-07T09:00:00Z" } },
       { timestamp: "2025-10-07T11:30:00Z", action: "Serviço Concluído", location: { lat: -23.561355, lng: -46.656003, timestamp: "2025-10-07T11:30:00Z" } },
     ],
+    checklist: { // Exemplo de checklist concluído
+      items: [
+        { id: "item1", description: "Verificação de segurança do equipamento", completed: true },
+        { id: "item2", description: "Limpeza e lubrificação de componentes", completed: true },
+        { id: "item3", description: "Teste de funcionalidade pós-manutenção", completed: true },
+        { id: "item4", description: "Ajuste de parâmetros operacionais", completed: true },
+        { id: "item5", description: "Descarte correto de resíduos", completed: true },
+      ],
+      photos: [
+        { type: "image", url: "/placeholder.svg", filename: "foto1.jpg" },
+      ],
+      signatureName: "Nilson Denuncio",
+      signatureDate: "2025-10-07T11:35:00Z",
+      completedByTechnicianId: "tech2",
+      completedByTechnicianName: "Nilson Denuncio",
+    }
   },
   {
     id: "#OS1024",
@@ -72,7 +88,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     classification: "Emergencial",
     daysAgo: 15,
     tags: ["emergência", "elétrica"],
-    deadlineDate: "2024-12-20T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2024-12-20T23:59:59Z",
     activityHistory: [
       { timestamp: "2024-12-01T14:00:00Z", action: "OS Criada" },
     ],
@@ -89,7 +105,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     classification: "Corretiva",
     daysAgo: 5,
     tags: ["mecânica", "produção"],
-    deadlineDate: "2024-11-10T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2024-11-10T23:59:59Z",
     activityHistory: [
       { timestamp: "2024-10-27T09:00:00Z", action: "OS Criada" },
     ],
@@ -106,7 +122,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     classification: "Preventiva",
     daysAgo: 8,
     tags: ["climatização", "instalação"],
-    deadlineDate: "2024-11-01T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2024-11-01T23:59:59Z",
     activityHistory: [
       { timestamp: "2024-10-20T10:00:00Z", action: "OS Criada" },
     ],
@@ -123,7 +139,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     classification: "Emergencial",
     daysAgo: 1,
     tags: ["emergência", "trânsito"],
-    deadlineDate: "2024-10-30T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2024-10-30T23:59:59Z",
     activityHistory: [
       { timestamp: "2024-10-28T16:00:00Z", action: "OS Criada" },
     ],
@@ -140,14 +156,14 @@ const initialMockWorkOrders: WorkOrder[] = [
     classification: "Corretiva",
     daysAgo: 0,
     tags: ["hidráulica", "escola"],
-    deadlineDate: "2024-11-15T23:59:59Z", // Adicionado prazo
+    deadlineDate: "2024-11-15T23:59:59Z",
     activityHistory: [
       { timestamp: "2024-11-05T08:00:00Z", action: "OS Criada" },
     ],
   },
   {
     id: "#OS1029",
-    status: "Cancelada", // Novo status
+    status: "Cancelada",
     client: "Empresa de Logística",
     title: "Instalação de rastreador em veículo",
     description: "Instalação de dispositivo de rastreamento no veículo da frota.",
@@ -226,7 +242,7 @@ const WorkOrders = () => {
     return acc;
   }, {} as Record<WorkOrder['status'], WorkOrder[]>);
 
-  const statusOrder: WorkOrder['status'][] = ["Pendente", "Em Andamento", "Crítica", "Concluída", "Cancelada"]; // 'Cancelada' adicionado
+  const statusOrder: WorkOrder['status'][] = ["Pendente", "Em Andamento", "Crítica", "Concluída", "Cancelada"];
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">

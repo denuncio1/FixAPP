@@ -14,11 +14,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
-import { WorkOrder, LocationData, ActivityLogEntry } from "@/types/work-order";
+import { WorkOrder, LocationData, ActivityLogEntry, WorkOrderChecklist } from "@/types/work-order";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History, Ban } from "lucide-react"; // 'Ban' adicionado para cancelar
+import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature } from "lucide-react"; // 'Ban' adicionado para cancelar
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog"; // Importar o novo componente
 
 interface WorkOrderDetailsDialogProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
   onUpdateWorkOrder,
 }) => {
   const [currentOrder, setCurrentOrder] = useState<WorkOrder>(workOrder);
+  const [isChecklistOpen, setIsChecklistOpen] = useState(false);
 
   useEffect(() => {
     setCurrentOrder(workOrder);
@@ -126,6 +128,11 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
       toast.info("O serviço não está em andamento para ser finalizado.");
       return;
     }
+    if (!currentOrder.checklist) {
+      toast.error("Por favor, preencha o checklist de execução antes de finalizar o serviço.");
+      setIsChecklistOpen(true); // Abre o checklist para o usuário preencher
+      return;
+    }
 
     const now = new Date().toISOString();
     const location = await getLocation();
@@ -172,6 +179,16 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     toast.info("Ordem de Serviço cancelada.");
   };
 
+  const handleSaveChecklist = (checklistData: WorkOrderChecklist) => {
+    const updatedOrder: WorkOrder = {
+      ...currentOrder,
+      checklist: checklistData,
+    };
+    setCurrentOrder(updatedOrder);
+    onUpdateWorkOrder(updatedOrder);
+    toast.success("Checklist salvo na Ordem de Serviço.");
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
@@ -195,7 +212,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                   currentOrder.status === "Em Andamento" && "bg-blue-100 text-blue-800",
                   currentOrder.status === "Concluída" && "bg-green-100 text-green-800",
                   currentOrder.status === "Crítica" && "bg-red-100 text-red-800",
-                  currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800", // Estilo para Cancelada
+                  currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800",
                 )}
               >
                 {currentOrder.status}
@@ -214,7 +231,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
               <div>
                 <p><span className="font-medium">Prioridade:</span> {currentOrder.priority}</p>
                 <p><span className="font-medium">Classificação:</span> {currentOrder.classification}</p>
-                <p><span className="font-medium">Prazo:</span> {formatDateOnly(currentOrder.deadlineDate)}</p> {/* Exibindo o prazo */}
+                <p><span className="font-medium">Prazo:</span> {formatDateOnly(currentOrder.deadlineDate)}</p>
                 <p><span className="font-medium">Criada há:</span> {currentOrder.daysAgo} dias</p>
               </div>
             </div>
@@ -253,6 +270,60 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                   </p>
                 )}
               </div>
+            </div>
+
+            <Separator />
+
+            {/* Seção do Checklist de Execução */}
+            <div>
+              <h4 className="text-md font-semibold mb-3 flex items-center gap-2">
+                <ListChecks className="h-4 w-4" /> Checklist de Execução
+              </h4>
+              {currentOrder.checklist ? (
+                <div className="space-y-3">
+                  <p className="text-sm">
+                    <span className="font-medium">Concluído por:</span> {currentOrder.checklist.signatureName} em{" "}
+                    {formatDateTime(currentOrder.checklist.signatureDate)}
+                  </p>
+                  <ul className="list-disc pl-5 text-sm text-muted-foreground">
+                    {currentOrder.checklist.items.map((item) => (
+                      <li key={item.id} className={item.completed ? "line-through text-green-600" : "text-red-600"}>
+                        {item.description} {item.completed ? "(Concluído)" : "(Pendente)"}
+                      </li>
+                    ))}
+                  </ul>
+                  {currentOrder.checklist.photos && currentOrder.checklist.photos.length > 0 && (
+                    <>
+                      <p className="font-medium mt-4">Fotos:</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {currentOrder.checklist.photos.map((media) => (
+                          <img key={media.url} src={media.url} alt={media.filename} className="h-20 w-full object-cover rounded-md border" />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {currentOrder.checklist.videos && currentOrder.checklist.videos.length > 0 && (
+                    <>
+                      <p className="font-medium mt-4">Vídeos:</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {currentOrder.checklist.videos.map((media) => (
+                          <video key={media.url} src={media.url} controls className="h-20 w-full object-cover rounded-md border" />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm">Nenhum checklist de execução preenchido.</p>
+              )}
+              <Button
+                variant="outline"
+                className="mt-4 w-full"
+                onClick={() => setIsChecklistOpen(true)}
+                disabled={currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
+              >
+                <ListChecks className="h-4 w-4 mr-2" /> {currentOrder.checklist ? "Ver/Editar Checklist" : "Preencher Checklist"}
+              </Button>
             </div>
 
             <Separator />
@@ -311,6 +382,15 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
           </Button>
         </DialogFooter>
       </DialogContent>
+
+      {isChecklistOpen && (
+        <WorkOrderExecutionChecklistDialog
+          isOpen={isChecklistOpen}
+          onClose={() => setIsChecklistOpen(false)}
+          workOrder={currentOrder}
+          onSaveChecklist={handleSaveChecklist}
+        />
+      )}
     </Dialog>
   );
 };
