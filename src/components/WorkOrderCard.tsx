@@ -19,6 +19,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
   technician,
   date,
   priority,
+  classification, // Adicionado classificação
   daysAgo,
   tags,
   onClick,
@@ -55,6 +56,9 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
             </p>
             <p>
               <span className="font-medium">Data:</span> {date}
+            </p>
+            <p>
+              <span className="font-medium">Classificação:</span> {classification}
             </p>
           </div>
         </div>

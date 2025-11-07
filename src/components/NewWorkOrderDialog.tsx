@@ -41,6 +41,9 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
   const [priority, setPriority] = useState<"Baixa" | "Média" | "Crítica">(
     "Média",
   );
+  const [classification, setClassification] = useState<"Preventiva" | "Corretiva" | "Preditiva" | "Emergencial">(
+    "Corretiva", // Valor padrão
+  );
   const [tagsInput, setTagsInput] = useState(""); // Novo estado para input de tags
 
   const handleSubmit = () => {
@@ -58,6 +61,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
       technician: technician || "N/A",
       date: new Date().toLocaleDateString("pt-BR"),
       priority,
+      classification, // Adicionado a classificação
       daysAgo: 0,
       tags: tagsInput.split(",").map(tag => tag.trim()).filter(tag => tag !== ""), // Processar tags
       activityHistory: [{
@@ -74,6 +78,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
     setDescription("");
     setTechnician("");
     setPriority("Média");
+    setClassification("Corretiva"); // Resetar classificação
     setTagsInput("");
     toast.success("Nova Ordem de Serviço criada com sucesso!");
   };
@@ -152,6 +157,27 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
                 <SelectItem value="Baixa">Baixa</SelectItem>
                 <SelectItem value="Média">Média</SelectItem>
                 <SelectItem value="Crítica">Crítica</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="classification" className="text-right">
+              Classificação
+            </Label>
+            <Select
+              value={classification}
+              onValueChange={(value: "Preventiva" | "Corretiva" | "Preditiva" | "Emergencial") =>
+                setClassification(value)
+              }
+            >
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Selecione a classificação" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Preventiva">Preventiva</SelectItem>
+                <SelectItem value="Corretiva">Corretiva</SelectItem>
+                <SelectItem value="Preditiva">Preditiva</SelectItem>
+                <SelectItem value="Emergencial">Emergencial</SelectItem>
               </SelectContent>
             </Select>
           </div>

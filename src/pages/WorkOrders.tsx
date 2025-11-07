@@ -29,6 +29,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "Carlos Turibio",
     date: "22/10/2025",
     priority: "Média",
+    classification: "Corretiva", // Adicionado
     daysAgo: 14,
     tags: ["mobiliário", "urgente"],
     activityHistory: [
@@ -44,6 +45,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "Nilson Denuncio",
     date: "22/10/2025",
     priority: "Média",
+    classification: "Preventiva", // Adicionado
     daysAgo: 15,
     tags: ["elétrica", "preventiva"],
     startTime: "2025-10-07T09:00:00Z",
@@ -65,6 +67,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "16/12/2024",
     priority: "Crítica",
+    classification: "Emergencial", // Adicionado
     daysAgo: 15,
     tags: ["emergência", "elétrica"],
     activityHistory: [
@@ -80,6 +83,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "01/11/2024",
     priority: "Crítica",
+    classification: "Corretiva", // Adicionado
     daysAgo: 5,
     tags: ["mecânica", "produção"],
     activityHistory: [
@@ -95,6 +99,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "João Silva",
     date: "28/10/2024",
     priority: "Baixa",
+    classification: "Preventiva", // Adicionado
     daysAgo: 8,
     tags: ["climatização", "instalação"],
     activityHistory: [
@@ -110,6 +115,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "Equipe de Emergência",
     date: "29/10/2024",
     priority: "Crítica",
+    classification: "Emergencial", // Adicionado
     daysAgo: 1,
     tags: ["emergência", "trânsito"],
     activityHistory: [
@@ -125,6 +131,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "05/11/2024",
     priority: "Baixa",
+    classification: "Corretiva", // Adicionado
     daysAgo: 0,
     tags: ["hidráulica", "escola"],
     activityHistory: [

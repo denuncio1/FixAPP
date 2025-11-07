@@ -21,6 +21,7 @@ export interface WorkOrder {
   technician: string;
   date: string; // Data de criação ou agendamento
   priority: "Baixa" | "Média" | "Crítica" | "Alta"; // Adicionado "Alta"
+  classification: "Preventiva" | "Corretiva" | "Preditiva" | "Emergencial"; // NOVO CAMPO
   daysAgo: number; // Dias desde a criação
   tags: string[]; // Nova propriedade para etiquetas
   startTime?: string; // Horário de início do serviço

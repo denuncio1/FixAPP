@@ -36,6 +36,7 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
+    classification: "Corretiva", // Adicionado
     tags: ["instalação", "rede"],
     daysAgo: 0,
     activityHistory: [],
@@ -55,6 +56,7 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
+    classification: "Corretiva", // Adicionado
     tags: ["elétrica", "reparo"],
     daysAgo: 0,
     activityHistory: [],
@@ -74,6 +76,7 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Baixa",
+    classification: "Corretiva", // Adicionado
     tags: ["segurança", "reparo"],
     daysAgo: 0,
     activityHistory: [],
@@ -93,6 +96,7 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
+    classification: "Corretiva", // Adicionado
     daysAgo: 0,
     tags: ["rede", "manutenção"],
     activityHistory: [],
@@ -112,6 +116,7 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Alta",
+    classification: "Preventiva", // Adicionado
     daysAgo: 0,
     tags: ["climatização", "preventiva"],
     activityHistory: [],

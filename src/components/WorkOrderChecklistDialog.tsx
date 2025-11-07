@@ -37,12 +37,14 @@ const WorkOrderChecklistDialog: React.FC<WorkOrderChecklistDialogProps> = ({
   const handleSubmit = () => {
     const selectedIssues: string[] = [];
     let priority: WorkOrder["priority"] = "Baixa";
+    let classification: WorkOrder["classification"] = "Corretiva"; // Default classification
     let title = "OS Gerada por Checklist";
     let description = "Ordem de serviço gerada automaticamente com base no checklist:\n";
 
     if (issueMachineNotStarting) {
       selectedIssues.push("Máquina não liga");
       priority = "Crítica";
+      classification = "Emergencial"; // Critical issues often lead to emergency classification
     }
     if (issueLeakage) {
       selectedIssues.push("Vazamento detectado");
@@ -55,6 +57,7 @@ const WorkOrderChecklistDialog: React.FC<WorkOrderChecklistDialogProps> = ({
     if (issueOverheating) {
       selectedIssues.push("Superaquecimento");
       priority = "Crítica";
+      classification = "Emergencial"; // Critical issues often lead to emergency classification
     }
 
     if (selectedIssues.length === 0 && !additionalNotes) {
@@ -83,6 +86,7 @@ const WorkOrderChecklistDialog: React.FC<WorkOrderChecklistDialogProps> = ({
       technician: "N/A",
       date: new Date().toLocaleDateString("pt-BR"),
       priority,
+      classification, // Adicionado a classificação
       daysAgo: 0,
       tags: ["checklist", "automática", ...selectedIssues.map(issue => issue.toLowerCase().replace(/\s/g, '-'))],
       activityHistory: [{

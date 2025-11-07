@@ -179,6 +179,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
               </div>
               <div>
                 <p><span className="font-medium">Prioridade:</span> {currentOrder.priority}</p>
+                <p><span className="font-medium">Classificação:</span> {currentOrder.classification}</p> {/* Adicionado classificação */}
                 <p><span className="font-medium">Criada há:</span> {currentOrder.daysAgo} dias</p>
               </div>
             </div>
