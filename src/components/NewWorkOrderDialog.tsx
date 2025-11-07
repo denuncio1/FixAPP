@@ -20,8 +20,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import { WorkOrder } from "@/types/work-order"; // Importação corrigida
+import { WorkOrder } from "@/types/work-order";
+import { cn } from "@/lib/utils";
+
+// Mock de técnicos para o Select
+const mockTechnicians = [
+  { id: "tech1", name: "Carlos Turibio" },
+  { id: "tech2", name: "Nilson Denuncio" },
+  { id: "tech3", name: "João Silva" },
+  { id: "tech4", name: "Equipe de Emergência" },
+];
 
 interface NewWorkOrderDialogProps {
   isOpen: boolean;
@@ -38,32 +52,34 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [technician, setTechnician] = useState("");
-  const [priority, setPriority] = useState<"Baixa" | "Média" | "Crítica">(
+  const [priority, setPriority] = useState<"Baixa" | "Média" | "Crítica" | "Alta">(
     "Média",
   );
   const [classification, setClassification] = useState<"Preventiva" | "Corretiva" | "Preditiva" | "Emergencial">(
-    "Corretiva", // Valor padrão
+    "Corretiva",
   );
-  const [tagsInput, setTagsInput] = useState(""); // Novo estado para input de tags
+  const [deadlineDate, setDeadlineDate] = useState<Date | undefined>(undefined); // Novo estado para o prazo
+  const [tagsInput, setTagsInput] = useState("");
 
   const handleSubmit = () => {
-    if (!client || !title || !description) {
-      toast.error("Por favor, preencha todos os campos obrigatórios.");
+    if (!client || !title || !description || !technician) {
+      toast.error("Por favor, preencha todos os campos obrigatórios (Cliente, Título, Descrição, Técnico).");
       return;
     }
 
     const newOrder: WorkOrder = {
-      id: `#OS${Math.floor(Math.random() * 10000)}`, // ID temporário
+      id: `#OS${Math.floor(Math.random() * 10000)}`,
       status: "Pendente",
       client,
       title,
       description,
-      technician: technician || "N/A",
+      technician: technician,
       date: new Date().toLocaleDateString("pt-BR"),
       priority,
-      classification, // Adicionado a classificação
+      classification,
       daysAgo: 0,
-      tags: tagsInput.split(",").map(tag => tag.trim()).filter(tag => tag !== ""), // Processar tags
+      tags: tagsInput.split(",").map(tag => tag.trim()).filter(tag => tag !== ""),
+      deadlineDate: deadlineDate ? deadlineDate.toISOString() : undefined, // Salva o prazo
       activityHistory: [{
         timestamp: new Date().toISOString(),
         action: "OS Criada",
@@ -78,7 +94,8 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
     setDescription("");
     setTechnician("");
     setPriority("Média");
-    setClassification("Corretiva"); // Resetar classificação
+    setClassification("Corretiva");
+    setDeadlineDate(undefined);
     setTagsInput("");
     toast.success("Nova Ordem de Serviço criada com sucesso!");
   };
@@ -133,12 +150,21 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
             <Label htmlFor="technician" className="text-right">
               Técnico
             </Label>
-            <Input
-              id="technician"
+            <Select
               value={technician}
-              onChange={(e) => setTechnician(e.target.value)}
-              className="col-span-3"
-            />
+              onValueChange={setTechnician}
+            >
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Selecione o técnico" />
+              </SelectTrigger>
+              <SelectContent>
+                {mockTechnicians.map((tech) => (
+                  <SelectItem key={tech.id} value={tech.name}>
+                    {tech.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="priority" className="text-right">
@@ -146,7 +172,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
             </Label>
             <Select
               value={priority}
-              onValueChange={(value: "Baixa" | "Média" | "Crítica") =>
+              onValueChange={(value: "Baixa" | "Média" | "Crítica" | "Alta") =>
                 setPriority(value)
               }
             >
@@ -156,6 +182,7 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
               <SelectContent>
                 <SelectItem value="Baixa">Baixa</SelectItem>
                 <SelectItem value="Média">Média</SelectItem>
+                <SelectItem value="Alta">Alta</SelectItem>
                 <SelectItem value="Crítica">Crítica</SelectItem>
               </SelectContent>
             </Select>
@@ -180,6 +207,34 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
                 <SelectItem value="Emergencial">Emergencial</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="deadlineDate" className="text-right">
+              Prazo
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "col-span-3 justify-start text-left font-normal",
+                    !deadlineDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {deadlineDate ? format(deadlineDate, "PPP", { locale: ptBR }) : <span>Selecione um prazo</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={deadlineDate}
+                  onSelect={setDeadlineDate}
+                  initialFocus
+                  locale={ptBR}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="tags" className="text-right">

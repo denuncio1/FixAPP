@@ -3,13 +3,13 @@
 import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Menu, Search, Plus, Tag, X, ListChecks } from "lucide-react"; // 'X' e 'ListChecks' importados
+import { Menu, Search, Plus, Tag, X, ListChecks } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import WorkOrderCard from "@/components/WorkOrderCard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import NewWorkOrderDialog from "@/components/NewWorkOrderDialog";
 import WorkOrderDetailsDialog from "@/components/WorkOrderDetailsDialog";
-import WorkOrderChecklistDialog from "@/components/WorkOrderChecklistDialog"; // Importar o novo componente
+import WorkOrderChecklistDialog from "@/components/WorkOrderChecklistDialog";
 import {
   Select,
   SelectContent,
@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { WorkOrder, ActivityLogEntry } from "@/types/work-order"; // Importação corrigida
+import { WorkOrder, ActivityLogEntry } from "@/types/work-order";
 
 const initialMockWorkOrders: WorkOrder[] = [
   {
@@ -29,9 +29,10 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "Carlos Turibio",
     date: "22/10/2025",
     priority: "Média",
-    classification: "Corretiva", // Adicionado
+    classification: "Corretiva",
     daysAgo: 14,
     tags: ["mobiliário", "urgente"],
+    deadlineDate: "2025-11-05T23:59:59Z", // Adicionado prazo
     activityHistory: [
       { timestamp: "2025-10-08T10:00:00Z", action: "OS Criada" },
     ],
@@ -45,11 +46,12 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "Nilson Denuncio",
     date: "22/10/2025",
     priority: "Média",
-    classification: "Preventiva", // Adicionado
+    classification: "Preventiva",
     daysAgo: 15,
     tags: ["elétrica", "preventiva"],
     startTime: "2025-10-07T09:00:00Z",
     endTime: "2025-10-07T11:30:00Z",
+    deadlineDate: "2025-10-25T23:59:59Z", // Adicionado prazo
     startLocation: { lat: -23.561355, lng: -46.656003, timestamp: "2025-10-07T09:00:00Z" },
     endLocation: { lat: -23.561355, lng: -46.656003, timestamp: "2025-10-07T11:30:00Z" },
     activityHistory: [
@@ -67,9 +69,10 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "16/12/2024",
     priority: "Crítica",
-    classification: "Emergencial", // Adicionado
+    classification: "Emergencial",
     daysAgo: 15,
     tags: ["emergência", "elétrica"],
+    deadlineDate: "2024-12-20T23:59:59Z", // Adicionado prazo
     activityHistory: [
       { timestamp: "2024-12-01T14:00:00Z", action: "OS Criada" },
     ],
@@ -83,9 +86,10 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "01/11/2024",
     priority: "Crítica",
-    classification: "Corretiva", // Adicionado
+    classification: "Corretiva",
     daysAgo: 5,
     tags: ["mecânica", "produção"],
+    deadlineDate: "2024-11-10T23:59:59Z", // Adicionado prazo
     activityHistory: [
       { timestamp: "2024-10-27T09:00:00Z", action: "OS Criada" },
     ],
@@ -99,9 +103,10 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "João Silva",
     date: "28/10/2024",
     priority: "Baixa",
-    classification: "Preventiva", // Adicionado
+    classification: "Preventiva",
     daysAgo: 8,
     tags: ["climatização", "instalação"],
+    deadlineDate: "2024-11-01T23:59:59Z", // Adicionado prazo
     activityHistory: [
       { timestamp: "2024-10-20T10:00:00Z", action: "OS Criada" },
     ],
@@ -115,9 +120,10 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "Equipe de Emergência",
     date: "29/10/2024",
     priority: "Crítica",
-    classification: "Emergencial", // Adicionado
+    classification: "Emergencial",
     daysAgo: 1,
     tags: ["emergência", "trânsito"],
+    deadlineDate: "2024-10-30T23:59:59Z", // Adicionado prazo
     activityHistory: [
       { timestamp: "2024-10-28T16:00:00Z", action: "OS Criada" },
     ],
@@ -131,11 +137,30 @@ const initialMockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "05/11/2024",
     priority: "Baixa",
-    classification: "Corretiva", // Adicionado
+    classification: "Corretiva",
     daysAgo: 0,
     tags: ["hidráulica", "escola"],
+    deadlineDate: "2024-11-15T23:59:59Z", // Adicionado prazo
     activityHistory: [
       { timestamp: "2024-11-05T08:00:00Z", action: "OS Criada" },
+    ],
+  },
+  {
+    id: "#OS1029",
+    status: "Cancelada", // Novo status
+    client: "Empresa de Logística",
+    title: "Instalação de rastreador em veículo",
+    description: "Instalação de dispositivo de rastreamento no veículo da frota.",
+    technician: "João Silva",
+    date: "01/11/2024",
+    priority: "Média",
+    classification: "Preventiva",
+    daysAgo: 10,
+    tags: ["veículo", "rastreamento"],
+    deadlineDate: "2024-11-08T23:59:59Z",
+    activityHistory: [
+      { timestamp: "2024-10-22T10:00:00Z", action: "OS Criada" },
+      { timestamp: "2024-11-01T14:00:00Z", action: "Serviço Cancelado", details: "Cliente solicitou o cancelamento." },
     ],
   },
 ];
@@ -144,7 +169,7 @@ const WorkOrders = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isNewOrderDialogOpen, setIsNewOrderDialogOpen] = useState(false);
-  const [isChecklistDialogOpen, setIsChecklistDialogOpen] = useState(false); // Novo estado para o diálogo de checklist
+  const [isChecklistDialogOpen, setIsChecklistDialogOpen] = useState(false);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>(initialMockWorkOrders);
   const [selectedTagsFilter, setSelectedTagsFilter] = useState<string[]>([]);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
@@ -201,7 +226,7 @@ const WorkOrders = () => {
     return acc;
   }, {} as Record<WorkOrder['status'], WorkOrder[]>);
 
-  const statusOrder: WorkOrder['status'][] = ["Pendente", "Em Andamento", "Crítica", "Concluída"];
+  const statusOrder: WorkOrder['status'][] = ["Pendente", "Em Andamento", "Crítica", "Concluída", "Cancelada"]; // 'Cancelada' adicionado
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -318,7 +343,7 @@ const WorkOrders = () => {
         onClose={() => setIsNewOrderDialogOpen(false)}
         onSave={handleSaveNewOrder}
       />
-      <WorkOrderChecklistDialog // Novo diálogo de checklist
+      <WorkOrderChecklistDialog
         isOpen={isChecklistDialogOpen}
         onClose={() => setIsChecklistDialogOpen(false)}
         onSave={handleSaveNewOrder}

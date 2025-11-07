@@ -4,9 +4,11 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { WorkOrder } from "@/types/work-order"; // Importação corrigida
+import { WorkOrder } from "@/types/work-order";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-interface WorkOrderCardProps extends WorkOrder { // Estendendo WorkOrder corretamente
+interface WorkOrderCardProps extends WorkOrder {
   onClick: () => void;
 }
 
@@ -19,11 +21,16 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
   technician,
   date,
   priority,
-  classification, // Adicionado classificação
+  classification,
   daysAgo,
   tags,
+  deadlineDate, // Adicionado deadlineDate
   onClick,
 }) => {
+  const formattedDeadline = deadlineDate
+    ? format(new Date(deadlineDate), "dd/MM/yyyy", { locale: ptBR })
+    : "N/A";
+
   return (
     <Card className="flex flex-col h-full cursor-pointer hover:shadow-md transition-shadow" onClick={onClick}>
       <CardHeader className="pb-2">
@@ -36,6 +43,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
               status === "Em Andamento" && "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
               status === "Concluída" && "bg-green-100 text-green-800 hover:bg-green-100/80",
               status === "Crítica" && "bg-red-100 text-red-800 hover:bg-red-100/80",
+              status === "Cancelada" && "bg-gray-300 text-gray-800 hover:bg-gray-300/80", // Estilo para Cancelada
             )}
           >
             {status}
@@ -60,6 +68,9 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
             <p>
               <span className="font-medium">Classificação:</span> {classification}
             </p>
+            <p>
+              <span className="font-medium">Prazo:</span> {formattedDeadline}
+            </p>
           </div>
         </div>
         <div className="mt-4">
@@ -78,6 +89,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
                 "px-2 py-1 text-xs font-medium",
                 priority === "Baixa" && "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
                 priority === "Média" && "bg-orange-100 text-orange-800 hover:bg-orange-100/80",
+                priority === "Alta" && "bg-purple-100 text-purple-800 hover:bg-purple-100/80", // Estilo para Alta
                 priority === "Crítica" && "bg-red-100 text-red-800 hover:bg-red-100/80",
               )}
             >

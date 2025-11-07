@@ -11,7 +11,7 @@ import WorkOrdersTableDisplay from "@/components/WorkOrdersTableDisplay";
 import OptimizedRoutesMap from "@/components/OptimizedRoutesMap";
 import TechnicianRouteSummary from "@/components/TechnicianRouteSummary";
 import { WorkOrder } from "@/types/work-order";
-import { Technician } from "@/types/technician"; // Importar a interface Technician
+import { Technician } from "@/types/technician";
 
 // Mock Data - Definido aqui e passado para os componentes
 const mockTechnicians: Technician[] = [
@@ -36,9 +36,10 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
-    classification: "Corretiva", // Adicionado
+    classification: "Corretiva",
     tags: ["instalação", "rede"],
     daysAgo: 0,
+    deadlineDate: "2024-11-05T23:59:59Z", // Adicionado prazo
     activityHistory: [],
   },
   {
@@ -56,9 +57,10 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
-    classification: "Corretiva", // Adicionado
+    classification: "Corretiva",
     tags: ["elétrica", "reparo"],
     daysAgo: 0,
+    deadlineDate: "2024-11-06T23:59:59Z", // Adicionado prazo
     activityHistory: [],
   },
   {
@@ -76,9 +78,10 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Baixa",
-    classification: "Corretiva", // Adicionado
+    classification: "Corretiva",
     tags: ["segurança", "reparo"],
     daysAgo: 0,
+    deadlineDate: "2024-11-07T23:59:59Z", // Adicionado prazo
     activityHistory: [],
   },
   {
@@ -96,9 +99,10 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Média",
-    classification: "Corretiva", // Adicionado
-    daysAgo: 0,
+    classification: "Corretiva",
     tags: ["rede", "manutenção"],
+    daysAgo: 0,
+    deadlineDate: "2024-11-08T23:59:59Z", // Adicionado prazo
     activityHistory: [],
   },
   {
@@ -116,9 +120,10 @@ const mockWorkOrders: WorkOrder[] = [
     technician: "N/A",
     date: "2024-11-01",
     priority: "Alta",
-    classification: "Preventiva", // Adicionado
-    daysAgo: 0,
+    classification: "Preventiva",
     tags: ["climatização", "preventiva"],
+    daysAgo: 0,
+    deadlineDate: "2024-11-09T23:59:59Z", // Adicionado prazo
     activityHistory: [],
   },
 ];

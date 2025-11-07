@@ -14,9 +14,11 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
-import { WorkOrder, LocationData, ActivityLogEntry } from "@/types/work-order"; // Importação corrigida
+import { WorkOrder, LocationData, ActivityLogEntry } from "@/types/work-order";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History } from "lucide-react"; // 'Stop' alterado para 'Square'
+import { MapPin, Clock, Play, Square, History, Ban } from "lucide-react"; // 'Ban' adicionado para cancelar
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface WorkOrderDetailsDialogProps {
   isOpen: boolean;
@@ -46,6 +48,12 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     });
   };
 
+  const formatDateOnly = (isoString?: string) => {
+    if (!isoString) return "N/A";
+    const date = new Date(isoString);
+    return format(date, "dd/MM/yyyy", { locale: ptBR });
+  };
+
   const getLocation = async (): Promise<LocationData | undefined> => {
     return new Promise((resolve) => {
       if (navigator.geolocation) {
@@ -60,9 +68,8 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
           (error) => {
             console.error("Erro ao obter localização:", error);
             toast.warning("Não foi possível obter a localização atual. Usando localização simulada.");
-            // Fallback para localização simulada
             resolve({
-              lat: -23.55052, // Exemplo: Centro de São Paulo
+              lat: -23.55052,
               lng: -46.633307,
               timestamp: new Date().toISOString(),
               address: "Localização Simulada (São Paulo)",
@@ -72,7 +79,6 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
         );
       } else {
         toast.warning("Geolocalização não suportada pelo navegador. Usando localização simulada.");
-        // Fallback para localização simulada
         resolve({
           lat: -23.55052,
           lng: -46.633307,
@@ -86,6 +92,10 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
   const handleStartService = async () => {
     if (currentOrder.status === "Em Andamento") {
       toast.info("O serviço já está em andamento.");
+      return;
+    }
+    if (currentOrder.status === "Concluída" || currentOrder.status === "Cancelada") {
+      toast.error("Não é possível iniciar um serviço já concluído ou cancelado.");
       return;
     }
 
@@ -139,6 +149,29 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     toast.success("Serviço finalizado com sucesso!");
   };
 
+  const handleCancelService = async () => {
+    if (currentOrder.status === "Concluída" || currentOrder.status === "Cancelada") {
+      toast.error("Não é possível cancelar um serviço já concluído ou já cancelado.");
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const newActivity: ActivityLogEntry = {
+      timestamp: now,
+      action: "Serviço Cancelado",
+      details: `Ordem de serviço cancelada.`,
+    };
+
+    const updatedOrder: WorkOrder = {
+      ...currentOrder,
+      status: "Cancelada",
+      activityHistory: [...currentOrder.activityHistory, newActivity],
+    };
+    setCurrentOrder(updatedOrder);
+    onUpdateWorkOrder(updatedOrder);
+    toast.info("Ordem de Serviço cancelada.");
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
@@ -162,6 +195,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                   currentOrder.status === "Em Andamento" && "bg-blue-100 text-blue-800",
                   currentOrder.status === "Concluída" && "bg-green-100 text-green-800",
                   currentOrder.status === "Crítica" && "bg-red-100 text-red-800",
+                  currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800", // Estilo para Cancelada
                 )}
               >
                 {currentOrder.status}
@@ -179,7 +213,8 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
               </div>
               <div>
                 <p><span className="font-medium">Prioridade:</span> {currentOrder.priority}</p>
-                <p><span className="font-medium">Classificação:</span> {currentOrder.classification}</p> {/* Adicionado classificação */}
+                <p><span className="font-medium">Classificação:</span> {currentOrder.classification}</p>
+                <p><span className="font-medium">Prazo:</span> {formatDateOnly(currentOrder.deadlineDate)}</p> {/* Exibindo o prazo */}
                 <p><span className="font-medium">Criada há:</span> {currentOrder.daysAgo} dias</p>
               </div>
             </div>
@@ -249,7 +284,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
             <Button
               variant="outline"
               onClick={handleStartService}
-              disabled={currentOrder.status === "Em Andamento" || currentOrder.status === "Concluída"}
+              disabled={currentOrder.status === "Em Andamento" || currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
               className="w-full sm:w-auto"
             >
               <Play className="h-4 w-4 mr-2" /> Iniciar Serviço
@@ -261,6 +296,14 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
               className="w-full sm:w-auto"
             >
               <Square className="h-4 w-4 mr-2" /> Finalizar Serviço
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleCancelService}
+              disabled={currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
+              className="w-full sm:w-auto"
+            >
+              <Ban className="h-4 w-4 mr-2" /> Cancelar Serviço
             </Button>
           </div>
           <Button onClick={onClose} className="w-full sm:w-auto">
