@@ -53,7 +53,7 @@ const LocationRegistration = () => {
   const [iotDevicesText, setIotDevicesText] = useState("");
   const [operatingHoursText, setOperatingHoursText] = useState("");
 
-  const mapRef = useRef<google.maps.Map | null>(null); // CORREÇÃO AQUI: Inicializado com null
+  const mapRef = useRef<google.maps.Map | null>(null);
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
   }, []);
