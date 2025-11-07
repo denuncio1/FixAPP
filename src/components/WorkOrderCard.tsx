@@ -31,11 +31,30 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
     ? format(new Date(deadlineDate), "dd/MM/yyyy", { locale: ptBR })
     : "N/A";
 
+  const headerClasses = cn(
+    "pb-2",
+    status === "Pendente" && "bg-yellow-100",
+    status === "Em Andamento" && "bg-lime-100",
+    status === "Concluída" && "bg-emerald-700 text-white", // Verde escuro com texto branco
+    status === "Cancelada" && "bg-gray-300",
+    status === "Crítica" && "bg-red-100",
+  );
+
+  const titleClasses = cn(
+    "text-lg font-semibold",
+    status === "Concluída" && "text-white",
+  );
+
+  const clientTextClasses = cn(
+    "text-sm",
+    status === "Concluída" ? "text-white/80" : "text-muted-foreground",
+  );
+
   return (
     <Card className="flex flex-col h-full cursor-pointer hover:shadow-md transition-shadow" onClick={onClick}>
-      <CardHeader className="pb-2">
+      <CardHeader className={headerClasses}>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold">{id}</CardTitle>
+          <CardTitle className={titleClasses}>{id}</CardTitle>
           <Badge
             className={cn(
               "px-2 py-1 text-xs font-medium",
@@ -43,13 +62,13 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
               status === "Em Andamento" && "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
               status === "Concluída" && "bg-green-100 text-green-800 hover:bg-green-100/80",
               status === "Crítica" && "bg-red-100 text-red-800 hover:bg-red-100/80",
-              status === "Cancelada" && "bg-gray-300 text-gray-800 hover:bg-gray-300/80", // Estilo para Cancelada
+              status === "Cancelada" && "bg-gray-300 text-gray-800 hover:bg-gray-300/80",
             )}
           >
             {status}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground">{client}</p>
+        <p className={clientTextClasses}>{client}</p>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col justify-between">
         <div>
@@ -89,7 +108,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
                 "px-2 py-1 text-xs font-medium",
                 priority === "Baixa" && "bg-blue-100 text-blue-800 hover:bg-blue-100/80",
                 priority === "Média" && "bg-orange-100 text-orange-800 hover:bg-orange-100/80",
-                priority === "Alta" && "bg-purple-100 text-purple-800 hover:bg-purple-100/80", // Estilo para Alta
+                priority === "Alta" && "bg-purple-100 text-purple-800 hover:bg-purple-100/80",
                 priority === "Crítica" && "bg-red-100 text-red-800 hover:bg-red-100/80",
               )}
             >
