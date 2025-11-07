@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase } from "lucide-react";
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History } from "lucide-react"; // Novos ícones: CalendarCheck, BellRing, History
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -26,7 +26,32 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       type: "link",
     },
     {
-      name: "Cadastro", // Categoria
+      name: "Manutenção", // Nova Categoria
+      icon: CalendarCheck, // Ícone para a categoria Manutenção
+      type: "category",
+      children: [
+        {
+          name: "Preventiva e Preditiva",
+          icon: CalendarCheck,
+          path: "/maintenance/preventive",
+          type: "link",
+        },
+        {
+          name: "Alertas Inteligentes",
+          icon: BellRing,
+          path: "/maintenance/alerts",
+          type: "link",
+        },
+        {
+          name: "Histórico de Manutenção",
+          icon: History,
+          path: "/maintenance/history",
+          type: "link",
+        },
+      ],
+    },
+    {
+      name: "Cadastro", // Categoria existente
       icon: PlusCircle,
       type: "category",
       children: [
@@ -57,7 +82,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
         {
           name: "Clientes",
           icon: Users,
-          path: "/clients", // Link atualizado para a listagem
+          path: "/clients",
           type: "link",
         },
         {
