@@ -33,7 +33,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
         {
           name: "Técnico",
           icon: Users,
-          path: "/technicians", // Aponta para a listagem
+          path: "/technicians",
           type: "link",
         },
         {
@@ -43,7 +43,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Localização", // Link atualizado para a listagem
+          name: "Localização",
           icon: Building2,
           path: "/locations",
           type: "link",
@@ -57,7 +57,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
         {
           name: "Clientes",
           icon: Users,
-          path: "/clients/new",
+          path: "/clients", // Link atualizado para a listagem
           type: "link",
         },
         {

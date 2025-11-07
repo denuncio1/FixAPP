@@ -11,8 +11,9 @@ import AutomaticPlanner from "./pages/AutomaticPlanner";
 import TechnicianRegistration from "./pages/TechnicianRegistration";
 import Technicians from "./pages/Technicians";
 import LocationRegistration from "./pages/LocationRegistration";
-import Locations from "./pages/Locations"; // Importar a nova página de listagem
+import Locations from "./pages/Locations";
 import ViewClient from "./pages/ViewClient";
+import Clients from "./pages/Clients"; // Importar a nova página de listagem de clientes
 import SupplierRegistration from "./pages/SupplierRegistration";
 import ManagerRegistration from "./pages/ManagerRegistration";
 import AssetRegistration from "./pages/AssetRegistration";
@@ -32,8 +33,9 @@ const App = () => (
           <Route path="/automatic-planner" element={<AutomaticPlanner />} />
           <Route path="/technicians" element={<Technicians />} />
           <Route path="/technicians/new" element={<TechnicianRegistration />} />
-          <Route path="/locations" element={<Locations />} /> {/* Nova rota de listagem */}
+          <Route path="/locations" element={<Locations />} />
           <Route path="/locations/new" element={<LocationRegistration />} />
+          <Route path="/clients" element={<Clients />} /> {/* Nova rota de listagem de clientes */}
           <Route path="/clients/new" element={<ViewClient />} />
           <Route path="/suppliers/new" element={<SupplierRegistration />} />
           <Route path="/managers/new" element={<ManagerRegistration />} />
