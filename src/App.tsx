@@ -25,6 +25,7 @@ import MaterialMovement from "./pages/MaterialMovement";
 import LowStockAlerts from "./pages/LowStockAlerts";
 import SupplierIntegration from "./pages/SupplierIntegration";
 import Login from "./pages/Login"; // Importar a página de Login
+import Settings from "./pages/Settings"; // Importar a nova página de Settings
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider"; // Importar o provedor de sessão
 
 const queryClient = new QueryClient();
@@ -82,6 +83,7 @@ const App = () => (
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
             <Route path="/stock/supplier-integration" element={<ProtectedRoute><SupplierIntegration /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} /> {/* Nova rota de Settings */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
