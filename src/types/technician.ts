@@ -1,5 +1,6 @@
 export interface Technician {
   id: string;
+  user_id?: string; // Adicionado para vincular ao auth.users
   name: string;
   email: string;
   phone: string;

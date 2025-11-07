@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon } from "lucide-react"; // Novos ícones: Boxes, ArrowDownUp, BellDot, LinkIcon
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy } from "lucide-react"; // Adicionado Trophy para Gamificação
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -51,8 +51,8 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       ],
     },
     {
-      name: "Estoque e Materiais", // Nova Categoria
-      icon: Boxes, // Ícone para a categoria Estoque e Materiais
+      name: "Estoque e Materiais",
+      icon: Boxes,
       type: "category",
       children: [
         {
@@ -128,6 +128,12 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       name: "Planejador Automático",
       icon: Map,
       path: "/automatic-planner",
+      type: "link",
+    },
+    {
+      name: "Gamificação", // Nova entrada para Gamificação
+      icon: Trophy,
+      path: "/gamification",
       type: "link",
     },
     {

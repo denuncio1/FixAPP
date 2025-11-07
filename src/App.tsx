@@ -24,13 +24,13 @@ import StockControl from "./pages/StockControl";
 import MaterialMovement from "./pages/MaterialMovement";
 import LowStockAlerts from "./pages/LowStockAlerts";
 import SupplierIntegration from "./pages/SupplierIntegration";
-import Login from "./pages/Login"; // Importar a página de Login
-import Settings from "./pages/Settings"; // Importar a nova página de Settings
-import { SessionContextProvider, useSession } from "./components/SessionContextProvider"; // Importar o provedor de sessão
+import Login from "./pages/Login";
+import Settings from "./pages/Settings";
+import Gamification from "./pages/Gamification"; // Importar a nova página de Gamification
+import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
 
-// Componente para proteger rotas
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { session, isLoading } = useSession();
 
@@ -61,9 +61,8 @@ const App = () => (
         <SessionContextProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} /> {/* Rota de login */}
+            <Route path="/login" element={<Login />} />
             
-            {/* Rotas Protegidas */}
             <Route path="/dashboard" element={<ProtectedRoute><MaintenanceDashboard /></ProtectedRoute>} />
             <Route path="/work-orders" element={<ProtectedRoute><WorkOrders /></ProtectedRoute>} />
             <Route path="/automatic-planner" element={<ProtectedRoute><AutomaticPlanner /></ProtectedRoute>} />
@@ -83,8 +82,9 @@ const App = () => (
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
             <Route path="/stock/supplier-integration" element={<ProtectedRoute><SupplierIntegration /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} /> {/* Nova rota de Settings */}
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} /> {/* Nova rota de Gamificação */}
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </SessionContextProvider>
