@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset } from "lucide-react"; // Novos ícones para Comunicação e Suporte
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2 } from "lucide-react"; // Novos ícones para Sustentabilidade
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -137,8 +137,8 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       type: "link",
     },
     {
-      name: "Comunicação e Suporte", // Nova Categoria
-      icon: LifeBuoy, // Ícone para a categoria Comunicação e Suporte
+      name: "Comunicação e Suporte",
+      icon: LifeBuoy,
       type: "category",
       children: [
         {
@@ -157,6 +157,25 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           name: "Solicitar Suporte",
           icon: Headset,
           path: "/communication/support-request",
+          type: "link",
+        },
+      ],
+    },
+    {
+      name: "Módulo de Sustentabilidade", // Nova Categoria
+      icon: Leaf, // Ícone para a categoria Sustentabilidade
+      type: "category",
+      children: [
+        {
+          name: "Consumo Energético",
+          icon: Zap,
+          path: "/sustainability/energy-consumption",
+          type: "link",
+        },
+        {
+          name: "Descarte de Resíduos",
+          icon: Trash2,
+          path: "/sustainability/waste-disposal",
           type: "link",
         },
       ],
