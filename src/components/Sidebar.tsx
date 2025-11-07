@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History } from "lucide-react"; // Novos ícones: CalendarCheck, BellRing, History
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon } from "lucide-react"; // Novos ícones: Boxes, ArrowDownUp, BellDot, LinkIcon
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -26,8 +26,8 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       type: "link",
     },
     {
-      name: "Manutenção", // Nova Categoria
-      icon: CalendarCheck, // Ícone para a categoria Manutenção
+      name: "Manutenção",
+      icon: CalendarCheck,
       type: "category",
       children: [
         {
@@ -51,7 +51,38 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       ],
     },
     {
-      name: "Cadastro", // Categoria existente
+      name: "Estoque e Materiais", // Nova Categoria
+      icon: Boxes, // Ícone para a categoria Estoque e Materiais
+      type: "category",
+      children: [
+        {
+          name: "Controle de Estoque",
+          icon: Boxes,
+          path: "/stock/control",
+          type: "link",
+        },
+        {
+          name: "Movimentação de Materiais",
+          icon: ArrowDownUp,
+          path: "/stock/movement",
+          type: "link",
+        },
+        {
+          name: "Alertas de Estoque",
+          icon: BellDot,
+          path: "/stock/alerts",
+          type: "link",
+        },
+        {
+          name: "Integração Fornecedores",
+          icon: LinkIcon,
+          path: "/stock/supplier-integration",
+          type: "link",
+        },
+      ],
+    },
+    {
+      name: "Cadastro",
       icon: PlusCircle,
       type: "category",
       children: [

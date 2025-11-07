@@ -17,9 +17,13 @@ import Clients from "./pages/Clients";
 import SupplierRegistration from "./pages/SupplierRegistration";
 import ManagerRegistration from "./pages/ManagerRegistration";
 import AssetRegistration from "./pages/AssetRegistration";
-import PreventiveMaintenance from "./pages/PreventiveMaintenance"; // Nova importação
-import SmartAlerts from "./pages/SmartAlerts"; // Nova importação
-import MaintenanceHistory from "./pages/MaintenanceHistory"; // Nova importação
+import PreventiveMaintenance from "./pages/PreventiveMaintenance";
+import SmartAlerts from "./pages/SmartAlerts";
+import MaintenanceHistory from "./pages/MaintenanceHistory";
+import StockControl from "./pages/StockControl"; // Nova importação
+import MaterialMovement from "./pages/MaterialMovement"; // Nova importação
+import LowStockAlerts from "./pages/LowStockAlerts"; // Nova importação
+import SupplierIntegration from "./pages/SupplierIntegration"; // Nova importação
 
 const queryClient = new QueryClient();
 
@@ -43,9 +47,13 @@ const App = () => (
           <Route path="/suppliers/new" element={<SupplierRegistration />} />
           <Route path="/managers/new" element={<ManagerRegistration />} />
           <Route path="/assets/new" element={<AssetRegistration />} />
-          <Route path="/maintenance/preventive" element={<PreventiveMaintenance />} /> {/* Nova rota */}
-          <Route path="/maintenance/alerts" element={<SmartAlerts />} /> {/* Nova rota */}
-          <Route path="/maintenance/history" element={<MaintenanceHistory />} /> {/* Nova rota */}
+          <Route path="/maintenance/preventive" element={<PreventiveMaintenance />} />
+          <Route path="/maintenance/alerts" element={<SmartAlerts />} />
+          <Route path="/maintenance/history" element={<MaintenanceHistory />} />
+          <Route path="/stock/control" element={<StockControl />} /> {/* Nova rota */}
+          <Route path="/stock/movement" element={<MaterialMovement />} /> {/* Nova rota */}
+          <Route path="/stock/alerts" element={<LowStockAlerts />} /> {/* Nova rota */}
+          <Route path="/stock/supplier-integration" element={<SupplierIntegration />} /> {/* Nova rota */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
