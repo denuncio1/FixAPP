@@ -27,6 +27,9 @@ const mockClient: Client = {
   address: "Rua da Consolação, 222, Consolação, São Paulo - SP, 01302-000",
   lat: -23.55052, // Exemplo: Centro de São Paulo
   lng: -46.633307,
+  contactName: "João da Silva",
+  contactEmail: "joao.silva@mercatto.com",
+  contactPhone: "(11) 98765-4321",
 };
 
 const ViewClient = () => {
@@ -212,7 +215,37 @@ const ViewClient = () => {
               </div>
             </TabsContent>
             <TabsContent value="contato" className="mt-6">
-              <p className="text-muted-foreground">Conteúdo da aba Contato...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="contactName">Nome do Contato</Label>
+                  <Input
+                    id="contactName"
+                    value={clientData.contactName || ""}
+                    readOnly
+                    className="bg-muted/50"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="contactEmail">E-mail do Contato</Label>
+                  <Input
+                    id="contactEmail"
+                    type="email"
+                    value={clientData.contactEmail || ""}
+                    readOnly
+                    className="bg-muted/50"
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contactPhone">Telefone do Contato</Label>
+                <Input
+                  id="contactPhone"
+                  type="tel"
+                  value={clientData.contactPhone || ""}
+                  readOnly
+                  className="bg-muted/50"
+                />
+              </div>
             </TabsContent>
             <TabsContent value="comercial" className="mt-6">
               <p className="text-muted-foreground">Conteúdo da aba Comercial...</p>
