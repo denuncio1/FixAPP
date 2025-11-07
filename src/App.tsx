@@ -9,11 +9,12 @@ import MaintenanceDashboard from "./pages/MaintenanceDashboard";
 import WorkOrders from "./pages/WorkOrders";
 import AutomaticPlanner from "./pages/AutomaticPlanner";
 import TechnicianRegistration from "./pages/TechnicianRegistration";
+import Technicians from "./pages/Technicians"; // Importar a nova página de listagem
 import LocationRegistration from "./pages/LocationRegistration";
 import ViewClient from "./pages/ViewClient";
 import SupplierRegistration from "./pages/SupplierRegistration";
 import ManagerRegistration from "./pages/ManagerRegistration";
-import AssetRegistration from "./pages/AssetRegistration"; // Importar a nova página
+import AssetRegistration from "./pages/AssetRegistration";
 
 const queryClient = new QueryClient();
 
@@ -28,12 +29,13 @@ const App = () => (
           <Route path="/dashboard" element={<MaintenanceDashboard />} />
           <Route path="/work-orders" element={<WorkOrders />} />
           <Route path="/automatic-planner" element={<AutomaticPlanner />} />
+          <Route path="/technicians" element={<Technicians />} /> {/* Nova rota de listagem */}
           <Route path="/technicians/new" element={<TechnicianRegistration />} />
           <Route path="/locations/new" element={<LocationRegistration />} />
           <Route path="/clients/new" element={<ViewClient />} />
           <Route path="/suppliers/new" element={<SupplierRegistration />} />
           <Route path="/managers/new" element={<ManagerRegistration />} />
-          <Route path="/assets/new" element={<AssetRegistration />} /> {/* Nova rota */}
+          <Route path="/assets/new" element={<AssetRegistration />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

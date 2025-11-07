@@ -31,9 +31,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       type: "category",
       children: [
         {
-          name: "Técnico",
+          name: "Técnico", // Link atualizado para a listagem
           icon: Users,
-          path: "/technicians/new",
+          path: "/technicians",
           type: "link",
         },
         {
@@ -49,7 +49,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Ativos", // Link atualizado
+          name: "Ativos",
           icon: Package,
           path: "/assets/new",
           type: "link",
