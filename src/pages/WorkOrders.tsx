@@ -3,12 +3,13 @@
 import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Menu, Search, Plus, Tag, X } from "lucide-react"; // 'X' importado
+import { Menu, Search, Plus, Tag, X, ListChecks } from "lucide-react"; // 'X' e 'ListChecks' importados
 import Sidebar from "@/components/Sidebar";
 import WorkOrderCard from "@/components/WorkOrderCard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import NewWorkOrderDialog from "@/components/NewWorkOrderDialog";
 import WorkOrderDetailsDialog from "@/components/WorkOrderDetailsDialog";
+import WorkOrderChecklistDialog from "@/components/WorkOrderChecklistDialog"; // Importar o novo componente
 import {
   Select,
   SelectContent,
@@ -76,7 +77,7 @@ const initialMockWorkOrders: WorkOrder[] = [
     client: "Indústria XYZ",
     title: "Reparo em linha de produção",
     description: "Motor da esteira com ruído estranho",
-    technician: "Ana Paula",
+    technician: "N/A",
     date: "01/11/2024",
     priority: "Crítica",
     daysAgo: 5,
@@ -136,6 +137,7 @@ const WorkOrders = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isNewOrderDialogOpen, setIsNewOrderDialogOpen] = useState(false);
+  const [isChecklistDialogOpen, setIsChecklistDialogOpen] = useState(false); // Novo estado para o diálogo de checklist
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>(initialMockWorkOrders);
   const [selectedTagsFilter, setSelectedTagsFilter] = useState<string[]>([]);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
@@ -258,6 +260,10 @@ const WorkOrders = () => {
                 <Plus className="h-4 w-4" />
                 Nova OS
               </Button>
+              <Button variant="outline" className="flex items-center gap-2 w-full md:w-auto" onClick={() => setIsChecklistDialogOpen(true)}>
+                <ListChecks className="h-4 w-4" />
+                OS por Checklist
+              </Button>
             </div>
           </div>
 
@@ -303,6 +309,11 @@ const WorkOrders = () => {
       <NewWorkOrderDialog
         isOpen={isNewOrderDialogOpen}
         onClose={() => setIsNewOrderDialogOpen(false)}
+        onSave={handleSaveNewOrder}
+      />
+      <WorkOrderChecklistDialog // Novo diálogo de checklist
+        isOpen={isChecklistDialogOpen}
+        onClose={() => setIsChecklistDialogOpen(false)}
         onSave={handleSaveNewOrder}
       />
       {selectedWorkOrderForDetails && (
