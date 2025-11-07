@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot } from "lucide-react"; // Adicionado Bot para Assistente Virtual
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import AppLogo from "./AppLogo"; // Importar o novo componente AppLogo
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -209,7 +210,7 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
     >
       <div className="flex h-16 items-center justify-center p-4">
         {!isCollapsed ? (
-          <img src="/logo.png" alt="FixApp Logo" className="h-10 w-auto" />
+          <AppLogo className="h-10 w-auto" /> {/* Usando AppLogo aqui */}
         ) : (
           <Wrench
             className="text-sidebar-primary-foreground transition-opacity duration-300"

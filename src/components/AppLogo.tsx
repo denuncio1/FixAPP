@@ -1,0 +1,20 @@
+"use client";
+
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+interface AppLogoProps {
+  className?: string;
+}
+
+const AppLogo: React.FC<AppLogoProps> = ({ className }) => {
+  return (
+    <img 
+      src="/logo.png" 
+      alt="FixApp Logo" 
+      className={cn("h-24 w-auto", className)} // Tamanho dobrado para h-24
+    />
+  );
+};
+
+export default AppLogo;

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Client } from "@/types/client"; // Importar a interface Client
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api"; // Importar componentes do Google Maps
+import AppLogo from "@/components/AppLogo"; // Importar AppLogo
 
 const containerStyle = {
   width: "100%",
@@ -71,7 +72,7 @@ const ViewClient = () => {
       <Card className="w-full max-w-4xl">
         <CardHeader className="relative flex flex-row items-center justify-between pb-4 border-b">
           <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="FixApp Logo" className="h-8 w-auto" />
+            <AppLogo className="h-8 w-auto" /> {/* Usar AppLogo aqui */}
             <div>
               <CardTitle className="text-xl font-bold">Visualizar Cliente</CardTitle>
               <p className="text-sm text-muted-foreground">Informações detalhadas do cliente</p>

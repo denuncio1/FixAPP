@@ -24,6 +24,7 @@ import { Asset } from "@/types/asset"; // Importar a interface Asset
 import { Location } from "@/types/location"; // Importar a interface Location
 import { Technician } from "@/types/technician"; // Importar a interface Technician
 import { cn } from "@/lib/utils";
+import AppLogo from "@/components/AppLogo"; // Importar AppLogo
 
 // Mock Data para Localizações e Técnicos
 const mockLocations: Location[] = [
@@ -115,6 +116,7 @@ const AssetRegistration = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
+          <AppLogo className="mx-auto mb-4 h-12" /> {/* Adicionar o logo aqui */}
           <CardTitle className="text-2xl font-bold">Cadastro de Ativo</CardTitle>
           <p className="text-sm text-muted-foreground">Registre novos equipamentos e ativos para manutenção.</p>
         </CardHeader>

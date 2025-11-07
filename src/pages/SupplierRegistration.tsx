@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Supplier } from "@/types/supplier"; // Importar a interface Supplier
 import { Badge } from "@/components/ui/badge";
+import AppLogo from "@/components/AppLogo"; // Importar AppLogo
 
 const SupplierRegistration = () => {
   const navigate = useNavigate();
@@ -126,7 +127,7 @@ const SupplierRegistration = () => {
       <Card className="w-full max-w-4xl">
         <CardHeader className="relative flex flex-row items-center justify-between pb-4 border-b">
           <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="FixApp Logo" className="h-8 w-auto" />
+            <AppLogo className="h-8 w-auto" /> {/* Usar AppLogo aqui */}
             <div>
               <CardTitle className="text-xl font-bold">Cadastro de Fornecedores</CardTitle>
               <p className="text-sm text-muted-foreground">Registre novos parceiros e fornecedores</p>

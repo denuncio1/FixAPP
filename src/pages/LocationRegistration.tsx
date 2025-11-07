@@ -19,6 +19,8 @@ import { MapPin, Factory, Building, Mountain, Globe, ArrowLeft, Image as ImageIc
 import { toast } from "sonner";
 import { Location } from "@/types/location";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
+import AppLogo from "@/components/AppLogo"; // Importar AppLogo
+
 // QRCode importação removida
 
 const containerStyle = {
@@ -191,6 +193,7 @@ const LocationRegistration = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
+          <AppLogo className="mx-auto mb-4 h-12" /> {/* Adicionar o logo aqui */}
           <CardTitle className="text-2xl font-bold">Cadastro de Localização</CardTitle>
         </CardHeader>
         <CardContent>

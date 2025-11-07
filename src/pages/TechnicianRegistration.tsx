@@ -18,6 +18,7 @@ import { ArrowLeft, User, HardHat, Phone, Mail, MapPin, X } from "lucide-react";
 import { toast } from "sonner";
 import { Technician } from "@/types/technician"; // Importar a interface Technician
 import { Badge } from "@/components/ui/badge"; // Adicionado Badge
+import AppLogo from "@/components/AppLogo"; // Importar AppLogo
 
 const mockSkills = ["Elétrica", "Hidráulica", "Refrigeração", "Mecânica", "Redes", "Alvenaria"];
 
@@ -96,6 +97,7 @@ const TechnicianRegistration = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
+          <AppLogo className="mx-auto mb-4 h-12" /> {/* Adicionar o logo aqui */}
           <div className="mb-4">
             <Avatar className="h-24 w-24">
               <AvatarImage src={avatarUrl || "/placeholder.svg"} alt="Avatar do Técnico" />
