@@ -13,8 +13,10 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <AppLogo className="mx-auto mb-4 h-12" /> {/* Usar AppLogo aqui, ajustando o tamanho para o card */}
-          <CardTitle className="text-2xl font-bold">Bem-vindo ao FixApp</CardTitle>
+          {/* O logo agora é o próprio CardTitle */}
+          <CardTitle className="text-2xl font-bold flex items-center justify-center mb-4">
+            <AppLogo className="h-12 w-auto" />
+          </CardTitle>
           <p className="text-muted-foreground">Faça login ou crie uma conta para continuar.</p>
         </CardHeader>
         <CardContent>
