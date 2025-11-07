@@ -179,6 +179,41 @@ const initialMockWorkOrders: WorkOrder[] = [
       { timestamp: "2024-11-01T14:00:00Z", action: "Serviço Cancelado", details: "Cliente solicitou o cancelamento." },
     ],
   },
+  {
+    id: "#OS1030",
+    status: "Em Verificação", // Novo status de exemplo
+    client: "Tech Solutions S.A.",
+    title: "Instalação de Servidor de Rede",
+    description: "Instalação e configuração de novo servidor em rack.",
+    technician: "Ana Santos",
+    date: "04/11/2024",
+    priority: "Alta",
+    classification: "Preventiva",
+    daysAgo: 1,
+    tags: ["redes", "instalação", "verificação"],
+    deadlineDate: "2024-11-05T17:00:00Z",
+    activityHistory: [
+      { timestamp: "2024-11-03T09:00:00Z", action: "OS Criada" },
+      { timestamp: "2024-11-04T10:00:00Z", action: "Serviço Iniciado" },
+      { timestamp: "2024-11-04T16:00:00Z", action: "Serviço Concluído (Aguardando Verificação)" },
+    ],
+    checklist: { // Exemplo de checklist concluído
+      items: [
+        { id: "item1", description: "Verificação de segurança do equipamento", completed: true },
+        { id: "item2", description: "Limpeza e lubrificação de componentes", completed: true },
+        { id: "item3", description: "Teste de funcionalidade pós-manutenção", completed: true },
+        { id: "item4", description: "Ajuste de parâmetros operacionais", completed: true },
+        { id: "item5", description: "Descarte correto de resíduos", completed: true },
+      ],
+      photos: [
+        { type: "image", url: "/placeholder.svg", filename: "foto_servidor.jpg" },
+      ],
+      signatureName: "Ana Santos",
+      signatureDate: "2024-11-04T16:05:00Z",
+      completedByTechnicianId: "tech1",
+      completedByTechnicianName: "Ana Santos",
+    }
+  },
 ];
 
 const WorkOrders = () => {
@@ -242,7 +277,7 @@ const WorkOrders = () => {
     return acc;
   }, {} as Record<WorkOrder['status'], WorkOrder[]>);
 
-  const statusOrder: WorkOrder['status'][] = ["Pendente", "Em Andamento", "Crítica", "Concluída", "Cancelada"];
+  const statusOrder: WorkOrder['status'][] = ["Pendente", "Em Andamento", "Em Verificação", "Crítica", "Concluída", "Cancelada"];
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">

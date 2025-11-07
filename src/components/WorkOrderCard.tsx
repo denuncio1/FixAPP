@@ -35,6 +35,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
     "pb-2",
     status === "Pendente" && "bg-yellow-200", // Amarelo mais forte
     status === "Em Andamento" && "bg-blue-100", // Azul para em andamento
+    status === "Em Verificação" && "bg-blue-200", // Azul para em verificação
     status === "Concluída" && "bg-emerald-700 text-white", // Verde escuro com texto branco
     status === "Cancelada" && "bg-gray-300",
     status === "Crítica" && "bg-red-200", // Vermelho mais forte
@@ -60,6 +61,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({
               "px-2 py-1 text-xs font-medium",
               status === "Pendente" && "bg-yellow-500 text-white hover:bg-yellow-500/80", // Amarelo vibrante
               status === "Em Andamento" && "bg-blue-500 text-white hover:bg-blue-500/80", // Azul vibrante
+              status === "Em Verificação" && "bg-blue-500 text-white hover:bg-blue-500/80", // Azul vibrante para verificação
               status === "Concluída" && "bg-green-600 text-white hover:bg-green-600/80", // Verde vibrante
               status === "Crítica" && "bg-red-600 text-white hover:bg-red-600/80", // Vermelho vibrante
               status === "Cancelada" && "bg-gray-500 text-white hover:bg-gray-500/80", // Cinza mais escuro

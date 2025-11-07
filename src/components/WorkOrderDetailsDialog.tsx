@@ -16,7 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { WorkOrder, LocationData, ActivityLogEntry, WorkOrderChecklist } from "@/types/work-order";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle } from "lucide-react"; // 'Ban' adicionado para cancelar, CheckCircle e AlertTriangle para status
+import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle, SearchCheck } from "lucide-react"; // 'SearchCheck' adicionado para 'Em Verificação'
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog"; // Importar o novo componente
@@ -96,8 +96,8 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
       toast.info("O serviço já está em andamento.");
       return;
     }
-    if (currentOrder.status === "Concluída" || currentOrder.status === "Cancelada") {
-      toast.error("Não é possível iniciar um serviço já concluído ou cancelado.");
+    if (currentOrder.status === "Concluída" || currentOrder.status === "Cancelada" || currentOrder.status === "Em Verificação") {
+      toast.error("Não é possível iniciar um serviço já concluído, cancelado ou em verificação.");
       return;
     }
 
@@ -123,12 +123,40 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     toast.success("Serviço iniciado com sucesso!");
   };
 
-  const handleEndService = async () => {
+  const handleMarkForVerification = async () => {
     if (currentOrder.status !== "Em Andamento") {
-      toast.info("O serviço não está em andamento para ser finalizado.");
+      toast.info("A OS precisa estar 'Em Andamento' para ser marcada como 'Em Verificação'.");
       return;
     }
     if (!currentOrder.checklist) {
+      toast.error("Por favor, preencha o checklist de execução antes de marcar para verificação.");
+      setIsChecklistOpen(true); // Abre o checklist para o usuário preencher
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const newActivity: ActivityLogEntry = {
+      timestamp: now,
+      action: "Serviço Marcado para Verificação",
+      details: `Serviço concluído pelo técnico, aguardando verificação e assinatura do cliente.`,
+    };
+
+    const updatedOrder: WorkOrder = {
+      ...currentOrder,
+      status: "Em Verificação",
+      activityHistory: [...currentOrder.activityHistory, newActivity],
+    };
+    setCurrentOrder(updatedOrder);
+    onUpdateWorkOrder(updatedOrder);
+    toast.success("OS marcada como 'Em Verificação'.");
+  };
+
+  const handleEndService = async () => {
+    if (currentOrder.status !== "Em Andamento" && currentOrder.status !== "Em Verificação") {
+      toast.info("O serviço não está em andamento ou em verificação para ser finalizado.");
+      return;
+    }
+    if (currentOrder.status === "Em Andamento" && !currentOrder.checklist) {
       toast.error("Por favor, preencha o checklist de execução antes de finalizar o serviço.");
       setIsChecklistOpen(true); // Abre o checklist para o usuário preencher
       return;
@@ -195,6 +223,8 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
         return <Clock className="h-4 w-4 mr-1" />;
       case "Em Andamento":
         return <Play className="h-4 w-4 mr-1" />;
+      case "Em Verificação":
+        return <SearchCheck className="h-4 w-4 mr-1" />; // Novo ícone para 'Em Verificação'
       case "Concluída":
         return <CheckCircle className="h-4 w-4 mr-1" />;
       case "Crítica":
@@ -227,6 +257,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                   "px-2 py-1 text-sm font-medium flex items-center",
                   currentOrder.status === "Pendente" && "bg-yellow-100 text-yellow-800",
                   currentOrder.status === "Em Andamento" && "bg-blue-100 text-blue-800",
+                  currentOrder.status === "Em Verificação" && "bg-blue-200 text-blue-800", // Cor para 'Em Verificação'
                   currentOrder.status === "Concluída" && "bg-green-100 text-green-800",
                   currentOrder.status === "Crítica" && "bg-red-100 text-red-800",
                   currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800",
@@ -372,15 +403,23 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
             <Button
               variant="outline"
               onClick={handleStartService}
-              disabled={currentOrder.status === "Em Andamento" || currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
+              disabled={currentOrder.status === "Em Andamento" || currentOrder.status === "Concluída" || currentOrder.status === "Cancelada" || currentOrder.status === "Em Verificação"}
               className="w-full sm:w-auto"
             >
               <Play className="h-4 w-4 mr-2" /> Iniciar Serviço
             </Button>
             <Button
+              variant="secondary"
+              onClick={handleMarkForVerification}
+              disabled={currentOrder.status !== "Em Andamento" || !currentOrder.checklist}
+              className="w-full sm:w-auto"
+            >
+              <SearchCheck className="h-4 w-4 mr-2" /> Marcar como Em Verificação
+            </Button>
+            <Button
               variant="destructive"
               onClick={handleEndService}
-              disabled={currentOrder.status !== "Em Andamento"}
+              disabled={currentOrder.status !== "Em Andamento" && currentOrder.status !== "Em Verificação"}
               className="w-full sm:w-auto"
             >
               <Square className="h-4 w-4 mr-2" /> Finalizar Serviço

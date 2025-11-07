@@ -37,7 +37,7 @@ export interface WorkOrderChecklist {
 
 export interface WorkOrder {
   id: string;
-  status: "Pendente" | "Concluída" | "Crítica" | "Em Andamento" | "Cancelada";
+  status: "Pendente" | "Concluída" | "Crítica" | "Em Andamento" | "Cancelada" | "Em Verificação";
   client: string;
   title: string;
   description: string;
