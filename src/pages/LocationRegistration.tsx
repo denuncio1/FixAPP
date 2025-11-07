@@ -15,11 +15,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, QrCode, Factory, Building, Mountain, Globe, ArrowLeft, Image as ImageIcon } from "lucide-react";
+import { MapPin, Factory, Building, Mountain, Globe, ArrowLeft, Image as ImageIcon } from "lucide-react"; // QrCode removido
 import { toast } from "sonner";
 import { Location } from "@/types/location";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
-import { QRCode } from "qrcode.react"; // CORREÇÃO AQUI: Importação como named export
+// QRCode importação removida
 
 const containerStyle = {
   width: "100%",
@@ -125,9 +125,7 @@ const LocationRegistration = () => {
     }
   };
 
-  const qrCodeValue = useMemo(() => {
-    return JSON.stringify({ name, address, lat, lng, description });
-  }, [name, address, lat, lng, description]);
+  // qrCodeValue useMemo removido
 
   const handleViewOnMap = () => {
     if (lat && lng) {
@@ -154,7 +152,7 @@ const LocationRegistration = () => {
       photoUrl: photoPreviewUrl,
       iconType: iconType,
       status: status ? "active" : "inactive",
-      qrCodeData: qrCodeValue,
+      // qrCodeData removido
       iotDevices: iotDevicesText.split(",").map(d => d.trim()).filter(d => d !== ""),
       operatingHours: operatingHoursText || undefined,
     };
@@ -350,19 +348,7 @@ const LocationRegistration = () => {
               />
             </div>
 
-            {/* QR Code */}
-            <div className="grid gap-2 text-center">
-              <Label>QR Code da Localização</Label>
-              {name && address && lat && lng ? (
-                <div className="flex justify-center">
-                  <QRCode value={qrCodeValue} size={128} level="H" />
-                </div>
-              ) : (
-                <p className="text-muted-foreground text-sm">Preencha os campos principais para gerar o QR Code.</p>
-              )}
-              <p className="text-xs text-muted-foreground">Este QR Code contém os dados básicos da localização.</p>
-            </div>
-
+            {/* Botão de Cadastro */}
             <Button type="submit" className="w-full">
               <MapPin className="h-4 w-4 mr-2" /> Cadastrar Localização
             </Button>
