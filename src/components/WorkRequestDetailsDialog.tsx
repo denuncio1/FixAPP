@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { FileText, History, QrCode, Image as ImageIcon, Video, CheckCircle, AlertTriangle, Ban, Wrench } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import * as QrCodeModule from "qrcode.react"; // Corrigido: Importação de namespace
+import QRCode from "qrcode.react"; // Corrigido: Default import
 
 interface WorkRequestDetailsDialogProps {
   isOpen: boolean;
@@ -121,7 +121,7 @@ const WorkRequestDetailsDialog: React.FC<WorkRequestDetailsDialogProps> = ({
                     <QrCode className="h-4 w-4" /> QR Code do Ativo
                   </h4>
                   <div className="flex justify-center">
-                    <QrCodeModule.default value={workRequest.assetId} size={128} level="L" />
+                    <QRCode value={workRequest.assetId} size={128} level="L" />
                   </div>
                   <p className="text-center text-sm text-muted-foreground mt-2">
                     Escaneie para acessar informações do ativo.

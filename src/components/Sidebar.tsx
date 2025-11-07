@@ -130,9 +130,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           type: "link",
         },
         {
-          name: "Ativos",
+          name: "Ativos", // Este link agora vai para a lista de ativos
           icon: Package,
-          path: "/assets/new",
+          path: "/assets", // Rota atualizada
           type: "link",
         },
         {

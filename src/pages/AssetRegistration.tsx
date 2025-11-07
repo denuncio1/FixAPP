@@ -89,7 +89,7 @@ const AssetRegistration = () => {
     console.log("Novo Ativo Cadastrado:", newAsset);
     toast.success("Ativo cadastrado com sucesso!");
     // Aqui você integraria com um backend para salvar o ativo
-    // Por enquanto, apenas limpamos o formulário e navegamos de volta
+    // Por enquanto, apenas limpamos o formulário e navegamos para a página de detalhes do novo ativo
     setName("");
     setCode("");
     setDescription("");
@@ -101,7 +101,7 @@ const AssetRegistration = () => {
     setAssignedTechnicianId(undefined);
     setPhotoFile(null);
     setPhotoPreviewUrl(undefined);
-    navigate("/dashboard"); // Ou para uma lista de ativos
+    navigate(`/assets/${newAsset.id}`); // Redireciona para a página de detalhes do ativo
   };
 
   return (

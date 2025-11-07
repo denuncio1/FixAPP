@@ -17,6 +17,8 @@ import Clients from "./pages/Clients";
 import SupplierRegistration from "./pages/SupplierRegistration";
 import ManagerRegistration from "./pages/ManagerRegistration";
 import AssetRegistration from "./pages/AssetRegistration";
+import Assets from "./pages/Assets"; // Importar a nova página de listagem de ativos
+import ViewAsset from "./pages/ViewAsset"; // Importar a nova página de visualização de ativo
 import PreventiveMaintenance from "./pages/PreventiveMaintenance";
 import SmartAlerts from "./pages/SmartAlerts";
 import MaintenanceHistory from "./pages/MaintenanceHistory";
@@ -74,7 +76,7 @@ const App = () => (
             
             <Route path="/dashboard" element={<ProtectedRoute><MaintenanceDashboard /></ProtectedRoute>} />
             <Route path="/work-orders" element={<ProtectedRoute><WorkOrders /></ProtectedRoute>} />
-            <Route path="/work-requests" element={<ProtectedRoute><WorkRequests /></ProtectedRoute>} /> {/* Nova rota */}
+            <Route path="/work-requests" element={<ProtectedRoute><WorkRequests /></ProtectedRoute>} />
             <Route path="/automatic-planner" element={<ProtectedRoute><AutomaticPlanner /></ProtectedRoute>} />
             <Route path="/technicians" element={<ProtectedRoute><Technicians /></ProtectedRoute>} />
             <Route path="/technicians/new" element={<ProtectedRoute><TechnicianRegistration /></ProtectedRoute>} />
@@ -84,7 +86,9 @@ const App = () => (
             <Route path="/clients/new" element={<ProtectedRoute><ViewClient /></ProtectedRoute>} />
             <Route path="/suppliers/new" element={<ProtectedRoute><SupplierRegistration /></ProtectedRoute>} />
             <Route path="/managers/new" element={<ProtectedRoute><ManagerRegistration /></ProtectedRoute>} />
+            <Route path="/assets" element={<ProtectedRoute><Assets /></ProtectedRoute>} /> {/* Nova rota para listar ativos */}
             <Route path="/assets/new" element={<ProtectedRoute><AssetRegistration /></ProtectedRoute>} />
+            <Route path="/assets/:id" element={<ProtectedRoute><ViewAsset /></ProtectedRoute>} /> {/* Nova rota para visualizar ativo */}
             <Route path="/maintenance/preventive" element={<ProtectedRoute><PreventiveMaintenance /></ProtectedRoute>} />
             <Route path="/maintenance/alerts" element={<ProtectedRoute><SmartAlerts /></ProtectedRoute>} />
             <Route path="/maintenance/history" element={<ProtectedRoute><MaintenanceHistory /></ProtectedRoute>} />
