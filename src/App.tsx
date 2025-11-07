@@ -10,8 +10,9 @@ import WorkOrders from "./pages/WorkOrders";
 import AutomaticPlanner from "./pages/AutomaticPlanner";
 import TechnicianRegistration from "./pages/TechnicianRegistration";
 import LocationRegistration from "./pages/LocationRegistration";
-import ViewClient from "./pages/ViewClient"; // Importar a nova página
+import ViewClient from "./pages/ViewClient";
 import SupplierRegistration from "./pages/SupplierRegistration";
+import ManagerRegistration from "./pages/ManagerRegistration"; // Importar a nova página
 
 const queryClient = new QueryClient();
 
@@ -28,8 +29,9 @@ const App = () => (
           <Route path="/automatic-planner" element={<AutomaticPlanner />} />
           <Route path="/technicians/new" element={<TechnicianRegistration />} />
           <Route path="/locations/new" element={<LocationRegistration />} />
-          <Route path="/clients/new" element={<ViewClient />} /> {/* Usar a nova página */}
+          <Route path="/clients/new" element={<ViewClient />} />
           <Route path="/suppliers/new" element={<SupplierRegistration />} />
+          <Route path="/managers/new" element={<ManagerRegistration />} /> {/* Nova rota */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
