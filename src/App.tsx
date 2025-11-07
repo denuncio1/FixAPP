@@ -30,8 +30,9 @@ import Gamification from "./pages/Gamification";
 import InternalChat from "./pages/InternalChat";
 import HelpCenter from "./pages/HelpCenter";
 import SupportRequest from "./pages/SupportRequest";
-import EnergyConsumption from "./pages/EnergyConsumption"; // Importar nova página
-import WasteDisposal from "./pages/WasteDisposal"; // Importar nova página
+import EnergyConsumption from "./pages/EnergyConsumption";
+import WasteDisposal from "./pages/WasteDisposal";
+import ImageRecognition from "./pages/ImageRecognition"; // Importar nova página
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
@@ -83,6 +84,7 @@ const App = () => (
             <Route path="/maintenance/preventive" element={<ProtectedRoute><PreventiveMaintenance /></ProtectedRoute>} />
             <Route path="/maintenance/alerts" element={<ProtectedRoute><SmartAlerts /></ProtectedRoute>} />
             <Route path="/maintenance/history" element={<ProtectedRoute><MaintenanceHistory /></ProtectedRoute>} />
+            <Route path="/maintenance/image-recognition" element={<ProtectedRoute><ImageRecognition /></ProtectedRoute>} /> {/* Nova rota */}
             <Route path="/stock/control" element={<ProtectedRoute><StockControl /></ProtectedRoute>} />
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
@@ -92,8 +94,8 @@ const App = () => (
             <Route path="/communication/chat" element={<ProtectedRoute><InternalChat /></ProtectedRoute>} />
             <Route path="/communication/help-center" element={<ProtectedRoute><HelpCenter /></ProtectedRoute>} />
             <Route path="/communication/support-request" element={<ProtectedRoute><SupportRequest /></ProtectedRoute>} />
-            <Route path="/sustainability/energy-consumption" element={<ProtectedRoute><EnergyConsumption /></ProtectedRoute>} /> {/* Nova rota */}
-            <Route path="/sustainability/waste-disposal" element={<ProtectedRoute><WasteDisposal /></ProtectedRoute>} /> {/* Nova rota */}
+            <Route path="/sustainability/energy-consumption" element={<ProtectedRoute><EnergyConsumption /></ProtectedRoute>} />
+            <Route path="/sustainability/waste-disposal" element={<ProtectedRoute><WasteDisposal /></ProtectedRoute>} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

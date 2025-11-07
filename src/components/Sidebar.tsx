@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2 } from "lucide-react"; // Novos ícones para Sustentabilidade
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera } from "lucide-react"; // Adicionado Camera para Reconhecimento de Imagem
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -46,6 +46,12 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           name: "Histórico de Manutenção",
           icon: History,
           path: "/maintenance/history",
+          type: "link",
+        },
+        {
+          name: "Reconhecimento de Imagem", // Novo link
+          icon: Camera,
+          path: "/maintenance/image-recognition",
           type: "link",
         },
       ],
@@ -162,8 +168,8 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
       ],
     },
     {
-      name: "Módulo de Sustentabilidade", // Nova Categoria
-      icon: Leaf, // Ícone para a categoria Sustentabilidade
+      name: "Módulo de Sustentabilidade",
+      icon: Leaf,
       type: "category",
       children: [
         {
