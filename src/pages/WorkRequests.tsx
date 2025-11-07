@@ -35,7 +35,7 @@ import {
 import { toast } from "sonner";
 import { WorkRequest, ChecklistMedia, ActivityLogEntry } from "@/types/work-order";
 import WorkRequestDetailsDialog from "@/components/WorkRequestDetailsDialog"; // Importar o novo diálogo
-import QRCode from "qrcode.react"; // Corrigido: Default import
+import * as QrCodeModule from "qrcode.react"; // Corrigido: Importação de namespace
 
 // Mock Data para Ativos (para simular a seleção via QR Code)
 const mockAssets = [
@@ -319,7 +319,7 @@ const WorkRequests = () => {
               {newRequestAssetId && (
                 <div className="mt-2 p-2 border rounded-md flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">QR Code para: {mockAssets.find(a => a.id === newRequestAssetId)?.name}</span>
-                  <QRCode value={newRequestAssetId} size={64} level="L" />
+                  <QrCodeModule.default value={newRequestAssetId} size={64} level="L" />
                 </div>
               )}
             </div>
