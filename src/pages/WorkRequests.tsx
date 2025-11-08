@@ -35,7 +35,7 @@ import {
 import { toast } from "sonner";
 import { WorkRequest, ChecklistMedia, ActivityLogEntry } from "@/types/work-order";
 import WorkRequestDetailsDialog from "@/components/WorkRequestDetailsDialog"; // Importar o novo diálogo
-import QRCode from "qrcode.react"; // Corrigido: Default import
+import { QRCode } from "qrcode.react"; // CORRIGIDO: Importação nomeada
 
 // Mock Data para Ativos (para simular a seleção via QR Code)
 const mockAssets = [
@@ -291,7 +291,6 @@ const WorkRequests = () => {
               Preencha os detalhes para criar uma nova solicitação.
             </DialogDescription>
           </DialogHeader>
-          {/* Correção do erro JSX: Adicionando o fechamento de DialogHeader */}
           <div className="grid gap-4 py-4 overflow-y-auto pr-4">
             <div className="grid gap-2">
               <Label htmlFor="description">Descrição do Problema *</Label>

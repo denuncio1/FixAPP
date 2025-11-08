@@ -16,9 +16,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { WorkRequest, ActivityLogEntry, ChecklistMedia } from "@/types/work-order";
 import { cn } from "@/lib/utils";
 import { FileText, History, QrCode, Image as ImageIcon, Video, CheckCircle, AlertTriangle, Ban, Wrench } from "lucide-react";
-import { format }date-fns";
+import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import QRCode from "qrcode.react"; // Corrigido: Default import
+import { QRCode } from "qrcode.react"; // CORRIGIDO: Importação nomeada
 
 interface WorkRequestDetailsDialogProps {
   isOpen: boolean;
