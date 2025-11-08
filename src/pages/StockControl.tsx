@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Menu, Search, Plus, Boxes, Edit, Trash2, BellRing, ShoppingCart, DollarSign, Package } from "lucide-react";
+import { Menu, Search, Plus, Boxes, Edit, Trash2, BellRing, ShoppingCart, DollarSign, Package, X } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Material, PurchaseOrderItem } from "@/types/material";
@@ -40,10 +40,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, X } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Supplier } from "@/types/supplier";
-import { Separator } from "@/components/ui/separator"; // Importação adicionada
-import { cn } from "@/lib/utils"; // Importação adicionada
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+// Importar os novos componentes modulares
+import StockOverviewCards from "@/components/stock-control/StockOverviewCards";
+import LowStockAlertCard from "@/components/stock-control/LowStockAlertCard";
+import MaterialTable from "@/components/stock-control/MaterialTable";
 
 // Mock Data para Materiais
 const mockMaterials: Material[] = [
@@ -335,136 +340,26 @@ const StockControl = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <Card className="md:col-span-1">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Habilitado</CardTitle>
-                <Label htmlFor="enabled-mode" className="sr-only">Habilitar/Desabilitar</Label>
-                <Switch
-                  id="enabled-mode"
-                  checked={isEnabled}
-                  onCheckedChange={setIsEnabled}
-                />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{isEnabled ? "Ativo" : "Inativo"}</div>
-                <p className="text-xs text-muted-foreground">
-                  Status geral do controle de estoque.
-                </p>
-              </CardContent>
-            </Card>
+          <StockOverviewCards
+            isEnabled={isEnabled}
+            setIsEnabled={setIsEnabled}
+            totalStockValue={totalStockValue}
+            formatCurrency={formatCurrency}
+          />
 
-            <Card className="md:col-span-2">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Custo Total do Estoque</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{formatCurrency(totalStockValue)}</div>
-                <p className="text-xs text-muted-foreground">
-                  Valor total de todos os materiais em estoque.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <LowStockAlertCard
+            lowStockMaterials={lowStockMaterials}
+            onGeneratePurchaseOrderForLowStock={handleGeneratePurchaseOrderForLowStock}
+          />
 
-          {lowStockMaterials.length > 0 && (
-            <Card className="mb-6 bg-red-50 border-red-200 text-red-800">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium flex items-center gap-2 text-red-800">
-                  <BellRing className="h-4 w-4" /> Alerta de Estoque Baixo!
-                </CardTitle>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/stock/alerts")}>
-                  Ver Detalhes
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm">
-                  {lowStockMaterials.length} item(s) está(ão) abaixo do nível mínimo de estoque.
-                  Considere gerar uma ordem de compra.
-                </p>
-                <Button className="mt-3 w-full" onClick={handleGeneratePurchaseOrderForLowStock}>
-                  <ShoppingCart className="h-4 w-4 mr-2" /> Gerar OC para Itens com Baixo Estoque
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-            <div className="relative flex-1 w-full md:max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar por nome, código, descrição ou localização..."
-                className="pl-9 w-full"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-
-            <Button className="flex items-center gap-2 w-full md:w-auto" onClick={handleAddMaterial}>
-              <Plus className="h-4 w-4" />
-              Novo Material
-            </Button>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Itens em Estoque</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Código</TableHead>
-                    <TableHead>Descrição</TableHead> {/* NOVO */}
-                    <TableHead>Quantidade</TableHead>
-                    <TableHead>Nível Mínimo</TableHead>
-                    <TableHead>Controlado por Serial</TableHead> {/* NOVO */}
-                    <TableHead>Localização</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredMaterials.length > 0 ? (
-                    filteredMaterials.map((material) => (
-                      <TableRow key={material.id}>
-                        <TableCell className="font-medium">{material.code}</TableCell>
-                        <TableCell>{material.description}</TableCell> {/* NOVO */}
-                        <TableCell>
-                          <Badge
-                            className={
-                              material.quantity <= material.minStockLevel
-                                ? "bg-red-100 text-red-800 hover:bg-red-100/80"
-                                : "bg-green-100 text-green-800 hover:bg-green-100/80"
-                            }
-                          >
-                            {material.quantity} {material.unit}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{material.minStockLevel} {material.unit}</TableCell>
-                        <TableCell>{material.isSerialControlled ? "Sim" : "Não"}</TableCell> {/* NOVO */}
-                        <TableCell>{material.location}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="icon" onClick={() => handleEditMaterial(material.id)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDeleteMaterial(material.id)}>
-                            <Trash2 className="h-4 w-4 text-red-500" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center text-muted-foreground py-4">
-                        Nenhum material encontrado.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+          <MaterialTable
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            filteredMaterials={filteredMaterials}
+            handleAddMaterial={handleAddMaterial}
+            handleEditMaterial={handleEditMaterial}
+            handleDeleteMaterial={handleDeleteMaterial}
+          />
         </main>
       </div>
 
