@@ -35,7 +35,7 @@ import {
 import { toast } from "sonner";
 import { WorkRequest, ChecklistMedia, ActivityLogEntry } from "@/types/work-order";
 import WorkRequestDetailsDialog from "@/components/WorkRequestDetailsDialog"; // Importar o novo diálogo
-// QRCode importação removida
+import NewWorkRequestDialog from "@/components/NewWorkRequestDialog"; // Importar o novo componente de diálogo
 
 // Mock Data para Ativos (para simular a seleção via QR Code)
 const mockAssets = [
@@ -82,86 +82,18 @@ const initialMockWorkRequests: WorkRequest[] = [
 const WorkRequests = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [workRequests, setWorkRequests] = useState<WorkRequest[]>(initialMockWorkRequests);
   const [isNewRequestDialogOpen, setIsNewRequestDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedWorkRequestForDetails, setSelectedWorkRequestForDetails] = useState<WorkRequest | null>(null);
-
-  // New Request Form States
-  const [newRequestDescription, setNewRequestDescription] = useState("");
-  const [newRequestAssetId, setNewRequestAssetId] = useState<string | undefined>(undefined);
-  const [newRequestPhotos, setNewRequestPhotos] = useState<File[]>([]);
-  const [newRequestVideos, setNewRequestVideos] = useState<File[]>([]);
-  const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
-  const [videoPreviewUrls, setVideoPreviewUrls] = useState<string[]>([]);
+  const [workRequests, setWorkRequests] = useState<WorkRequest[]>(initialMockWorkRequests); // Adicionado useState aqui
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      if (type === 'image') {
-        setNewRequestPhotos((prev) => [...prev, ...files]);
-        setPhotoPreviewUrls((prev) => [...prev, ...files.map(file => URL.createObjectURL(file))]);
-      } else {
-        setNewRequestVideos((prev) => [...prev, ...files]);
-        setVideoPreviewUrls((prev) => [...prev, ...files.map(file => URL.createObjectURL(file))]);
-      }
-      toast.success(`${files.length} ${type === 'image' ? 'foto(s)' : 'vídeo(s)'} adicionada(s).`);
-    }
-  };
-
-  const handleRemoveMedia = (urlToRemove: string, type: 'image' | 'video') => {
-    if (type === 'image') {
-      setPhotoPreviewUrls((prev) => prev.filter((url) => url !== urlToRemove));
-      setNewRequestPhotos((prev) => prev.filter((file) => URL.createObjectURL(file) !== urlToRemove));
-    } else {
-      setVideoPreviewUrls((prev) => prev.filter((url) => url !== urlToRemove));
-      setNewRequestVideos((prev) => prev.filter((file) => URL.createObjectURL(file) !== urlToRemove));
-    }
-    URL.revokeObjectURL(urlToRemove); // Libera a URL do objeto
-    toast.info("Mídia removida.");
-  };
-
-  const handleCreateNewRequest = () => {
-    if (!newRequestDescription) {
-      toast.error("A descrição da solicitação é obrigatória.");
-      return;
-    }
-
-    const asset = mockAssets.find(a => a.id === newRequestAssetId);
-    const newAttachments: ChecklistMedia[] = [
-      ...newRequestPhotos.map(file => ({ type: 'image' as const, url: URL.createObjectURL(file), filename: file.name })),
-      ...newRequestVideos.map(file => ({ type: 'video' as const, url: URL.createObjectURL(file), filename: file.name })),
-    ];
-
-    const newRequest: WorkRequest = {
-      id: `SR${Math.floor(Math.random() * 10000)}`,
-      status: "Aberto",
-      createdBy: "Usuário Atual (Mock)", // Em um app real, seria o usuário logado
-      createdAt: new Date().toISOString(),
-      description: newRequestDescription,
-      assetId: newRequestAssetId,
-      assetName: asset?.name,
-      attachments: newAttachments.length > 0 ? newAttachments : undefined,
-      activityLog: [
-        { timestamp: new Date().toISOString(), action: "Solicitação Aberta", details: "Nova solicitação de trabalho criada." },
-      ],
-    };
-
+  const handleSaveNewRequest = (newRequest: WorkRequest) => {
     setWorkRequests((prev) => [newRequest, ...prev]);
     toast.success("Solicitação de Trabalho criada com sucesso!");
-    setIsNewRequestDialogOpen(false);
-
-    // Reset form states
-    setNewRequestDescription("");
-    setNewRequestAssetId(undefined);
-    setNewRequestPhotos([]);
-    setNewRequestVideos([]);
-    setPhotoPreviewUrls([]);
-    setVideoPreviewUrls([]);
   };
 
   const handleOpenDetails = (request: WorkRequest) => {
@@ -281,108 +213,11 @@ const WorkRequests = () => {
       </div>
 
       {/* Diálogo para Nova Solicitação */}
-      <Dialog open={isNewRequestDialogOpen} onOpenChange={setIsNewRequestDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5" /> Nova Solicitação de Trabalho
-            </DialogTitle>
-            <DialogDescription>
-              Preencha os detalhes para criar uma nova solicitação.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4 overflow-y-auto pr-4">
-            <div className="grid gap-2">
-              <Label htmlFor="description">Descrição do Problema *</Label>
-              <Textarea
-                id="description"
-                placeholder="Descreva o problema ou a necessidade de serviço..."
-                value={newRequestDescription}
-                onChange={(e) => setNewRequestDescription(e.target.value)}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="asset">Ativo Relacionado (Opcional)</Label>
-              <Select value={newRequestAssetId} onValueChange={setNewRequestAssetId}>
-                <SelectTrigger id="asset">
-                  <SelectValue placeholder="Selecione um ativo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockAssets.map((asset) => (
-                    <SelectItem key={asset.id} value={asset.id}>
-                      {asset.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {/* Bloco do QR Code removido */}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="photos">Anexar Fotos</Label>
-              <Input
-                id="photos"
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => handleFileChange(e, 'image')}
-              />
-              {photoPreviewUrls.length > 0 && (
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {photoPreviewUrls.map((url) => (
-                    <div key={url} className="relative group">
-                      <img src={url} alt="Preview" className="h-20 w-full object-cover rounded-md border" />
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => handleRemoveMedia(url, 'image')}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="videos">Anexar Vídeos</Label>
-              <Input
-                id="videos"
-                type="file"
-                accept="video/*"
-                multiple
-                onChange={(e) => handleFileChange(e, 'video')}
-              />
-              {videoPreviewUrls.length > 0 && (
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {videoPreviewUrls.map((url) => (
-                    <div key={url} className="relative group">
-                      <video src={url} controls className="h-20 w-full object-cover rounded-md border" />
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => handleRemoveMedia(url, 'video')}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsNewRequestDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleCreateNewRequest}>
-              <Plus className="h-4 w-4 mr-2" /> Criar Solicitação
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <NewWorkRequestDialog
+        isOpen={isNewRequestDialogOpen}
+        onClose={() => setIsNewRequestDialogOpen(false)}
+        onSave={handleSaveNewRequest}
+      />
 
       {/* Diálogo de Detalhes da Solicitação */}
       {selectedWorkRequestForDetails && (

@@ -26,19 +26,24 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Menu, Search, Plus, ListChecks, FileText, CalendarIcon, CheckCircle2, XCircle, History, Download, Upload, PenTool, Signature, Camera, Video, MapPin } from "lucide-react";
+import { Menu, Search, Plus, ListChecks, FileText, CalendarIcon, CheckCircle2, XCircle, History, Download, Upload, PenTool, Signature, Camera, Video, MapPin, Wrench } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { NormaRegulamentadora, NrChecklistItem, NrChecklistRun } from "@/types/nr-checklist";
 import { useSession } from "@/components/SessionContextProvider";
 import { supabase } from "@/integrations/supabase/client";
+import NewWorkRequestDialog from "@/components/NewWorkRequestDialog"; // Importar o novo diálogo de solicitação de trabalho
+import { WorkRequest, ChecklistMedia } from "@/types/work-order"; // Importar tipos necessários
 
 // Mock Data para Normas Regulamentadoras (será substituído por dados do Supabase)
 const mockNormas: NormaRegulamentadora[] = [
   { id: "nr10", user_id: "mock_user_id", nr_number: "NR-10", title: "Segurança em Instalações e Serviços em Eletricidade", description: "Estabelece os requisitos e condições mínimas objetivando a implementação de medidas de controle e sistemas preventivos, de forma a garantir a segurança e a saúde dos trabalhadores que, direta ou indiretamente, interajam em instalações elétricas e serviços com eletricidade.", content_url: "https://www.gov.br/trabalho-e-emprego/pt-br/servicos/seguranca-e-saude-no-trabalho/normatizacao/normas-regulamentadoras/nr-10.pdf", created_at: "2023-01-01T00:00:00Z" },
   { id: "nr12", user_id: "mock_user_id", nr_number: "NR-12", title: "Segurança no Trabalho em Máquinas e Equipamentos", description: "Define referências técnicas, princípios fundamentais e medidas de proteção para garantir a saúde e a integridade física dos trabalhadores e estabelece requisitos mínimos para a prevenção de acidentes e doenças do trabalho nas fases de projeto e de utilização de máquinas e equipamentos de todos os tipos.", content_url: "https://www.gov.br/trabalho-e-emprego/pt-br/servicos/seguranca-e-saude-no-trabalho/normatizacao/normas-regulamentadoras/nr-12.pdf", created_at: "2023-01-01T00:00:00Z" },
   { id: "osha1910", user_id: "mock_user_id", nr_number: "OSHA 1910.147", title: "The Control of Hazardous Energy (Lockout/Tagout)", description: "This standard addresses the practices and procedures necessary to disable machinery or equipment to prevent the release of hazardous energy while employees perform servicing and maintenance activities.", content_url: "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147", created_at: "2023-01-01T00:00:00Z" },
+  { id: "epa", user_id: "mock_user_id", nr_number: "EPA", title: "Environmental Protection Agency Regulations", description: "Regulations set by the U.S. Environmental Protection Agency to protect human health and the environment.", content_url: "https://www.epa.gov/laws-regulations", created_at: "2023-01-01T00:00:00Z" },
+  { id: "iso50001", user_id: "mock_user_id", nr_number: "ISO 50001", title: "Energy Management Systems", description: "International standard for energy management systems (EnMS) to help organizations improve their energy performance.", content_url: "https://www.iso.org/standard/69501.html", created_at: "2023-01-01T00:00:00Z" },
+  { id: "iso45001", user_id: "mock_user_id", nr_number: "ISO 45001", title: "Occupational Health and Safety Management Systems", description: "International standard for occupational health and safety (OH&S) management systems, providing a framework to improve employee safety, reduce workplace risks and create better, safer working conditions.", content_url: "https://www.iso.org/standard/65460.html", created_at: "2023-01-01T00:00:00Z" },
 ];
 
 // Mock Data para Itens de Checklist (será substituído por dados do Supabase)
@@ -50,6 +55,9 @@ const mockNrChecklistItems: NrChecklistItem[] = [
   { id: "nr12-1", user_id: "mock_user_id", nr_number: "NR-12", item_description: "12.4.1 - Sistemas de segurança", is_header: true, created_at: "2023-01-01T00:00:00Z", updated_at: "2023-01-01T00:00:00Z" },
   { id: "nr12-2", user_id: "mock_user_id", nr_number: "NR-12", item_description: "As máquinas e equipamentos possuem sistemas de segurança (ex: proteções fixas, móveis, intertravamento) conforme a norma?", guidance: "Inspecionar proteções físicas e dispositivos de segurança.", created_at: "2023-01-01T00:00:00Z", updated_at: "2023-01-01T00:00:00Z" },
   { id: "nr12-3", user_id: "mock_user_id", nr_number: "NR-12", item_description: "Os dispositivos de parada de emergência estão acessíveis e funcionando?", guidance: "Testar botões de emergência.", created_at: "2023-01-01T00:00:00Z", updated_at: "2023-01-01T00:00:00Z" },
+  { id: "epa-1", user_id: "mock_user_id", nr_number: "EPA", item_description: "Descarte de resíduos perigosos está sendo feito conforme regulamentação?", guidance: "Verificar licenças e registros de descarte.", created_at: "2023-01-01T00:00:00Z", updated_at: "2023-01-01T00:00:00Z" },
+  { id: "iso50001-1", user_id: "mock_user_id", nr_number: "ISO 50001", item_description: "Existe um plano de gestão de energia documentado e comunicado?", guidance: "Revisar documentação e evidências de comunicação.", created_at: "2023-01-01T00:00:00Z", updated_at: "2023-01-01T00:00:00Z" },
+  { id: "iso45001-1", user_id: "mock_user_id", nr_number: "ISO 45001", item_description: "A política de saúde e segurança ocupacional está implementada e é revisada periodicamente?", guidance: "Verificar registros de revisão e comunicação da política.", created_at: "2023-01-01T00:00:00Z", updated_at: "2023-01-01T00:00:00Z" },
 ];
 
 // Mock Data para Execuções de Checklist (será substituído por dados do Supabase)
@@ -65,18 +73,12 @@ interface LocationData {
   address?: string;
 }
 
-interface ChecklistMedia {
-  type: 'image' | 'video';
-  url: string;
-  filename: string;
-}
-
 const NRChecklist = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedNr, setSelectedNr] = useState<string | null>(null);
   const [normas, setNormas] = useState<NormaRegulamentadora[]>(mockNormas);
-  const [checklistItems, setChecklistItems] = useState<NrChecklistItem[]>([]);
+  const [checklistItems, setChecklistItems] = useState<NrChecklistItem[]>([]); // This state is not used, currentRunItems is used for active checklist
   const [checklistRuns, setChecklistRuns] = useState<NrChecklistRun[]>(mockNrChecklistRuns);
   const { user } = useSession();
 
@@ -87,6 +89,10 @@ const NRChecklist = () => {
   const [runVideos, setRunVideos] = useState<ChecklistMedia[]>([]);
   const [signatureName, setSignatureName] = useState("");
   const [currentLocation, setCurrentLocation] = useState<LocationData | null>(null);
+
+  // Estados para o diálogo de Nova Solicitação de Trabalho
+  const [isNewWorkRequestDialogOpen, setIsNewWorkRequestDialogOpen] = useState(false);
+  const [newWorkRequestInitialData, setNewWorkRequestInitialData] = useState<Partial<WorkRequest> | undefined>(undefined);
 
   useEffect(() => {
     // Simular carregamento de itens de checklist para a NR selecionada
@@ -261,6 +267,47 @@ const NRChecklist = () => {
     setSelectedNr(null); // Volta para a seleção de NR
   };
 
+  const handleGenerateWorkRequest = () => {
+    if (!selectedNr) {
+      toast.error("Selecione uma normativa antes de gerar uma solicitação de trabalho.");
+      return;
+    }
+
+    const nonCompliantItems = currentRunItems.filter(item => !item.is_header && item.is_compliant === false);
+    let description = `Solicitação de Trabalho gerada a partir do Checklist de ${selectedNr}.\n\n`;
+
+    if (nonCompliantItems.length > 0) {
+      description += "Itens Não Conformes:\n";
+      nonCompliantItems.forEach(item => {
+        description += `- ${item.item_description}\n`;
+        if (item.notes) description += `  Notas: ${item.notes}\n`;
+      });
+    } else {
+      description += "Nenhum item não conforme foi encontrado, mas uma solicitação de trabalho foi gerada manualmente.\n";
+    }
+
+    if (runNotes) {
+      description += `\nNotas Gerais do Checklist:\n${runNotes}\n`;
+    }
+
+    const initialAttachments: ChecklistMedia[] = [...runPhotos, ...runVideos];
+
+    setNewWorkRequestInitialData({
+      description: description,
+      attachments: initialAttachments.length > 0 ? initialAttachments : undefined,
+      // Você pode adicionar mais campos aqui, como assetId se o checklist estiver vinculado a um ativo
+    });
+    setIsNewWorkRequestDialogOpen(true);
+  };
+
+  const handleSaveWorkRequest = (newRequest: WorkRequest) => {
+    // Aqui você integraria com a lógica real para salvar a solicitação de trabalho
+    // Por enquanto, apenas logamos e mostramos um toast
+    console.log("Nova Solicitação de Trabalho salva:", newRequest);
+    toast.success(`Solicitação de Trabalho ${newRequest.id} criada com sucesso!`);
+    setIsNewWorkRequestDialogOpen(false);
+  };
+
   const getNrTitle = (nrNumber: string) => {
     return normas.find(n => n.nr_number === nrNumber)?.title || nrNumber;
   };
@@ -284,7 +331,7 @@ const NRChecklist = () => {
           <div className="mb-6">
             <h2 className="text-3xl font-bold mb-2">Gerenciar e Executar Checklists de Conformidade</h2>
             <p className="text-muted-foreground">
-              Garanta o cumprimento de normativas como OSHA, NR's e EPA, registrando informações detalhadas.
+              Garanta o cumprimento de normativas como OSHA, NR's, EPA, ISO 50001 e ISO 45001, registrando informações detalhadas.
             </p>
           </div>
 
@@ -457,9 +504,14 @@ const NRChecklist = () => {
                       </div>
                     </div>
 
-                    <Button onClick={handleCompleteChecklist} className="w-full mt-4">
-                      <ListChecks className="h-4 w-4 mr-2" /> Concluir Checklist
-                    </Button>
+                    <div className="flex gap-2 w-full mt-4">
+                      <Button onClick={handleCompleteChecklist} className="flex-1">
+                        <ListChecks className="h-4 w-4 mr-2" /> Concluir Checklist
+                      </Button>
+                      <Button onClick={handleGenerateWorkRequest} className="flex-1" variant="secondary">
+                        <Wrench className="h-4 w-4 mr-2" /> Gerar Solicitação de Trabalho
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <p className="text-muted-foreground text-center py-4">
@@ -512,6 +564,14 @@ const NRChecklist = () => {
           </Card>
         </main>
       </div>
+
+      {/* Diálogo para Nova Solicitação de Trabalho */}
+      <NewWorkRequestDialog
+        isOpen={isNewWorkRequestDialogOpen}
+        onClose={() => setIsNewWorkRequestDialogOpen(false)}
+        onSave={handleSaveWorkRequest}
+        initialData={newWorkRequestInitialData}
+      />
     </div>
   );
 };
