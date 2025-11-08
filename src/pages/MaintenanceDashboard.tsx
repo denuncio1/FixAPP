@@ -4,31 +4,60 @@ import React from "react";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Menu, Wrench, Package, Users, Home, FileText, Download } from "lucide-react"; // Adicionado FileText, Download
+import { Menu, Wrench, Package, Users, Home, FileText, Download, RefreshCw } from "lucide-react"; // Adicionado RefreshCw
 import Sidebar from "@/components/Sidebar";
-import KpiCards from "@/components/KpiCards"; // Nova importação
-import MaintenanceCharts from "@/components/MaintenanceCharts"; // Nova importação
-import { toast } from "sonner"; // Importar toast para notificações
-import AppLogo from "@/components/AppLogo"; // Importar AppLogo
+import KpiCards from "@/components/KpiCards";
+import MaintenanceCharts from "@/components/MaintenanceCharts";
+import DashboardKpiCards from "@/components/DashboardKpiCards"; // NOVO: Importar DashboardKpiCards
+import ComplianceDonutChart from "@/components/ComplianceDonutChart"; // NOVO: Importar ComplianceDonutChart
+import WorkOrdersBarChart from "@/components/WorkOrdersBarChart"; // NOVO: Importar WorkOrdersBarChart
+import ServiceRequestsBarChart from "@/components/ServiceRequestsBarChart"; // NOVO: Importar ServiceRequestsBarChart
+import { toast } from "sonner";
+import AppLogo from "@/components/AppLogo";
+import { Input } from "@/components/ui/input"; // Para o filtro de localização
 
 const MaintenanceDashboard = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [locationFilter, setLocationFilter] = useState(""); // Estado para o filtro de localização
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  // Mock Data para KPIs
+  // Mock Data para KPIs existentes
   const mockKpis = {
     avgResponseTime: "3.5 horas",
     costPerWorkOrder: "R$ 150,00",
     assetAvailability: "98.5%",
   };
 
+  // NOVO: Mock Data para os KPIs do Dashboard da imagem
+  const mockDashboardKpis = {
+    ossInVerification: 15,
+    ossConcluidas: 74,
+    tarefasAtrasadas: 12,
+    paradasPlanejadas: 8,
+    paradasNaoPlanejadas: 3,
+    ativosParados: 5, // Exemplo
+    severidadeFalhas: "Média",
+  };
+
+  // NOVO: Mock Data para o gráfico de cumprimento
+  const mockCompliancePercentage = 51.0;
+
+  // NOVO: Mock Data para o gráfico de Ordens de Serviço
+  const mockWorkOrdersChartData = [
+    { name: "Total", "OSs Criadas": 49, "OSs Finalizadas": 25, "OSs Pendentes": 24 },
+  ];
+
+  // NOVO: Mock Data para o gráfico de Solicitações de Serviços
+  const mockServiceRequestsChartData = [
+    { name: "Total", Criado: 14, Solucionado: 1 },
+  ];
+
   const handleExportReport = (format: string) => {
     toast.info(`Funcionalidade de exportação para ${format} em desenvolvimento.`);
     console.log(`Exportar relatório em formato: ${format}`);
-    // Aqui seria a lógica para chamar um serviço de exportação (backend ou biblioteca cliente)
   };
 
   return (
@@ -44,11 +73,24 @@ const MaintenanceDashboard = () => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <AppLogo className="h-12 w-auto mr-4" /> {/* Logo à esquerda, mais proeminente */}
-          <h1 className="text-xl font-semibold flex items-center gap-2 flex-1 justify-between">
-            <span>Painel de Manutenção e Relatórios</span>
-            <AppLogo className="h-8 w-auto ml-2" /> {/* Logo à direita do título */}
+          <AppLogo className="h-12 w-auto mr-4" />
+          <h1 className="text-xl font-semibold flex items-center gap-2 flex-1">
+            Painel de Controle
           </h1>
+          {/* NOVO: Filtro de Localização no Header */}
+          <div className="flex items-center gap-2 ml-auto">
+            <Input
+              placeholder="Localização ou parte de"
+              className="w-[200px]"
+              value={locationFilter}
+              onChange={(e) => setLocationFilter(e.target.value)}
+            />
+            <Button variant="ghost" size="icon">
+              <RefreshCw className="h-5 w-5" />
+            </Button>
+            {/* Outros ícones do header da imagem podem ser adicionados aqui */}
+            <AppLogo className="h-8 w-auto ml-4" /> {/* Logo à direita do título */}
+          </div>
         </header>
         <main className="flex-1 p-6">
           <div className="mb-6">
@@ -58,7 +100,27 @@ const MaintenanceDashboard = () => {
             </p>
           </div>
 
-          {/* Seção de KPIs */}
+          {/* NOVO: Seção de KPIs do Dashboard da imagem */}
+          <div className="mb-8">
+            <DashboardKpiCards
+              ossInVerification={mockDashboardKpis.ossInVerification}
+              ossConcluidas={mockDashboardKpis.ossConcluidas}
+              tarefasAtrasadas={mockDashboardKpis.tarefasAtrasadas}
+              paradasPlanejadas={mockDashboardKpis.paradasPlanejadas}
+              paradasNaoPlanejadas={mockDashboardKpis.paradasNaoPlanejadas}
+              ativosParados={mockDashboardKpis.ativosParados}
+              severidadeFalhas={mockDashboardKpis.severidadeFalhas}
+            />
+          </div>
+
+          {/* NOVO: Gráficos do Dashboard da imagem */}
+          <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3 mb-8">
+            <ComplianceDonutChart compliancePercentage={mockCompliancePercentage} />
+            <WorkOrdersBarChart data={mockWorkOrdersChartData} />
+            <ServiceRequestsBarChart data={mockServiceRequestsChartData} />
+          </div>
+
+          {/* Seção de KPIs (existente) */}
           <div className="mb-8">
             <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
               <FileText className="h-6 w-6" /> Indicadores Chave de Desempenho (KPIs)
@@ -66,7 +128,7 @@ const MaintenanceDashboard = () => {
             <KpiCards kpis={mockKpis} />
           </div>
 
-          {/* Seção de Gráficos Interativos */}
+          {/* Seção de Gráficos Interativos (existente) */}
           <div className="mb-8">
             <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
               <Wrench className="h-6 w-6" /> Análise de Manutenção
@@ -74,7 +136,7 @@ const MaintenanceDashboard = () => {
             <MaintenanceCharts />
           </div>
 
-          {/* Seção de Exportação de Relatórios */}
+          {/* Seção de Exportação de Relatórios (existente) */}
           <div className="mb-8">
             <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
               <Download className="h-6 w-6" /> Exportar Relatórios
