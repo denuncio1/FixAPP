@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Menu, Link as LinkIcon, Settings2, Plus } from "lucide-react";
+import { Menu, Link as LinkIcon, Settings2, Plus, Database, TrendingDown, Scale } from "lucide-react"; // Adicionado Database, TrendingDown, Scale
 import Sidebar from "@/components/Sidebar";
 
 const SupplierIntegration = () => {
@@ -39,21 +39,22 @@ const SupplierIntegration = () => {
           <Card className="max-w-2xl mx-auto text-center">
             <CardHeader>
               <CardTitle className="flex items-center justify-center gap-2">
-                <LinkIcon className="h-6 w-6" /> Funcionalidade em Desenvolvimento
+                <LinkIcon className="h-6 w-6" /> Integração de Cadeia de Suprimentos
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                Esta seção permitirá a configuração de integrações diretas com sistemas de fornecedores para:
+                Esta seção permite a configuração de integrações diretas com sistemas de fornecedores e ERPs, como **SAP** e **Totvs Proteus**, para otimizar a gestão de estoque e reduzir custos.
               </p>
               <ul className="list-disc list-inside text-left text-muted-foreground space-y-1">
-                <li>Automatizar o envio de pedidos de compra.</li>
-                <li>Receber atualizações de status de pedidos.</li>
-                <li>Sincronizar informações de catálogo e preços.</li>
-                <li>Receber notificações de disponibilidade de estoque dos fornecedores.</li>
+                <li className="flex items-center gap-2"><Database className="h-4 w-4 text-blue-500" /> Automatizar o envio de pedidos de compra e reabastecimento.</li>
+                <li className="flex items-center gap-2"><TrendingDown className="h-4 w-4 text-green-500" /> Reduzir custos operacionais e de estoque.</li>
+                <li className="flex items-center gap-2"><Scale className="h-4 w-4 text-yellow-500" /> Manter o estoque equilibrado e evitar rupturas.</li>
+                <li>Receber atualizações de status de pedidos em tempo real.</li>
+                <li>Sincronizar informações de catálogo, preços e disponibilidade.</li>
               </ul>
               <p className="text-lg font-semibold mt-6">
-                Fique atento para futuras atualizações!
+                Otimize sua cadeia de suprimentos e melhore a eficiência operacional!
               </p>
               <div className="flex justify-center gap-4 mt-6">
                 <Button variant="outline">

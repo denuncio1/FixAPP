@@ -20,11 +20,11 @@ import { toast } from "sonner"; // Importação adicionada
 
 // Mock Data para Materiais (para simular estoque real e gerar alertas)
 const mockCurrentMaterials: Material[] = [
-  { id: "MAT001", name: "Filtro de Óleo (Modelo X)", code: "FO-MX-001", quantity: 8, unit: "unidade", minStockLevel: 10, location: "Armazém Principal, Prateleira A1", lastUpdated: "2024-11-05T10:00:00Z" },
-  { id: "MAT002", name: "Cabo Elétrico 2.5mm²", code: "CE-2.5-002", quantity: 60, unit: "metro", minStockLevel: 50, location: "Armazém Principal, Prateleira B2", lastUpdated: "2024-11-05T10:00:00Z" },
-  { id: "MAT003", name: "Válvula Hidráulica (Tipo Y)", code: "VH-TY-003", quantity: 2, unit: "unidade", minStockLevel: 3, location: "Armazém Principal, Prateleira C3", lastUpdated: "2024-11-05T10:00:00Z" },
-  { id: "MAT004", name: "Graxa Lubrificante (Balde 5kg)", code: "GL-5KG-004", quantity: 1, unit: "balde", minStockLevel: 1, location: "Armazém Principal, Prateleira D4", lastUpdated: "2024-11-05T10:00:00Z" },
-  { id: "MAT005", name: "Parafuso M8x20mm", code: "PM8X20-005", quantity: 150, unit: "unidade", minStockLevel: 200, location: "Armazém Principal, Gaveta 12", lastUpdated: "2024-11-05T10:00:00Z" },
+  { id: "MAT001", name: "Filtro de Óleo (Modelo X)", code: "FO-MX-001", quantity: 8, unit: "unidade", minStockLevel: 10, location: "Armazém Principal, Prateleira A1", lastUpdated: "2024-11-05T10:00:00Z", unitCost: 15.00, isSerialControlled: false },
+  { id: "MAT002", name: "Cabo Elétrico 2.5mm²", code: "CE-2.5-002", quantity: 60, unit: "metro", minStockLevel: 50, location: "Armazém Principal, Prateleira B2", lastUpdated: "2024-11-05T10:00:00Z", unitCost: 2.50, isSerialControlled: false },
+  { id: "MAT003", name: "Válvula Hidráulica (Tipo Y)", code: "VH-TY-003", quantity: 2, unit: "unidade", minStockLevel: 3, location: "Armazém Principal, Prateleira C3", lastUpdated: "2024-11-05T10:00:00Z", unitCost: 80.00, isSerialControlled: true },
+  { id: "MAT004", name: "Graxa Lubrificante (Balde 5kg)", code: "GL-5KG-004", quantity: 1, unit: "balde", minStockLevel: 1, location: "Armazém Principal, Prateleira D4", lastUpdated: "2024-11-05T10:00:00Z", unitCost: 120.00, isSerialControlled: false },
+  { id: "MAT005", name: "Parafuso M8x20mm", code: "PM8X20-005", quantity: 150, unit: "unidade", minStockLevel: 200, location: "Armazém Principal, Gaveta 12", lastUpdated: "2024-11-05T10:00:00Z", unitCost: 0.50, isSerialControlled: false },
 ];
 
 const LowStockAlerts = () => {

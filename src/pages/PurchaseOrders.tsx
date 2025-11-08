@@ -40,6 +40,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"; // Importação adicionada
 import { Label } from "@/components/ui/label"; // Importação adicionada
 import { Textarea } from "@/components/ui/textarea"; // Importação adicionada
+import { Separator } from "@/components/ui/separator"; // Importação adicionada
 
 // Mock Data para Fornecedores (para seleção)
 const mockSuppliers: Supplier[] = [
@@ -49,9 +50,9 @@ const mockSuppliers: Supplier[] = [
 
 // Mock Data para Materiais (para seleção de itens da OC)
 const mockMaterials: Material[] = [
-  { id: "MAT001", name: "Filtro de Óleo (Modelo X)", code: "FO-MX-001", quantity: 50, unit: "unidade", minStockLevel: 10, location: "Armazém Principal, Prateleira A1", lastUpdated: "2024-11-01T10:00:00Z" },
-  { id: "MAT002", name: "Cabo Elétrico 2.5mm²", code: "CE-2.5-002", quantity: 200, unit: "metro", minStockLevel: 50, location: "Armazém Principal, Prateleira B2", lastUpdated: "2024-10-30T14:30:00Z" },
-  { id: "MAT003", name: "Válvula Hidráulica (Tipo Y)", code: "VH-TY-003", quantity: 5, unit: "unidade", minStockLevel: 3, location: "Armazém Principal, Prateleira C3", lastUpdated: "2024-11-02T09:15:00Z" },
+  { id: "MAT001", name: "Filtro de Óleo (Modelo X)", code: "FO-MX-001", quantity: 50, unit: "unidade", minStockLevel: 10, location: "Armazém Principal, Prateleira A1", lastUpdated: "2024-11-01T10:00:00Z", unitCost: 15.00, isSerialControlled: false },
+  { id: "MAT002", name: "Cabo Elétrico 2.5mm²", code: "CE-2.5-002", quantity: 200, unit: "metro", minStockLevel: 50, location: "Armazém Principal, Prateleira B2", lastUpdated: "2024-10-30T14:30:00Z", unitCost: 2.50, isSerialControlled: false },
+  { id: "MAT003", name: "Válvula Hidráulica (Tipo Y)", code: "VH-TY-003", quantity: 5, unit: "unidade", minStockLevel: 3, location: "Armazém Principal, Prateleira C3", lastUpdated: "2024-11-02T09:15:00Z", unitCost: 80.00, isSerialControlled: true },
 ];
 
 // Mock Data para Ordens de Compra

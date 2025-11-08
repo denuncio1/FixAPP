@@ -9,6 +9,8 @@ export interface Material {
   location: string; // Localização no estoque (ex: "Prateleira A1", "Armazém Principal")
   supplierId?: string; // ID do fornecedor principal
   lastUpdated: string; // Data da última atualização (ISO string)
+  unitCost: number; // NOVO: Custo unitário do material
+  isSerialControlled: boolean; // NOVO: Indica se o material é controlado por número de série
 }
 
 export interface MaterialMovement {

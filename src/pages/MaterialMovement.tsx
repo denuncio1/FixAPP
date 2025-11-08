@@ -28,9 +28,9 @@ import { Textarea } from "@/components/ui/textarea";
 
 // Mock Data para Materiais (para seleção)
 const mockMaterialsForSelection: Material[] = [
-  { id: "MAT001", name: "Filtro de Óleo (Modelo X)", code: "FO-MX-001", quantity: 50, unit: "unidade", minStockLevel: 10, location: "Armazém Principal, Prateleira A1", lastUpdated: "2024-11-01T10:00:00Z" },
-  { id: "MAT002", name: "Cabo Elétrico 2.5mm²", code: "CE-2.5-002", quantity: 200, unit: "metro", minStockLevel: 50, location: "Armazém Principal, Prateleira B2", lastUpdated: "2024-10-30T14:30:00Z" },
-  { id: "MAT003", name: "Válvula Hidráulica (Tipo Y)", code: "VH-TY-003", quantity: 5, unit: "unidade", minStockLevel: 3, location: "Armazém Principal, Prateleira C3", lastUpdated: "2024-11-02T09:15:00Z" },
+  { id: "MAT001", name: "Filtro de Óleo (Modelo X)", code: "FO-MX-001", quantity: 50, unit: "unidade", minStockLevel: 10, location: "Armazém Principal, Prateleira A1", lastUpdated: "2024-11-01T10:00:00Z", unitCost: 15.00, isSerialControlled: false },
+  { id: "MAT002", name: "Cabo Elétrico 2.5mm²", code: "CE-2.5-002", quantity: 200, unit: "metro", minStockLevel: 50, location: "Armazém Principal, Prateleira B2", lastUpdated: "2024-10-30T14:30:00Z", unitCost: 2.50, isSerialControlled: false },
+  { id: "MAT003", name: "Válvula Hidráulica (Tipo Y)", code: "VH-TY-003", quantity: 5, unit: "unidade", minStockLevel: 3, location: "Armazém Principal, Prateleira C3", lastUpdated: "2024-11-02T09:15:00Z", unitCost: 80.00, isSerialControlled: true },
 ];
 
 // Mock Data para Movimentações de Materiais
