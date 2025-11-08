@@ -38,6 +38,7 @@ import ImageRecognition from "./pages/ImageRecognition";
 import VirtualAssistant from "./pages/VirtualAssistant";
 import DigitalMeters from "./pages/DigitalMeters";
 import WorkRequests from "./pages/WorkRequests"; // Importar nova página
+import NRChecklist from "./pages/NRChecklist"; // NOVO: Importar a página de Checklist de Normativas
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
@@ -95,6 +96,7 @@ const App = () => (
             <Route path="/maintenance/image-recognition" element={<ProtectedRoute><ImageRecognition /></ProtectedRoute>} />
             <Route path="/maintenance/virtual-assistant" element={<ProtectedRoute><VirtualAssistant /></ProtectedRoute>} />
             <Route path="/maintenance/digital-meters" element={<ProtectedRoute><DigitalMeters /></ProtectedRoute>} />
+            <Route path="/maintenance/nr-checklist" element={<ProtectedRoute><NRChecklist /></ProtectedRoute>} /> {/* NOVA ROTA */}
             <Route path="/stock/control" element={<ProtectedRoute><StockControl /></ProtectedRoute>} />
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
