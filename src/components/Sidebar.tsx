@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot, Gauge, FileText, ListChecks } from "lucide-react"; // Adicionado ListChecks para NRChecklist
+import { Home, Wrench, Package, Users, Settings, Map, Building2, PlusCircle, Truck, Briefcase, CalendarCheck, BellRing, History, Boxes, ArrowDownUp, BellDot, Link as LinkIcon, Trophy, MessageSquare, LifeBuoy, Headset, Leaf, Zap, Trash2, Camera, Bot, Gauge, FileText, ListChecks, ShoppingCart } from "lucide-react"; // Adicionado ShoppingCart
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import AppLogo from "./AppLogo";
@@ -102,6 +102,12 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           name: "Alertas de Estoque",
           icon: BellDot,
           path: "/stock/alerts",
+          type: "link",
+        },
+        {
+          name: "Ordens de Compra", // NOVO ITEM
+          icon: ShoppingCart, // Ícone para ordens de compra
+          path: "/stock/purchase-orders", // NOVA ROTA
           type: "link",
         },
         {

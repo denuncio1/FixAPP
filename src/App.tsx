@@ -39,6 +39,7 @@ import VirtualAssistant from "./pages/VirtualAssistant";
 import DigitalMeters from "./pages/DigitalMeters";
 import WorkRequests from "./pages/WorkRequests"; // Importar nova página
 import NRChecklist from "./pages/NRChecklist"; // NOVO: Importar a página de Checklist de Normativas
+import PurchaseOrders from "./pages/PurchaseOrders"; // NOVO: Importar a página de Ordens de Compra
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
 import OfflineIndicator from "./components/OfflineIndicator"; // NOVO: Importar OfflineIndicator
 
@@ -101,6 +102,7 @@ const App = () => (
             <Route path="/stock/control" element={<ProtectedRoute><StockControl /></ProtectedRoute>} />
             <Route path="/stock/movement" element={<ProtectedRoute><MaterialMovement /></ProtectedRoute>} />
             <Route path="/stock/alerts" element={<ProtectedRoute><LowStockAlerts /></ProtectedRoute>} />
+            <Route path="/stock/purchase-orders" element={<ProtectedRoute><PurchaseOrders /></ProtectedRoute>} /> {/* NOVA ROTA */}
             <Route path="/stock/supplier-integration" element={<ProtectedRoute><SupplierIntegration /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} />

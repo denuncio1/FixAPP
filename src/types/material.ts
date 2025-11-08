@@ -31,3 +31,26 @@ export interface LowStockAlert {
   timestamp: string; // Data e hora do alerta
   status: "Ativo" | "Resolvido";
 }
+
+export interface PurchaseOrderItem {
+  materialId: string;
+  materialName: string;
+  quantity: number;
+  unitCost: number;
+  totalCost: number;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  orderNumber: string;
+  supplierId: string;
+  supplierName: string;
+  items: PurchaseOrderItem[];
+  totalAmount: number;
+  orderDate: string; // ISO string
+  expectedDeliveryDate: string; // ISO string
+  status: "Pendente" | "Aprovada" | "Recebida Parcialmente" | "Recebida Completa" | "Cancelada";
+  createdBy: string;
+  notes?: string;
+  createdAt: string; // ISO string
+}
