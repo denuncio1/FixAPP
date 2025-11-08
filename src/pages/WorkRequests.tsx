@@ -35,7 +35,7 @@ import {
 import { toast } from "sonner";
 import { WorkRequest, ChecklistMedia, ActivityLogEntry } from "@/types/work-order";
 import WorkRequestDetailsDialog from "@/components/WorkRequestDetailsDialog"; // Importar o novo diálogo
-import { QRCode } from "qrcode.react"; // CORRIGIDO: Importação nomeada
+import QRCode from "qrcode.react"; // CORRIGIDO: Importação padrão (default import)
 
 // Mock Data para Ativos (para simular a seleção via QR Code)
 const mockAssets = [
