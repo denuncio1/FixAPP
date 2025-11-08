@@ -40,6 +40,7 @@ import DigitalMeters from "./pages/DigitalMeters";
 import WorkRequests from "./pages/WorkRequests"; // Importar nova página
 import NRChecklist from "./pages/NRChecklist"; // NOVO: Importar a página de Checklist de Normativas
 import { SessionContextProvider, useSession } from "./components/SessionContextProvider";
+import OfflineIndicator from "./components/OfflineIndicator"; // NOVO: Importar OfflineIndicator
 
 const queryClient = new QueryClient();
 
@@ -113,6 +114,7 @@ const App = () => (
           </Routes>
         </SessionContextProvider>
       </BrowserRouter>
+      <OfflineIndicator /> {/* Adicionado o indicador de offline aqui */}
     </TooltipProvider>
   </QueryClientProvider>
 );

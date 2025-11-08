@@ -16,11 +16,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { WorkOrder, LocationData, ActivityLogEntry, WorkOrderChecklist } from "@/types/work-order";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle, SearchCheck, Package } from "lucide-react"; // 'Package' adicionado para ativo
+import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle, SearchCheck, Package, Download } from "lucide-react"; // 'Download' adicionado
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog"; // Importar o novo componente
-import WorkOrderCompletionActionsDialog from "./WorkOrderCompletionActionsDialog"; // NOVO: Importar o diálogo de ações
+import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog";
+import WorkOrderCompletionActionsDialog from "./WorkOrderCompletionActionsDialog";
+import { saveWorkOrderOffline, getWorkOrderOffline, removeWorkOrderOffline } from "@/utils/offlineWorkOrderStorage"; // NOVO: Importar utilitários offline
 
 interface WorkOrderDetailsDialogProps {
   isOpen: boolean;
@@ -37,10 +38,13 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
 }) => {
   const [currentOrder, setCurrentOrder] = useState<WorkOrder>(workOrder);
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
-  const [isCompletionActionsOpen, setIsCompletionActionsOpen] = useState(false); // NOVO: Estado para o diálogo de ações
+  const [isCompletionActionsOpen, setIsCompletionActionsOpen] = useState(false);
+  const [isOfflineSaved, setIsOfflineSaved] = useState(false); // NOVO: Estado para verificar se está salvo offline
 
   useEffect(() => {
     setCurrentOrder(workOrder);
+    // Verifica se a OS já está salva offline ao abrir o diálogo
+    setIsOfflineSaved(!!getWorkOrderOffline(workOrder.id));
   }, [workOrder]);
 
   const formatDateTime = (isoString?: string) => {
@@ -122,6 +126,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
     toast.success("Serviço iniciado com sucesso!");
   };
 
@@ -150,6 +155,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
     toast.success("OS marcada como 'Em Verificação'.");
   };
 
@@ -183,8 +189,9 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
     toast.success("Serviço finalizado com sucesso!");
-    setIsCompletionActionsOpen(true); // NOVO: Abre o diálogo de ações ao concluir
+    setIsCompletionActionsOpen(true);
   };
 
   const handleCancelService = async () => {
@@ -207,6 +214,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
     toast.info("Ordem de Serviço cancelada.");
   };
 
@@ -217,7 +225,18 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
     toast.success("Checklist salvo na Ordem de Serviço.");
+  };
+
+  const handleToggleOffline = () => {
+    if (isOfflineSaved) {
+      removeWorkOrderOffline(currentOrder.id);
+      setIsOfflineSaved(false);
+    } else {
+      saveWorkOrderOffline(currentOrder);
+      setIsOfflineSaved(true);
+    }
   };
 
   const getStatusIcon = (status: WorkOrder['status']) => {
@@ -227,7 +246,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
       case "Em Andamento":
         return <Play className="h-4 w-4 mr-1" />;
       case "Em Verificação":
-        return <SearchCheck className="h-4 w-4 mr-1" />; // Novo ícone para 'Em Verificação'
+        return <SearchCheck className="h-4 w-4 mr-1" />;
       case "Concluída":
         return <CheckCircle className="h-4 w-4 mr-1" />;
       case "Crítica":
@@ -260,7 +279,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
                   "px-2 py-1 text-sm font-medium flex items-center",
                   currentOrder.status === "Pendente" && "bg-yellow-100 text-yellow-800",
                   currentOrder.status === "Em Andamento" && "bg-blue-100 text-blue-800",
-                  currentOrder.status === "Em Verificação" && "bg-blue-200 text-blue-800", // Cor para 'Em Verificação'
+                  currentOrder.status === "Em Verificação" && "bg-blue-200 text-blue-800",
                   currentOrder.status === "Concluída" && "bg-green-100 text-green-800",
                   currentOrder.status === "Crítica" && "bg-red-100 text-red-800",
                   currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800",
@@ -451,6 +470,9 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
               <Ban className="h-4 w-4 mr-2" /> Cancelar Serviço
             </Button>
           </div>
+          <Button onClick={handleToggleOffline} className="w-full sm:w-auto">
+            <Download className="h-4 w-4 mr-2" /> {isOfflineSaved ? "Remover Offline" : "Download Offline"}
+          </Button>
           <Button onClick={onClose} className="w-full sm:w-auto">
             Fechar
           </Button>
