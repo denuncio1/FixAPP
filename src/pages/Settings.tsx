@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Menu, Shield, UserCog, Lock, ScrollText, Plug, Database, Cloud, Building, Code } from "lucide-react"; // Novos ícones para integrações
+import { Menu, Shield, UserCog, Lock, ScrollText, Plug, Database, Cloud, Building, Code, Sun, Moon, Settings } from "lucide-react"; // Adicionado 'Settings' aqui
 import Sidebar from "@/components/Sidebar";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,19 @@ const Settings = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [biometricsEnabled, setBiometricsEnabled] = useState(false);
   const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light'); // Estado para o tema
+
+  useEffect(() => {
+    // Carrega o tema salvo no localStorage ou detecta a preferência do sistema
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -26,6 +39,14 @@ const Settings = () => {
   const handleTwoFactorAuthChange = (checked: boolean) => {
     setTwoFactorAuthEnabled(checked);
     toast.info(`Autenticação em Dois Fatores ${checked ? "ativada" : "desativada"}.`);
+  };
+
+  const handleThemeChange = (checked: boolean) => {
+    const newTheme = checked ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    toast.info(`Modo ${newTheme === 'dark' ? "Escuro" : "Claro"} ativado.`);
   };
 
   return (
@@ -167,14 +188,26 @@ const Settings = () => {
               </CardContent>
             </Card>
 
-            {/* Manter outras configurações gerais, se houver */}
+            {/* Configurações Gerais */}
             <Card>
               <CardHeader>
-                <CardTitle>Configurações Gerais</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5" /> Configurações Gerais
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Esta seção pode conter outras configurações do sistema.
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="dark-mode" className="text-sm font-medium flex items-center gap-2">
+                    {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />} Modo Escuro
+                  </Label>
+                  <Switch
+                    id="dark-mode"
+                    checked={theme === 'dark'}
+                    onCheckedChange={handleThemeChange}
+                  />
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Alterne entre o tema claro e escuro para uma melhor experiência visual.
                 </p>
               </CardContent>
             </Card>
