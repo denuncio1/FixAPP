@@ -41,25 +41,43 @@ interface NewWorkOrderDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (newOrder: WorkOrder) => void;
+  initialData?: Partial<WorkOrder>; // NOVO: Adicionando a prop initialData
 }
 
 const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
   isOpen,
   onClose,
   onSave,
+  initialData,
 }) => {
-  const [client, setClient] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [technician, setTechnician] = useState("");
+  const [client, setClient] = useState(initialData?.client || "");
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [technician, setTechnician] = useState(initialData?.technician || "");
   const [priority, setPriority] = useState<"Baixa" | "Média" | "Crítica" | "Alta">(
-    "Média",
+    initialData?.priority || "Média",
   );
   const [classification, setClassification] = useState<"Preventiva" | "Corretiva" | "Preditiva" | "Emergencial">(
-    "Corretiva",
+    initialData?.classification || "Corretiva",
   );
-  const [deadlineDate, setDeadlineDate] = useState<Date | undefined>(undefined); // Novo estado para o prazo
-  const [tagsInput, setTagsInput] = useState("");
+  const [deadlineDate, setDeadlineDate] = useState<Date | undefined>(
+    initialData?.deadlineDate ? new Date(initialData.deadlineDate) : undefined
+  );
+  const [tagsInput, setTagsInput] = useState(initialData?.tags?.join(", ") || "");
+
+  // Resetar estados quando o diálogo é aberto com novos dados iniciais
+  React.useEffect(() => {
+    if (isOpen) {
+      setClient(initialData?.client || "");
+      setTitle(initialData?.title || "");
+      setDescription(initialData?.description || "");
+      setTechnician(initialData?.technician || "");
+      setPriority(initialData?.priority || "Média");
+      setClassification(initialData?.classification || "Corretiva");
+      setDeadlineDate(initialData?.deadlineDate ? new Date(initialData.deadlineDate) : undefined);
+      setTagsInput(initialData?.tags?.join(", ") || "");
+    }
+  }, [isOpen, initialData]);
 
   const handleSubmit = () => {
     if (!client || !title || !description || !technician) {
@@ -85,6 +103,8 @@ const NewWorkOrderDialog: React.FC<NewWorkOrderDialogProps> = ({
         action: "OS Criada",
         details: `Ordem de serviço criada por ${client}`,
       }],
+      assetId: initialData?.assetId, // Manter assetId se veio do initialData
+      assetName: initialData?.assetName, // Manter assetName se veio do initialData
     };
     onSave(newOrder);
     onClose();

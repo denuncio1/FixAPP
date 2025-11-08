@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Menu, Shield, UserCog, Lock, ScrollText, Plug, Database, Cloud, Building, Code, Sun, Moon, Settings } from "lucide-react"; // Adicionado 'Settings' aqui
+import { Menu, Shield, UserCog, Lock, ScrollText, Plug, Database, Cloud, Building, Code, Sun, Moon, Settings as SettingsIcon } from "lucide-react"; // Renomeado 'Settings' para 'SettingsIcon'
 import Sidebar from "@/components/Sidebar";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -192,7 +192,7 @@ const Settings = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5" /> Configurações Gerais
+                  <SettingsIcon className="h-5 w-5" /> Configurações Gerais
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">

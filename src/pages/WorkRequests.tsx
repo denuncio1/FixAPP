@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { WorkRequest, ChecklistMedia, ActivityLogEntry } from "@/types/work-order";
+import { WorkRequest, ChecklistMedia, ActivityLogEntry, WorkOrder } from "@/types/work-order";
 import WorkRequestDetailsDialog from "@/components/WorkRequestDetailsDialog"; // Importar o novo diálogo
 import NewWorkRequestDialog from "@/components/NewWorkRequestDialog"; // Importar o novo componente de diálogo
 
@@ -85,7 +85,7 @@ const WorkRequests = () => {
   const [isNewRequestDialogOpen, setIsNewRequestDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedWorkRequestForDetails, setSelectedWorkRequestForDetails] = useState<WorkRequest | null>(null);
-  const [workRequests, setWorkRequests] = useState<WorkRequest[]>(initialMockWorkRequests); // Adicionado useState aqui
+  const [workRequests, setWorkRequests] = useState<WorkRequest[]>(initialMockWorkRequests);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -99,6 +99,21 @@ const WorkRequests = () => {
   const handleOpenDetails = (request: WorkRequest) => {
     setSelectedWorkRequestForDetails(request);
     setIsDetailsDialogOpen(true);
+  };
+
+  const handleUpdateWorkRequest = (updatedRequest: WorkRequest) => {
+    setWorkRequests((prev) =>
+      prev.map((req) => (req.id === updatedRequest.id ? updatedRequest : req))
+    );
+  };
+
+  const handleGenerateWorkOrder = (newOrder: WorkOrder) => {
+    // Em um cenário real, esta função enviaria a nova OS para o backend
+    // e possivelmente a adicionaria à lista de WorkOrders global.
+    console.log("Nova Ordem de Serviço gerada:", newOrder);
+    toast.success(`OS ${newOrder.id} criada a partir da solicitação!`);
+    // Aqui você poderia adicionar a nova OS a um estado global de ordens de serviço
+    // ou redirecionar para a página de WorkOrders.
   };
 
   const filteredWorkRequests = workRequests.filter((request) =>
@@ -225,7 +240,9 @@ const WorkRequests = () => {
           isOpen={isDetailsDialogOpen}
           onClose={() => setIsDetailsDialogOpen(false)}
           workRequest={selectedWorkRequestForDetails}
-          mockAssets={mockAssets} // Passar mockAssets para o diálogo
+          mockAssets={mockAssets}
+          onUpdateRequest={handleUpdateWorkRequest}
+          onGenerateWorkOrder={handleGenerateWorkOrder}
         />
       )}
     </div>
