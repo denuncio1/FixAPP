@@ -15,13 +15,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, Factory, Building, Mountain, Globe, ArrowLeft, Image as ImageIcon } from "lucide-react"; // QrCode removido
+import { MapPin, Factory, Building, Mountain, Globe, ArrowLeft, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Location } from "@/types/location";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import AppLogo from "@/components/AppLogo"; // Importar AppLogo
-
-// QRCode importação removida
 
 const containerStyle = {
   width: "100%",
@@ -193,7 +191,7 @@ const LocationRegistration = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <AppLogo className="mx-auto mb-4 h-12" /> {/* Adicionar o logo aqui */}
+          <AppLogo className="mx-auto mb-4 h-12 w-auto" /> {/* Adicionar o logo aqui */}
           <CardTitle className="text-2xl font-bold">Cadastro de Localização</CardTitle>
         </CardHeader>
         <CardContent>

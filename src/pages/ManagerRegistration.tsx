@@ -83,7 +83,7 @@ const ManagerRegistration = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <AppLogo className="mx-auto mb-4 h-12" /> {/* Adicionar o logo aqui */}
+          <AppLogo className="mx-auto mb-4 h-12 w-auto" /> {/* Adicionar o logo aqui */}
           <div className="mb-4">
             <Avatar className="h-24 w-24">
               <AvatarImage src={avatarUrl || "/placeholder.svg"} alt="Avatar do Gestor" />

@@ -31,7 +31,7 @@ const Index = () => {
       {/* Conteúdo principal (mensagem de carregamento) */}
       <main className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="text-center">
-          <AppLogo className="mx-auto mb-8" /> {/* Logo centralizado para a mensagem de carregamento */}
+          <AppLogo className="mx-auto mb-8 h-24 w-auto" /> {/* Logo centralizado para a mensagem de carregamento */}
           <h1 className="text-4xl font-bold mb-4">Carregando...</h1>
           <p className="text-xl text-gray-600">
             Verificando sessão de usuário.

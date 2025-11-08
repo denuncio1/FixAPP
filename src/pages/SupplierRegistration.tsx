@@ -268,7 +268,7 @@ const SupplierRegistration = () => {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="contactPhone">Telefone do Contato *</Label>
-                  <Input
+                <Input
                     id="contactPhone"
                     type="tel"
                     placeholder="(XX) XXXXX-XXXX"
