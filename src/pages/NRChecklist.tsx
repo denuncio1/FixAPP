@@ -36,12 +36,17 @@ import { supabase } from "@/integrations/supabase/client";
 import NewWorkRequestDialog from "@/components/NewWorkRequestDialog"; // Importar o novo diálogo de solicitação de trabalho
 import { WorkRequest, ChecklistMedia } from "@/types/work-order"; // Importar tipos necessários
 
+// Importar os novos componentes modulares
+import NRChecklistSelection from "@/components/nr-checklist/NRChecklistSelection.tsx";
+import NRChecklistExecution from "@/components/nr-checklist/NRChecklistExecution.tsx";
+import NRChecklistHistory from "@/components/nr-checklist/NRChecklistHistory.tsx";
+
 // Mock Data para Normas Regulamentadoras (será substituído por dados do Supabase)
 const mockNormas: NormaRegulamentadora[] = [
   { id: "nr10", user_id: "mock_user_id", nr_number: "NR-10", title: "Segurança em Instalações e Serviços em Eletricidade", description: "Estabelece os requisitos e condições mínimas objetivando a implementação de medidas de controle e sistemas preventivos, de forma a garantir a segurança e a saúde dos trabalhadores que, direta ou indiretamente, interajam em instalações elétricas e serviços com eletricidade.", content_url: "https://www.gov.br/trabalho-e-emprego/pt-br/servicos/seguranca-e-saude-no-trabalho/normatizacao/normas-regulamentadoras/nr-10.pdf", created_at: "2023-01-01T00:00:00Z" },
   { id: "nr12", user_id: "mock_user_id", nr_number: "NR-12", title: "Segurança no Trabalho em Máquinas e Equipamentos", description: "Define referências técnicas, princípios fundamentais e medidas de proteção para garantir a saúde e a integridade física dos trabalhadores e estabelece requisitos mínimos para a prevenção de acidentes e doenças do trabalho nas fases de projeto e de utilização de máquinas e equipamentos de todos os tipos.", content_url: "https://www.gov.br/trabalho-e-emprego/pt-br/servicos/seguranca-e-saude-no-trabalho/normatizacao/normas-regulamentadoras/nr-12.pdf", created_at: "2023-01-01T00:00:00Z" },
   { id: "osha1910", user_id: "mock_user_id", nr_number: "OSHA 1910.147", title: "The Control of Hazardous Energy (Lockout/Tagout)", description: "This standard addresses the practices and procedures necessary to disable machinery or equipment to prevent the release of hazardous energy while employees perform servicing and maintenance activities.", content_url: "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147", created_at: "2023-01-01T00:00:00Z" },
-  { id: "epa", user_id: "mock_user_id", nr_number: "EPA", title: "Environmental Protection Agency Regulations", description: "Regulations set by the U.S. Environmental Protection Agency to protect human health and the environment.", content_url: "https://www.epa.gov/laws-regulations", created_at: "2023-01-01T00:00:00Z" },
+  { id: "epa", user_id: "mock_user_id", nr_number: "EPA", title: "Environmental Protection Agency Regulations", description: "Regulations set by the U.S. Environmental Protection Agency to protect human health and the environment.", content_url: "https://www.epa.gov/laws-regs/regulations", created_at: "2023-01-01T00:00:00Z" },
   { id: "iso50001", user_id: "mock_user_id", nr_number: "ISO 50001", title: "Energy Management Systems", description: "International standard for energy management systems (EnMS) to help organizations improve their energy performance.", content_url: "https://www.iso.org/standard/69501.html", created_at: "2023-01-01T00:00:00Z" },
   { id: "iso45001", user_id: "mock_user_id", nr_number: "ISO 45001", title: "Occupational Health and Safety Management Systems", description: "International standard for occupational health and safety (OH&S) management systems, providing a framework to improve employee safety, reduce workplace risks and create better, safer working conditions.", content_url: "https://www.iso.org/standard/65460.html", created_at: "2023-01-01T00:00:00Z" },
 ];
@@ -78,7 +83,6 @@ const NRChecklist = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedNr, setSelectedNr] = useState<string | null>(null);
   const [normas, setNormas] = useState<NormaRegulamentadora[]>(mockNormas);
-  const [checklistItems, setChecklistItems] = useState<NrChecklistItem[]>([]); // This state is not used, currentRunItems is used for active checklist
   const [checklistRuns, setChecklistRuns] = useState<NrChecklistRun[]>(mockNrChecklistRuns);
   const { user } = useSession();
 
@@ -108,12 +112,24 @@ const NRChecklist = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  const filteredNormas = normas.filter((norma) =>
-    norma.nr_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    norma.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    norma.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getNrTitle = (nrNumber: string) => {
+    return normas.find(n => n.nr_number === nrNumber)?.title || nrNumber;
+  };
 
+  // Handlers para NRChecklistSelection
+  const handleAddNorma = () => {
+    toast.info("Funcionalidade 'Adicionar Nova Normativa' em desenvolvimento.");
+  };
+
+  const handleImportItems = () => {
+    toast.info("Funcionalidade 'Importar Itens de Checklist' em desenvolvimento.");
+  };
+
+  const handleExportItems = () => {
+    toast.info("Funcionalidade 'Exportar Itens de Checklist' em desenvolvimento.");
+  };
+
+  // Handlers para NRChecklistExecution
   const handleItemComplianceChange = (id: string, compliant: boolean) => {
     setCurrentRunItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, is_compliant: compliant } : item)),
@@ -308,10 +324,6 @@ const NRChecklist = () => {
     setIsNewWorkRequestDialogOpen(false);
   };
 
-  const getNrTitle = (nrNumber: string) => {
-    return normas.find(n => n.nr_number === nrNumber)?.title || nrNumber;
-  };
-
   return (
     <div className="flex min-h-screen bg-background text-foreground">
       <Sidebar isCollapsed={isSidebarCollapsed} />
@@ -336,232 +348,42 @@ const NRChecklist = () => {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3 mb-6">
-            {/* Card de Seleção de Normativa e Execução */}
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ListChecks className="h-5 w-5" /> Selecionar Normativa
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="nr-select">Normativa</Label>
-                    <Select value={selectedNr || ""} onValueChange={setSelectedNr}>
-                      <SelectTrigger id="nr-select">
-                        <SelectValue placeholder="Selecione uma normativa" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {normas.map((nr) => (
-                          <SelectItem key={nr.id} value={nr.nr_number}>
-                            {nr.nr_number} - {nr.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+            <NRChecklistSelection
+              normas={normas}
+              selectedNr={selectedNr}
+              setSelectedNr={setSelectedNr}
+              getNrTitle={getNrTitle}
+              onAddNorma={handleAddNorma}
+              onImportItems={handleImportItems}
+              onExportItems={handleExportItems}
+            />
 
-                  {selectedNr && (
-                    <>
-                      <Button variant="outline" className="w-full">
-                        <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Normativa
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <Upload className="h-4 w-4 mr-2" /> Importar Itens de Checklist
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <Download className="h-4 w-4 mr-2" /> Exportar Itens de Checklist
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Card de Itens do Checklist para Execução */}
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <PenTool className="h-5 w-5" /> Executar Checklist: {selectedNr ? getNrTitle(selectedNr) : "N/A"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedNr ? (
-                  <div className="grid gap-4">
-                    <div className="max-h-[300px] overflow-y-auto pr-4">
-                      {currentRunItems.length > 0 ? (
-                        currentRunItems.map((item) => (
-                          <div key={item.id} className={cn("mb-4", item.is_header ? "font-semibold text-md mt-4" : "border-b pb-3")}>
-                            <div className="flex items-center space-x-2 mb-2">
-                              {!item.is_header && (
-                                <>
-                                  <Checkbox
-                                    id={`item-${item.id}-compliant`}
-                                    checked={item.is_compliant === true}
-                                    onCheckedChange={(checked) => handleItemComplianceChange(item.id, !!checked)}
-                                  />
-                                  <Label htmlFor={`item-${item.id}-compliant`} className="text-sm font-medium leading-none">
-                                    {item.item_description}
-                                  </Label>
-                                  {item.is_compliant === false && <XCircle className="h-4 w-4 text-red-500 ml-2" />}
-                                  {item.is_compliant === true && <CheckCircle2 className="h-4 w-4 text-green-500 ml-2" />}
-                                </>
-                              )}
-                              {item.is_header && <span className="text-base">{item.item_description}</span>}
-                            </div>
-                            {!item.is_header && item.guidance && (
-                              <p className="text-xs text-muted-foreground ml-6 mb-2">
-                                <span className="font-medium">Orientação:</span> {item.guidance}
-                              </p>
-                            )}
-                            {!item.is_header && (
-                              <Textarea
-                                placeholder="Notas sobre este item..."
-                                value={item.notes || ""}
-                                onChange={(e) => handleItemNotesChange(item.id, e.target.value)}
-                                className="ml-6 mt-1 text-sm"
-                              />
-                            )}
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-muted-foreground text-center py-4">
-                          Nenhum item de checklist disponível para esta normativa.
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Mídias */}
-                    <div className="grid gap-2 mt-4">
-                      <Label htmlFor="photo-upload" className="flex items-center gap-2">
-                        <Camera className="h-4 w-4" /> Fotos
-                      </Label>
-                      <Input id="photo-upload" type="file" accept="image/*" multiple onChange={handlePhotoUpload} />
-                      <div className="grid grid-cols-3 gap-2">
-                        {runPhotos.map((media) => (
-                          <div key={media.url} className="relative group">
-                            <img src={media.url} alt={media.filename} className="h-20 w-full object-cover rounded-md border" />
-                            <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleRemoveMedia(media.url)}>
-                              <XCircle className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="video-upload" className="flex items-center gap-2">
-                        <Video className="h-4 w-4" /> Vídeos
-                      </Label>
-                      <Input id="video-upload" type="file" accept="video/*" multiple onChange={handleVideoUpload} />
-                      <div className="grid grid-cols-3 gap-2">
-                        {runVideos.map((media) => (
-                          <div key={media.url} className="relative group">
-                            <video src={media.url} controls className="h-20 w-full object-cover rounded-md border" />
-                            <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleRemoveMedia(media.url)}>
-                              <XCircle className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Notas Gerais */}
-                    <div className="grid gap-2">
-                      <Label htmlFor="run-notes">Notas Gerais</Label>
-                      <Textarea
-                        id="run-notes"
-                        placeholder="Observações adicionais sobre a execução do checklist..."
-                        value={runNotes}
-                        onChange={(e) => setRunNotes(e.target.value)}
-                      />
-                    </div>
-
-                    {/* Localização e Assinatura */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="signature-name" className="flex items-center gap-2">
-                          <Signature className="h-4 w-4" /> Assinatura Digital
-                        </Label>
-                        <Input
-                          id="signature-name"
-                          placeholder="Seu Nome Completo"
-                          value={signatureName}
-                          onChange={(e) => setSignatureName(e.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="location-info" className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4" /> Localização
-                        </Label>
-                        <Button type="button" variant="outline" onClick={handleGetLocation}>
-                          {currentLocation ? "Localização Obtida" : "Obter Localização Atual"}
-                        </Button>
-                        {currentLocation && (
-                          <p className="text-xs text-muted-foreground break-words">
-                            {currentLocation.address || `Lat: ${currentLocation.lat.toFixed(4)}, Lng: ${currentLocation.lng.toFixed(4)}`}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2 w-full mt-4">
-                      <Button onClick={handleCompleteChecklist} className="flex-1">
-                        <ListChecks className="h-4 w-4 mr-2" /> Concluir Checklist
-                      </Button>
-                      <Button onClick={handleGenerateWorkRequest} className="flex-1" variant="secondary">
-                        <Wrench className="h-4 w-4 mr-2" /> Gerar Solicitação de Trabalho
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground text-center py-4">
-                    Selecione uma normativa para iniciar a execução do checklist.
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+            <NRChecklistExecution
+              selectedNr={selectedNr}
+              getNrTitle={getNrTitle}
+              currentRunItems={currentRunItems}
+              handleItemComplianceChange={handleItemComplianceChange}
+              handleItemNotesChange={handleItemNotesChange}
+              runPhotos={runPhotos}
+              handlePhotoUpload={handlePhotoUpload}
+              handleRemoveMedia={handleRemoveMedia}
+              runVideos={runVideos}
+              handleVideoUpload={handleVideoUpload}
+              runNotes={runNotes}
+              setRunNotes={setRunNotes}
+              signatureName={signatureName}
+              setSignatureName={setSignatureName}
+              currentLocation={currentLocation}
+              handleGetLocation={handleGetLocation}
+              handleCompleteChecklist={handleCompleteChecklist}
+              handleGenerateWorkRequest={handleGenerateWorkRequest}
+            />
           </div>
 
-          {/* Histórico de Execuções de Checklist */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <History className="h-5 w-5" /> Histórico de Execuções de Checklists
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Normativa</TableHead>
-                    <TableHead>Data de Conclusão</TableHead>
-                    <TableHead>Itens Conformes</TableHead>
-                    <TableHead>Itens Não Conformes</TableHead>
-                    <TableHead className="text-right">Conformidade (%)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {checklistRuns.length > 0 ? (
-                    checklistRuns.map((run) => (
-                      <TableRow key={run.id}>
-                        <TableCell className="font-medium">{run.nr_number}</TableCell>
-                        <TableCell>{format(new Date(run.completion_date), "dd/MM/yyyy HH:mm", { locale: ptBR })}</TableCell>
-                        <TableCell>{run.compliant_items}</TableCell>
-                        <TableCell>{run.non_compliant_items}</TableCell>
-                        <TableCell className="text-right">{run.compliance_percentage.toFixed(1)}%</TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center text-muted-foreground py-4">
-                        Nenhuma execução de checklist registrada.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+          <NRChecklistHistory
+            checklistRuns={checklistRuns}
+            getNrTitle={getNrTitle}
+          />
         </main>
       </div>
 
