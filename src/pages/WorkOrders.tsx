@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { WorkOrder, ActivityLogEntry } from "@/types/work-order";
+import { getAllOfflineWorkOrders } from "@/utils/offlineWorkOrderStorage"; // Importar função para obter OSs offline
 
 const initialMockWorkOrders: WorkOrder[] = [
   {
@@ -253,6 +254,16 @@ const WorkOrders = () => {
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedWorkOrderForDetails, setSelectedWorkOrderForDetails] = useState<WorkOrder | null>(null);
 
+  // Estado para armazenar os IDs das OSs salvas offline
+  const [offlineWorkOrderIds, setOfflineWorkOrderIds] = useState<Set<string>>(new Set());
+
+  // Carrega os IDs das OSs offline ao montar o componente
+  React.useEffect(() => {
+    const offlineOrders = getAllOfflineWorkOrders();
+    const ids = new Set(offlineOrders.map(order => order.id));
+    setOfflineWorkOrderIds(ids);
+  }, []);
+
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
@@ -265,6 +276,10 @@ const WorkOrders = () => {
     setWorkOrders((prevOrders) =>
       prevOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order))
     );
+    // Atualiza o status offline se a OS foi modificada
+    if (offlineWorkOrderIds.has(updatedOrder.id)) {
+      setOfflineWorkOrderIds(prev => new Set(prev.add(updatedOrder.id)));
+    }
   };
 
   const handleOpenDetails = (order: WorkOrder) => {
@@ -404,7 +419,12 @@ const WorkOrders = () => {
                 <CardContent className="flex-1 p-4 space-y-4 overflow-y-auto">
                   {groupedWorkOrders[status] && groupedWorkOrders[status].length > 0 ? (
                     groupedWorkOrders[status].map((order) => (
-                      <WorkOrderCard key={order.id} {...order} onClick={() => handleOpenDetails(order)} />
+                      <WorkOrderCard
+                        key={order.id}
+                        {...order}
+                        onClick={() => handleOpenDetails(order)}
+                        isOfflineSaved={offlineWorkOrderIds.has(order.id)} // Passa o status offline
+                      />
                     ))
                   ) : (
                     <p className="text-muted-foreground text-center py-4">

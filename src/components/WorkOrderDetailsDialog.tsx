@@ -42,6 +42,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
 
   useEffect(() => {
     setCurrentOrder(workOrder);
+    // Verifica se a OS já está salva offline ao abrir o diálogo
     setIsOfflineSaved(!!getWorkOrderOffline(workOrder.id));
   }, [workOrder]);
 
@@ -109,7 +110,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // Salva offline também
     toast.success("Serviço iniciado com sucesso!");
   };
 
@@ -138,7 +139,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // Salva offline também
     toast.success("OS marcada como 'Em Verificação'.");
   };
 
@@ -172,7 +173,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // Salva offline também
     toast.success("Serviço finalizado com sucesso!");
     setIsCompletionActionsOpen(true);
   };
@@ -197,7 +198,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // Salva offline também
     toast.info("Ordem de Serviço cancelada.");
   };
 
@@ -208,7 +209,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder);
+    saveWorkOrderOffline(updatedOrder); // Salva offline também
     toast.success("Checklist salvo na Ordem de Serviço.");
   };
 
