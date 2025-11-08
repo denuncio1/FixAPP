@@ -4,24 +4,23 @@ import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { WorkOrder, LocationData, ActivityLogEntry, WorkOrderChecklist } from "@/types/work-order";
-import { cn } from "@/lib/utils";
-import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, Signature, CheckCircle, AlertTriangle, SearchCheck, Package, Download } from "lucide-react"; // 'Download' adicionado
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog";
 import WorkOrderCompletionActionsDialog from "./WorkOrderCompletionActionsDialog";
-import { saveWorkOrderOffline, getWorkOrderOffline, removeWorkOrderOffline } from "@/utils/offlineWorkOrderStorage"; // NOVO: Importar utilitários offline
+import { saveWorkOrderOffline, getWorkOrderOffline, removeWorkOrderOffline } from "@/utils/offlineWorkOrderStorage";
+
+// Importar os novos componentes modulares
+import WorkOrderDetailsHeader from "./work-order-details/WorkOrderDetailsHeader.tsx";
+import WorkOrderMainDetails from "./work-order-details/WorkOrderMainDetails.tsx";
+import WorkOrderTimesAndLocations from "./work-order-details/WorkOrderTimesAndLocations.tsx";
+import WorkOrderChecklistDisplay from "./work-order-details/WorkOrderChecklistDisplay.tsx";
+import WorkOrderActivityHistory from "./work-order-details/WorkOrderActivityHistory.tsx";
+import WorkOrderActionButtons from "./work-order-details/WorkOrderActionButtons.tsx";
 
 interface WorkOrderDetailsDialogProps {
   isOpen: boolean;
@@ -39,28 +38,12 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
   const [currentOrder, setCurrentOrder] = useState<WorkOrder>(workOrder);
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isCompletionActionsOpen, setIsCompletionActionsOpen] = useState(false);
-  const [isOfflineSaved, setIsOfflineSaved] = useState(false); // NOVO: Estado para verificar se está salvo offline
+  const [isOfflineSaved, setIsOfflineSaved] = useState(false);
 
   useEffect(() => {
     setCurrentOrder(workOrder);
-    // Verifica se a OS já está salva offline ao abrir o diálogo
     setIsOfflineSaved(!!getWorkOrderOffline(workOrder.id));
   }, [workOrder]);
-
-  const formatDateTime = (isoString?: string) => {
-    if (!isoString) return "N/A";
-    const date = new Date(isoString);
-    return date.toLocaleString("pt-BR", {
-      dateStyle: "short",
-      timeStyle: "short",
-    });
-  };
-
-  const formatDateOnly = (isoString?: string) => {
-    if (!isoString) return "N/A";
-    const date = new Date(isoString);
-    return format(date, "dd/MM/yyyy", { locale: ptBR });
-  };
 
   const getLocation = async (): Promise<LocationData | undefined> => {
     return new Promise((resolve) => {
@@ -126,7 +109,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
+    saveWorkOrderOffline(updatedOrder);
     toast.success("Serviço iniciado com sucesso!");
   };
 
@@ -137,7 +120,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     }
     if (!currentOrder.checklist) {
       toast.error("Por favor, preencha o checklist de execução antes de marcar para verificação.");
-      setIsChecklistOpen(true); // Abre o checklist para o usuário preencher
+      setIsChecklistOpen(true);
       return;
     }
 
@@ -155,7 +138,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
+    saveWorkOrderOffline(updatedOrder);
     toast.success("OS marcada como 'Em Verificação'.");
   };
 
@@ -166,7 +149,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     }
     if (currentOrder.status === "Em Andamento" && !currentOrder.checklist) {
       toast.error("Por favor, preencha o checklist de execução antes de finalizar o serviço.");
-      setIsChecklistOpen(true); // Abre o checklist para o usuário preencher
+      setIsChecklistOpen(true);
       return;
     }
 
@@ -189,7 +172,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
+    saveWorkOrderOffline(updatedOrder);
     toast.success("Serviço finalizado com sucesso!");
     setIsCompletionActionsOpen(true);
   };
@@ -214,7 +197,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
+    saveWorkOrderOffline(updatedOrder);
     toast.info("Ordem de Serviço cancelada.");
   };
 
@@ -225,7 +208,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     };
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
-    saveWorkOrderOffline(updatedOrder); // NOVO: Salva a atualização offline
+    saveWorkOrderOffline(updatedOrder);
     toast.success("Checklist salvo na Ordem de Serviço.");
   };
 
@@ -239,243 +222,37 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     }
   };
 
-  const getStatusIcon = (status: WorkOrder['status']) => {
-    switch (status) {
-      case "Pendente":
-        return <Clock className="h-4 w-4 mr-1" />;
-      case "Em Andamento":
-        return <Play className="h-4 w-4 mr-1" />;
-      case "Em Verificação":
-        return <SearchCheck className="h-4 w-4 mr-1" />;
-      case "Concluída":
-        return <CheckCircle className="h-4 w-4 mr-1" />;
-      case "Crítica":
-        return <AlertTriangle className="h-4 w-4 mr-1" />;
-      case "Cancelada":
-        return <Ban className="h-4 w-4 mr-1" />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            Detalhes da Ordem de Serviço <Badge>{currentOrder.id}</Badge>
-          </DialogTitle>
-          <DialogDescription>
-            Informações completas e histórico da ordem de serviço.
-          </DialogDescription>
+          <WorkOrderDetailsHeader workOrder={currentOrder} />
         </DialogHeader>
 
         <ScrollArea className="flex-1 p-4 -mx-4">
           <div className="grid gap-4 py-4 px-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <h3 className="text-lg font-semibold">{currentOrder.title}</h3>
-              <Badge
-                className={cn(
-                  "px-2 py-1 text-sm font-medium flex items-center",
-                  currentOrder.status === "Pendente" && "bg-yellow-100 text-yellow-800",
-                  currentOrder.status === "Em Andamento" && "bg-blue-100 text-blue-800",
-                  currentOrder.status === "Em Verificação" && "bg-blue-200 text-blue-800",
-                  currentOrder.status === "Concluída" && "bg-green-100 text-green-800",
-                  currentOrder.status === "Crítica" && "bg-red-100 text-red-800",
-                  currentOrder.status === "Cancelada" && "bg-gray-300 text-gray-800",
-                )}
-              >
-                {getStatusIcon(currentOrder.status)} {currentOrder.status}
-              </Badge>
-            </div>
-            <p className="text-muted-foreground">{currentOrder.description}</p>
-
-            <Separator />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <p><span className="font-medium">Cliente:</span> {currentOrder.client}</p>
-                <p><span className="font-medium">Técnico:</span> {currentOrder.technician || "N/A"}</p>
-                <p><span className="font-medium">Data Criação:</span> {currentOrder.date}</p>
-              </div>
-              <div>
-                <p><span className="font-medium">Prioridade:</span> {currentOrder.priority}</p>
-                <p><span className="font-medium">Classificação:</span> {currentOrder.classification}</p>
-                <p><span className="font-medium">Prazo:</span> {formatDateOnly(currentOrder.deadlineDate)}</p>
-                <p><span className="font-medium">Criada há:</span> {currentOrder.daysAgo} dias</p>
-              </div>
-            </div>
-
-            {currentOrder.assetName && (
-              <>
-                <Separator />
-                <p className="text-sm flex items-center gap-1">
-                  <Package className="h-4 w-4" /> <span className="font-medium">Ativo Relacionado:</span> {currentOrder.assetName}
-                </p>
-              </>
-            )}
-
-            {currentOrder.estimatedDuration && (
-              <p className="text-sm flex items-center gap-1">
-                <Clock className="h-4 w-4" /> <span className="font-medium">Duração Estimada:</span> {currentOrder.estimatedDuration}
-              </p>
-            )}
-
-            {currentOrder.tags && currentOrder.tags.length > 0 && (
-              <>
-                <Separator />
-                <div>
-                  <p className="font-medium mb-1">Tags:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {currentOrder.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary">{tag}</Badge>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            <Separator />
-
-            <h4 className="text-md font-semibold flex items-center gap-2"><Clock className="h-4 w-4" /> Tempos e Localizações:</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <p><span className="font-medium">Início do Serviço:</span> {formatDateTime(currentOrder.startTime)}</p>
-                {currentOrder.startLocation && (
-                  <p className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin className="h-3 w-3" /> {currentOrder.startLocation.address || `Lat: ${currentOrder.startLocation.lat.toFixed(4)}, Lng: ${currentOrder.startLocation.lng.toFixed(4)}`}
-                  </p>
-                )}
-              </div>
-              <div>
-                <p><span className="font-medium">Fim do Serviço:</span> {formatDateTime(currentOrder.endTime)}</p>
-                {currentOrder.endLocation && (
-                  <p className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin className="h-3 w-3" /> {currentOrder.endLocation.address || `Lat: ${currentOrder.endLocation.lat.toFixed(4)}, Lng: ${currentOrder.endLocation.lng.toFixed(4)}`}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Seção do Checklist de Execução */}
-            <div>
-              <h4 className="text-md font-semibold mb-3 flex items-center gap-2">
-                <ListChecks className="h-4 w-4" /> Checklist de Execução
-              </h4>
-              {currentOrder.checklist ? (
-                <div className="space-y-3">
-                  <p className="text-sm">
-                    <span className="font-medium">Concluído por:</span> {currentOrder.checklist.signatureName} em{" "}
-                    {formatDateTime(currentOrder.checklist.signatureDate)}
-                  </p>
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground">
-                    {currentOrder.checklist.items.map((item) => (
-                      <li key={item.id} className={item.completed ? "line-through text-green-600" : "text-red-600"}>
-                        {item.description} {item.completed ? "(Concluído)" : "(Pendente)"}
-                      </li>
-                    ))}
-                  </ul>
-                  {currentOrder.checklist.photos && currentOrder.checklist.photos.length > 0 && (
-                    <>
-                      <p className="font-medium mt-4">Fotos:</p>
-                      <div className="grid grid-cols-3 gap-2">
-                        {currentOrder.checklist.photos.map((media) => (
-                          <img key={media.url} src={media.url} alt={media.filename} className="h-20 w-full object-cover rounded-md border" />
-                        ))}
-                      </div>
-                    </>
-                  )}
-                  {currentOrder.checklist.videos && currentOrder.checklist.videos.length > 0 && (
-                    <>
-                      <p className="font-medium mt-4">Vídeos:</p>
-                      <div className="grid grid-cols-3 gap-2">
-                        {currentOrder.checklist.videos.map((media) => (
-                          <video key={media.url} src={media.url} controls className="h-20 w-full object-cover rounded-md border" />
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <p className="text-muted-foreground text-sm">Nenhum checklist de execução preenchido.</p>
-              )}
-              <Button
-                variant="outline"
-                className="mt-4 w-full"
-                onClick={() => setIsChecklistOpen(true)}
-                disabled={currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
-              >
-                <ListChecks className="h-4 w-4 mr-2" /> {currentOrder.checklist ? "Ver/Editar Checklist" : "Preencher Checklist"}
-              </Button>
-            </div>
-
-            <Separator />
-
-            <h4 className="text-md font-semibold flex items-center gap-2"><History className="h-4 w-4" /> Histórico de Atividades:</h4>
-            <ul className="space-y-2 text-sm">
-              {currentOrder.activityHistory.length > 0 ? (
-                currentOrder.activityHistory.map((activity, index) => (
-                  <li key={index} className="border-l-2 pl-3">
-                    <p className="font-medium">{activity.action}</p>
-                    <p className="text-muted-foreground text-xs">{formatDateTime(activity.timestamp)}</p>
-                    {activity.location && (
-                      <p className="flex items-center gap-1 text-muted-foreground text-xs">
-                        <MapPin className="h-3 w-3" /> {activity.location.address || `Lat: ${activity.location.lat.toFixed(4)}, Lng: ${activity.location.lng.toFixed(4)}`}
-                      </p>
-                    )}
-                    {activity.details && <p className="text-muted-foreground text-xs">{activity.details}</p>}
-                  </li>
-                ))
-              ) : (
-                <p className="text-muted-foreground">Nenhuma atividade registrada.</p>
-              )}
-            </ul>
+            <WorkOrderMainDetails workOrder={currentOrder} />
+            <WorkOrderTimesAndLocations workOrder={currentOrder} />
+            <WorkOrderChecklistDisplay
+              workOrder={currentOrder}
+              onOpenChecklist={() => setIsChecklistOpen(true)}
+              isChecklistDisabled={currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
+            />
+            <WorkOrderActivityHistory workOrder={currentOrder} />
           </div>
         </ScrollArea>
 
-        <DialogFooter className="flex flex-col sm:flex-row sm:justify-end sm:space-x-2 pt-4">
-          <div className="flex gap-2 w-full sm:w-auto mb-2 sm:mb-0">
-            <Button
-              variant="outline"
-              onClick={handleStartService}
-              disabled={currentOrder.status === "Em Andamento" || currentOrder.status === "Concluída" || currentOrder.status === "Cancelada" || currentOrder.status === "Em Verificação"}
-              className="w-full sm:w-auto"
-            >
-              <Play className="h-4 w-4 mr-2" /> Iniciar Serviço
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleMarkForVerification}
-              disabled={currentOrder.status !== "Em Andamento" || !currentOrder.checklist}
-              className="w-full sm:w-auto"
-            >
-              <SearchCheck className="h-4 w-4 mr-2" /> Marcar como Em Verificação
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleEndService}
-              disabled={currentOrder.status !== "Em Andamento" && currentOrder.status !== "Em Verificação"}
-              className="w-full sm:w-auto"
-            >
-              <Square className="h-4 w-4 mr-2" /> Finalizar Serviço
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleCancelService}
-              disabled={currentOrder.status === "Concluída" || currentOrder.status === "Cancelada"}
-              className="w-full sm:w-auto"
-            >
-              <Ban className="h-4 w-4 mr-2" /> Cancelar Serviço
-            </Button>
-          </div>
-          <Button onClick={handleToggleOffline} className="w-full sm:w-auto">
-            <Download className="h-4 w-4 mr-2" /> {isOfflineSaved ? "Remover Offline" : "Download Offline"}
-          </Button>
-          <Button onClick={onClose} className="w-full sm:w-auto">
-            Fechar
-          </Button>
+        <DialogFooter className="pt-4">
+          <WorkOrderActionButtons
+            workOrder={currentOrder}
+            onStartService={handleStartService}
+            onMarkForVerification={handleMarkForVerification}
+            onEndService={handleEndService}
+            onCancelService={handleCancelService}
+            onToggleOffline={handleToggleOffline}
+            onClose={onClose}
+            isOfflineSaved={isOfflineSaved}
+          />
         </DialogFooter>
       </DialogContent>
 
