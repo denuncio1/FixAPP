@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { FileText, History, QrCode, Image as ImageIcon, Video, CheckCircle, AlertTriangle, Ban, Wrench } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import QRCode from "qrcode.react"; // CORRIGIDO: Importação padrão (default import)
+// QRCode importação removida
 
 interface WorkRequestDetailsDialogProps {
   isOpen: boolean;
@@ -113,22 +113,7 @@ const WorkRequestDetailsDialog: React.FC<WorkRequestDetailsDialogProps> = ({
               </div>
             </div>
 
-            {workRequest.assetId && (
-              <>
-                <Separator />
-                <div>
-                  <h4 className="text-md font-semibold mb-2 flex items-center gap-2">
-                    <QrCode className="h-4 w-4" /> QR Code do Ativo
-                  </h4>
-                  <div className="flex justify-center">
-                    <QRCode value={workRequest.assetId} size={128} level="L" />
-                  </div>
-                  <p className="text-center text-sm text-muted-foreground mt-2">
-                    Escaneie para acessar informações do ativo.
-                  </p>
-                </div>
-              </>
-            )}
+            {/* Bloco do QR Code removido */}
 
             {workRequest.attachments && workRequest.attachments.length > 0 && (
               <>

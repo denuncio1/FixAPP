@@ -35,7 +35,7 @@ import {
 import { toast } from "sonner";
 import { WorkRequest, ChecklistMedia, ActivityLogEntry } from "@/types/work-order";
 import WorkRequestDetailsDialog from "@/components/WorkRequestDetailsDialog"; // Importar o novo diálogo
-import QRCode from "qrcode.react"; // CORRIGIDO: Default import
+// QRCode importação removida
 
 // Mock Data para Ativos (para simular a seleção via QR Code)
 const mockAssets = [
@@ -306,7 +306,7 @@ const WorkRequests = () => {
               <Label htmlFor="asset">Ativo Relacionado (Opcional)</Label>
               <Select value={newRequestAssetId} onValueChange={setNewRequestAssetId}>
                 <SelectTrigger id="asset">
-                  <SelectValue placeholder="Selecione um ativo ou simule QR Code" />
+                  <SelectValue placeholder="Selecione um ativo" />
                 </SelectTrigger>
                 <SelectContent>
                   {mockAssets.map((asset) => (
@@ -316,12 +316,7 @@ const WorkRequests = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {newRequestAssetId && (
-                <div className="mt-2 p-2 border rounded-md flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">QR Code para: {mockAssets.find(a => a.id === newRequestAssetId)?.name}</span>
-                  <QRCode value={newRequestAssetId} size={64} level="L" />
-                </div>
-              )}
+              {/* Bloco do QR Code removido */}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="photos">Anexar Fotos</Label>
