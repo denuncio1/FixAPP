@@ -20,6 +20,7 @@ import { MapPin, Clock, Play, Square, History, Ban, ListChecks, Camera, Video, S
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import WorkOrderExecutionChecklistDialog from "./WorkOrderExecutionChecklistDialog"; // Importar o novo componente
+import WorkOrderCompletionActionsDialog from "./WorkOrderCompletionActionsDialog"; // NOVO: Importar o diálogo de ações
 
 interface WorkOrderDetailsDialogProps {
   isOpen: boolean;
@@ -36,6 +37,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
 }) => {
   const [currentOrder, setCurrentOrder] = useState<WorkOrder>(workOrder);
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
+  const [isCompletionActionsOpen, setIsCompletionActionsOpen] = useState(false); // NOVO: Estado para o diálogo de ações
 
   useEffect(() => {
     setCurrentOrder(workOrder);
@@ -182,6 +184,7 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
     setCurrentOrder(updatedOrder);
     onUpdateWorkOrder(updatedOrder);
     toast.success("Serviço finalizado com sucesso!");
+    setIsCompletionActionsOpen(true); // NOVO: Abre o diálogo de ações ao concluir
   };
 
   const handleCancelService = async () => {
@@ -460,6 +463,14 @@ const WorkOrderDetailsDialog: React.FC<WorkOrderDetailsDialogProps> = ({
           onClose={() => setIsChecklistOpen(false)}
           workOrder={currentOrder}
           onSaveChecklist={handleSaveChecklist}
+        />
+      )}
+
+      {isCompletionActionsOpen && (
+        <WorkOrderCompletionActionsDialog
+          isOpen={isCompletionActionsOpen}
+          onClose={() => setIsCompletionActionsOpen(false)}
+          workOrder={currentOrder}
         />
       )}
     </Dialog>
